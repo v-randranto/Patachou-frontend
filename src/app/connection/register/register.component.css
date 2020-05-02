@@ -1,0 +1,40 @@
+.container-fluid {
+  background: url('../../../assets/img/bg-register1.jpg') no-repeat center center;
+  background-size: cover;
+}
+
+.btn-primary {
+  border: 1px solid #7e3300 !important;
+  background-color: #7e3300 !important;
+}
+
+.label-file {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+fa-icon {
+  font-size: 1.2rem;
+}
+
+.btn {
+  font-size: 1.2rem !important;
+}
+.text-danger {
+  font-weight: bold;
+}
+
+input, textarea {
+  background-color:#f7f5ec;
+}
+fa-icon {
+  color: darkslategray;
+}
+.text-dark  {
+  color: darkslategray !important;
+}
+.text-white, .label-file  {
+  color: ivory !important;
+}
+
+

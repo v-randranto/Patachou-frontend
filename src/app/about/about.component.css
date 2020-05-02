@@ -1,0 +1,4 @@
+.container-fluid {
+  background-color: #b0f2b6;
+  height: calc(100vh - 6vh);
+}
