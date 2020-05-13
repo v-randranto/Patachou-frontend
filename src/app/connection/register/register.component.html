@@ -1,0 +1,126 @@
+<div class="container-fluid ">
+  <div class="card col-lg-6 mx-auto">
+    <h5 class="card-header">J'ouvre un compte</h5>
+    <div class="card-body">
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+          <div class="form-group col-lg-5 required ">
+            <input type="text" formControlName="pseudo" class="form-control" placeholder="* Pseudonyme" />
+            <div *ngIf="(formControls.pseudo.touched || formControls.pseudo.dirty) && formControls.pseudo.invalid"
+              class="text-danger">
+              <div *ngIf="formControls.pseudo.errors.required">Ah, il faut le pseudonyme!</div>
+              <div *ngIf="formControls.pseudo.errors.maxlength">Le pseudonyme ne peut dépasser 20 caractères</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row ">
+          <div class="form-group col-lg-5 required">
+            <input type="text" formControlName="firstName" class="form-control" placeholder="* Prénom" />
+            <div
+              *ngIf="(formControls.firstName.touched || formControls.firstName.dirty) && formControls.firstName.invalid"
+              class="text-danger">
+              <div *ngIf="formControls.firstName.errors.required">Meh, il faut le prénom!</div>
+              <div *ngIf="formControls.firstName.errors.maxlength">Le prénom ne peut dépasser 20 caractères</div>
+            </div>
+          </div>
+
+          <div class="form-group col-lg-5 offset-lg-1 required">
+            <input type="text" formControlName="lastName" class="form-control" placeholder="* Nom" />
+            <div *ngIf="(formControls.lastName.touched || formControls.lastName.dirty) && formControls.lastName.invalid"
+              class="text-danger">
+              <div *ngIf="formControls.lastName.errors.required">Bin, il faut le nom!</div>
+              <div *ngIf="formControls.lastName.errors.maxlength">Le prénom ne peut dépasser 20 caractères</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row align-items-center">
+          <div class="form-group col-lg-5 ">
+            <div class="form-check d-inline mr-4 align-self-center">
+              <input class="form-check-input " type="radio" name="sex" id="female" value="female">
+              <fa-icon [icon]="femaleIcon"></fa-icon>
+            </div>
+            <div class="form-check d-inline  mr-4">
+              <input class="form-check-input" type="radio" name="sex" id="male" value="male">
+              <fa-icon [icon]="maleIcon"></fa-icon>
+            </div>
+            <div class="form-check d-inline ">
+
+              <input class="form-check-input" type="radio" name="sex" id="other" value="other">
+              <fa-icon [icon]="otherIcon"></fa-icon>
+            </div>
+          </div>
+
+          <div class="form-group col-lg-5 offset-lg-1">
+            <div class="row">
+              <fa-icon class="col-1 col-lg-1 ml-1 align-self-center" [icon]="birthDateIcon">a</fa-icon>
+              <input type="date" formControlName="birthDate" class="form-control col-7 col-lg-10 ml-2" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row ">
+          <div class="form-group col-lg-8 required">
+            <input type="text" formControlName="email" class="form-control" placeholder="* mon.adresse@email.com" />
+            <small id="emailHelp" class="form-text text-muted">Nous ne partagerons pas votre email.</small>
+            <div *ngIf="(formControls.email.touched || formControls.email.dirty) && formControls.email.invalid"
+              class="text-danger">
+              <div *ngIf="formControls.email.errors.required">Eh oui, nous avons besoin de votre email!</div>
+              <div *ngIf="formControls.email.errors.pattern">Bah, il n'est pas valide votre email!</div>
+              <div *ngIf="formControls.email.errors.maxlength">L'email est beaucoup trop long!</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-lg-5 required">
+            <input type="password" formControlName="password" class="form-control" placeholder="* Mot de passe" />
+            <div *ngIf="(formControls.password.touched || formControls.password.dirty) && formControls.password.invalid"
+              class="text-danger">
+              <div *ngIf="formControls.password.errors.required">Si si, il faut un mot de passe!</div>
+              <div *ngIf="formControls.password.errors.minlength">Le mot de passe contient au moins 4 caractères</div>
+            </div>
+          </div>
+
+          <div class="form-group col-lg-5 offset-lg-1 required">
+            <input type="password" formControlName="confirmPassword" class="form-control"
+              placeholder="* Confirmation du mot de passe" />
+            <div
+              *ngIf="(formControls.confirmPassword.touched || formControls.confirmPassword.dirty) && formControls.confirmPassword.invalid"
+              class="text-danger">
+              <div *ngIf="formControls.confirmPassword.errors.required">Il faut confirmer le mot de passe!</div>
+              <div *ngIf="formControls.confirmPassword.errors.minlength">Le mot de passe contient au moins 4 caractères</div>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-lg-11">
+            <textarea formControlName="presentation" class="form-control"
+              placeholder="Quelques mots pour vous présenter..." rows="5" cols="50" maxlength="1000">
+          </textarea>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-lg-4">
+            <fa-icon [icon]="uploadIcon"></fa-icon>
+            <label class="d-inline label-file ml-2">Votre photo ou avatar
+              <input type="file" formControlName="pix" class="form-control-file d-none" id="avatar"
+                (change)="onFileSelect($event.target.files)" [accept]="acceptFileExtensions">
+            </label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="text-center col-lg-6 my-3">
+            <button class="btn btn-primary btn-lg" type="submit"
+              [disabled]="registerForm.invalid || fileStatus['invalid']">Et j'envoie la sauce caramel!</button>
+          </div>
+          <div class="text-center  col-lg-6 my-3 ">
+            <button class="btn btn-secondary btn-lg">Ah mais j'ai déjà un compte!</button>
+          </div>
+        </div>
+      </form>
+      {{registerForm.value | json}}
+    </div>
+  </div>
+</div>

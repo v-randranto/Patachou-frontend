@@ -1,0 +1,20 @@
+/*
+div.required ::placeholder {
+  color: pink;
+} */
+.btn-primary {
+  border: 1px solid #7e3300 !important;
+  background-color: #7e3300 !important;
+}
+
+.label-file {
+    cursor: pointer;
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+fa-icon {
+  color: grey;
+}
