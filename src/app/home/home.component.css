@@ -1,9 +1,14 @@
 .container-fluid {
-  background: url('../../assets/img/bg-home.jpg') no-repeat center center fixed;
+  background: url('../../assets/img/bg-home.jpg') no-repeat center center;
   background-size: cover;
   height: calc(100vh - 6vh);
 }
 
-.btn {
-  font-size: 1.2rem !important;
+.btn-primary {
+  border: 1px solid #ae3006 !important;
+  background-color: #ae3006 !important;
+}
+.btn-warning {
+  border: 1px solid #ffd700!important;
+  background-color: #ffd700 !important;
 }

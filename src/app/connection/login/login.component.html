@@ -1,1 +1,38 @@
-<p>login works!</p>
+<div class="container-fluid">
+    <h3 class="text-center text-color pt-4">Je me connecte...</h3>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-row my-3">
+        <div class="form-group col-10 col-sm-7 col-md-5 col-lg-4 col-xl-3 mx-auto">
+          <input type="text" formControlName="pseudo" class="form-control" placeholder="* Pseudonyme" maxlength=30 />
+        </div>
+      </div>
+
+      <div class="form-row my-3">
+        <div class="form-group col-10 col-sm-7 col-md-5 col-lg-4 col-xl-3 mx-auto">
+          <input type="password" formControlName="password" class="form-control" placeholder="* Password"
+            maxlength=30 />
+        </div>
+      </div>
+
+      <div class="my-3 mx-auto" *ngIf="badCredentials">
+        <div class="bg-danger">Oups, le pseudo ou le mot passe n'est pas correct.</div>
+      </div>
+
+      <div class="my-3 mx-auto" *ngIf="technicalFailure">
+        <div class="bg-danger">Oups, il y a une saucisse dans la pâte à choux. On s'occupe du problème, veuillez-nous excuser pour cet incident technique.</div>
+      </div>
+
+      <div class="row">
+        <button class="btn btn-primary col-8 col-sm-6 col-md-5 col-lg-3 col-xl-2 mx-auto my-3" type="submit"
+          [disabled]="loginForm.invalid">Et j'envoie la sauce
+          caramel!</button>
+      </div>
+      <div class="row my-1">
+        <button class="btn btn-warning col-8 col-sm-6 col-md-5 col-lg-3 col-xl-2 mx-auto "
+          [routerLink]="'/connection/register'">Ah mais je n'ai pas de
+          compte!</button>
+      </div>
+
+    </form>
+  </div>
+

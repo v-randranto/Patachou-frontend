@@ -1,12 +1,17 @@
+import { ProfileModule } from './profile/profile.module';
+import { JwtInterceptorService } from './core/service/jwt-interceptor.service';
+import { AuthenticationService } from './core/service/authentication.service';
+import { environment } from './../environments/environment';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { PopoverModule } from 'ngx-bootstrap/popover';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
@@ -25,7 +30,10 @@ import { ErrorComponent } from './layout/error/error.component';
 import { MemberDataService } from './data/service/member-data.service';
 import { ContactComponent } from './contact/contact.component';
 
-const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
+const config: SocketIoConfig = {
+  url: environment.ws_url,
+  options: {}
+};
 
 @NgModule({
   declarations: [
@@ -48,12 +56,18 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
     CoreModule,
     DataModule,
     NgbCollapseModule,
-    BsDatepickerModule.forRoot(),
-    DatepickerModule.forRoot()
+    PopoverModule.forRoot(),
+    ProfileModule
   ],
   providers: [
     ChatService,
-    MemberDataService],
+    MemberDataService,
+    AuthenticationService,
+    JwtInterceptorService,
+    {provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptorService,
+      multi: true}
+  ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

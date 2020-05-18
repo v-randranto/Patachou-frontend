@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthenticationService } from '@app/core/service/authentication.service';
 
 @Component({
   selector: 'app-navbar',
@@ -7,7 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavbarComponent implements OnInit {
   public isMenuCollapsed = true;
-  constructor() { }
+  constructor(public authenticationService: AuthenticationService) { }
+
+  logout() {
+    this.authenticationService.logout();
+  }
 
   ngOnInit(): void {
   }

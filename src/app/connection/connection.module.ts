@@ -3,21 +3,24 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
-import { LogoutComponent } from './logout/logout.component';
 import { LostPasswordComponent } from './lost-password/lost-password.component';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { Routes, RouterModule } from '@angular/router';
+
+const routes: Routes = [];
 
 @NgModule({
   declarations: [
     RegisterComponent,
     LoginComponent,
-    LogoutComponent,
     LostPasswordComponent
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    FontAwesomeModule],
+    FontAwesomeModule,
+    [RouterModule.forChild(routes)]
+  ],
 })
 export class ConnectionModule {}

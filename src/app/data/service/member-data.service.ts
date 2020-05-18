@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Member } from '../model/member';
+import { TokenData } from '../model/user';
 
 @Injectable({
   providedIn: 'root'
@@ -10,29 +11,18 @@ export class MemberDataService {
 
   constructor(private http: HttpClient) { }
 
-  // public getMembers(): Observable<Member[]> {
-  //   const url = '/api/member/get';
-  //   return this.http.get<Member[]>(url);
-  // }
-  // public getMember(): Observable<Member> {  // à corriger !!!
-  //   const url = '/api/member/get';
-  //   return this.http.post<Member>(url);
-  // }
-
-  public addMember(member: Member) {
-    const url = '/api/member/add';
-    return this.http.post<any>(url, member)
+  public login(user: any): Observable<TokenData> {
+    const url = '/api/connection/login';
+    return this.http.post<TokenData>(url, user);
+  }
+  public getProfile(id: any): Observable<Member> {
+    const url = '/api/profile/get';
+    return this.http.post<Member>(url, id);
   }
 
-
-  // public updateTool(member: Member) {
-  //   const url = `api/member/update`;
-  //   return this.http.put(url, member);
-  // }
-
-  // public deleteTool(memberId: number) {
-  //   const url = `api/member/delete${memberId}`;
-  //   return this.http.delete(url);
-  // }
+  public register(member: Member): Observable<any> {
+    const url = '/api/connection/register';
+    return this.http.post<any>(url, member)
+  }
 
 }

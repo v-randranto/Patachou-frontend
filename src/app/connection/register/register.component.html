@@ -1,139 +1,148 @@
 <div class="container-fluid mx-auto">
 
-  <div class="row ">
-    <div class="col-lg-6 mx-auto my-5">
-      <h3 class="col text-center text-color mb-4">J'ouvre une compote...</h3>
-      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-        <div class="form-row ">
-          <div class="form-group col-lg-5 mx-auto required">
-            <input type="text" formControlName="pseudo" class="form-control" placeholder="* Pseudonyme" maxlength=20 />
-            <div *ngIf="(formControls.pseudo.touched || formControls.pseudo.dirty) && formControls.pseudo.invalid"
-              class="text-danger">
-              <div *ngIf="formControls.pseudo.errors.required">Ah, il faut le pseudo</div>
-              <div *ngIf="formControls.pseudo.errors.pattern">Le format n'est pas correct</div>
-              <div *ngIf="formControls.pseudo.errors.maxlength">Le pseudonyme ne peut dépasser 20 caractères</div>
-            </div>
+  <div class="col-md-5 mx-auto ">
+    <h3 class="text-dark py-4">J'ouvre une compote...</h3>
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="form-row">
+        <div class="form-group col-md-10 col-xl-7 required">
+          <input #pseudo type="text" formControlName="pseudo" class="form-control" placeholder="* Pseudonyme"
+            maxlength=30 (keydown)="checkPseudoInput($event)" data-toggle="tooltip" [title]="pseudoTooltip" />
+          <div *ngIf="(formControls.pseudo.touched || formControls.pseudo.dirty) && formControls.pseudo.invalid"
+            class="bg-danger text-white px-2">
+            <div *ngIf="formControls.pseudo.errors.required">Saisissez votre pseudo.</div>
+            <div *ngIf="formControls.pseudo.errors.pattern">Format incorrect ou caractère non permis.</div>
+            <div *ngIf="formControls.pseudo.errors.maxlength">Le pseudonyme ne peut dépasser 20 caractères</div>
+
           </div>
-          <div class="col-lg-5 mx-auto"></div>
+          <div class="bg-danger text-white px-2" *ngIf="pseudoUnavailable">Le pseudonyme est déjà utilisé</div>
         </div>
+      </div>
 
-        <div class="form-row ">
-          <div class="form-group col-lg-5 mx-auto required">
-            <input type="text" formControlName="firstName" class="form-control" placeholder="* Prénom" maxlength=30 />
-            <div
-              *ngIf="(formControls.firstName.touched || formControls.firstName.dirty) && formControls.firstName.invalid"
-              class="text-danger">
-              <div *ngIf="formControls.firstName.errors.required">Meh, il faut le prénom!</div>
-              <div *ngIf="formControls.firstName.errors.pattern">Le format n'est pas correct</div>
-              <div *ngIf="formControls.firstName.errors.maxlength">Le prénom ne peut dépasser 30 caractères</div>
-            </div>
-          </div>
-
-          <div class="form-group col-lg-5 mx-auto required">
-            <input type="text" formControlName="lastName" class="form-control" placeholder="* Nom" maxlength=30 />
-            <div *ngIf="(formControls.lastName.touched || formControls.lastName.dirty) && formControls.lastName.invalid"
-              class="text-danger">
-              <div *ngIf="formControls.lastName.errors.required">Bin, il faut le nom!</div>
-              <div *ngIf="formControls.lastName.errors.pattern">Le format n'est pas correct</div>
-              <div *ngIf="formControls.lastName.errors.maxlength">Le nom ne peut dépasser 30 caractères</div>
-            </div>
+      <div class="form-row ">
+        <div class="form-group col-md-10 col-xl-7 required">
+          <input type="text" formControlName="firstName" class="form-control" placeholder="* Prénom" maxlength=30
+            (keydown)="checkNameInput($event)" data-toggle="tooltip" [title]="nameTooltip" />
+          <div
+            *ngIf="(formControls.firstName.touched || formControls.firstName.dirty) && formControls.firstName.invalid"
+            class="bg-danger text-white px-2">
+            <div *ngIf="formControls.firstName.errors.required">Saisissez votre prénom.</div>
+            <div *ngIf="formControls.firstName.errors.pattern">Le format n'est pas correct.</div>
+            <div *ngIf="formControls.firstName.errors.maxlength">Le prénom ne peut dépasser 30 caractères</div>
           </div>
         </div>
-
-        <div class="form-row align-items-center mx-auto">
-          <div class="form-group col-lg-5 mx-auto">
-            <div class="form-check d-inline mr-4 align-self-center">
-              <input class="form-check-input" type="radio" name="sex" id="female" value="female" formControlName="sex">
-              <fa-icon [icon]="femaleIcon"></fa-icon>
-            </div>
-            <div class="form-check d-inline  mr-4">
-              <input class="form-check-input" type="radio" name="sex" id="male" value="male" formControlName="sex">
-              <fa-icon [icon]="maleIcon"></fa-icon>
-            </div>
-            <div class="form-check d-inline ">
-              <input class="form-check-input" type="radio" name="sex" id="other" value="other" formControlName="sex">
-              <fa-icon [icon]="otherIcon"></fa-icon>
-            </div>
-          </div>
-
-          <div class="form-group col-lg-5 mx-auto">
-            <div class="row">
-              <fa-icon class="col-1 col-lg-1 ml-1 align-self-center" [icon]="birthDateIcon"></fa-icon>
-              <input type="date" formControlName="birthDate" class="form-control col-9 col-lg-8 ml-4" min="1920-01-01"
-                max="2018-12-31" />
-            </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-10 col-xl-7 required">
+          <input type="text" formControlName="lastName" class="form-control" placeholder="* Nom" maxlength=30
+            (keydown)="checkNameInput($event)" data-toggle="tooltip" [title]="nameTooltip" />
+          <div *ngIf="(formControls.lastName.touched || formControls.lastName.dirty) && formControls.lastName.invalid"
+            class="bg-danger text-white px-2">
+            <div *ngIf="formControls.lastName.errors.required">Saisissez votre nom.</div>
+            <div *ngIf="formControls.lastName.errors.pattern">Le format n'est pas correct.</div>
+            <div *ngIf="formControls.lastName.errors.maxlength">Le nom ne peut dépasser 30 caractères</div>
           </div>
         </div>
+      </div>
 
-        <div class="form-row">
-          <div class="form-group col-lg-11 mx-auto required ">
-            <input type="text" formControlName="email" class="form-control" placeholder="* mon.adresse@email.com"
-              maxlength=50 />
-            <small id="emailHelp" class="form-text text-color">Nous ne partagerons pas votre email.</small>
-            <div *ngIf="(formControls.email.touched || formControls.email.dirty) && formControls.email.invalid"
-              class="text-danger">
-              <div *ngIf="formControls.email.errors.required">Eh oui, nous avons besoin de votre email!</div>
-              <div *ngIf="formControls.email.errors.pattern">Bah, il n'est pas valide votre email!</div>
-              <div *ngIf="formControls.email.errors.maxlength">L'email est beaucoup trop long!</div>
-            </div>
+      <div class="form-row align-items-center">
+        <div class="form-group col-md-10 col-xl-7 ">
+          <div class="form-check d-inline mr-4 align-self-center">
+            <input class="form-check-input" type="radio" name="sex" id="female" value="female" formControlName="sex"
+              checked>
+            <fa-icon class="align-self-center" [icon]="femaleIcon"></fa-icon>
+          </div>
+          <div class="form-check d-inline  mr-4">
+            <input class="form-check-input" type="radio" name="sex" id="male" value="male" formControlName="sex">
+            <fa-icon class="align-self-center" [icon]="maleIcon"></fa-icon>
+          </div>
+          <div class="form-check d-inline ">
+            <input class="form-check-input" type="radio" name="sex" id="other" value="other" formControlName="sex">
+            <fa-icon class="align-self-center" [icon]="otherIcon"></fa-icon>
           </div>
         </div>
-
-        <div class="form-row ">
-          <div class="form-group col-lg-5 mx-auto required" data-toggle="tooltip" title="Some text">
-            <input type="password" formControlName="password" class="form-control" placeholder="* Mot de passe"
-              maxlength=50 />
-            <div *ngIf="(formControls.password.touched || formControls.password.dirty) && formControls.password.invalid"
-              class="text-danger">
-              <div *ngIf="formControls.password.errors.required">Si si, il faut un mot de passe!</div>
-              <div *ngIf="formControls.password.errors.minlength">Le mot de passe contient au moins 4 caractères</div>
-            </div>
-          </div>
-
-          <div class="form-group col-lg-5 mx-auto required">
-            <input type="password" formControlName="confirmPassword" class="form-control"
-              placeholder="* Confirmation du mot de passe" maxlength=50 />
-            <div
-              *ngIf="(formControls.confirmPassword.touched || formControls.confirmPassword.dirty) && formControls.confirmPassword.invalid"
-              class="text-danger">
-              <div *ngIf="formControls.confirmPassword.errors.required">Il faut confirmer le mot de passe!</div>
-              <div *ngIf="formControls.confirmPassword.errors.mustMatch">Le mot de passe confirmé est différent.
-              </div>
-            </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-10 col-xl-7 ">
+          <div class="row ">
+            <fa-icon class="col-1 ml-1 align-self-center" [icon]="birthDateIcon"></fa-icon>
+            <input type="date" formControlName="birthDate" class="form-control col-6 col-xl-7 ml-3" min="1920-01-01"
+              max="2002-12-31" />
           </div>
         </div>
-        <div class="form-row">
-          <div class="form-group col-lg-11 mx-auto">
-            <textarea formControlName="presentation" class="form-control"
-              placeholder="Quelques mots pour vous présenter..." rows="5" cols="50" maxlength="1000">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-10 col-xl-7 required ">
+          <input type="text" formControlName="email" class="form-control" placeholder="* mon.adresse@email.com"
+            maxlength=50 (blur)="emailOnBlur()" (focus)="emailOnFocus()" />
+          <small id="emailHelp" class="form-text text-color">Nous ne partagerons pas votre email.</small>
+          <div *ngIf="emailBlurred && formControls.email.invalid" class="bg-danger text-white px-2">
+            <span *ngIf="formControls.email.errors.required">Eh oui, nous avons besoin de ton email!</span>
+            <span *ngIf="formControls.email.errors.pattern">Oups, l'email n'est pas valide!</span>
+            <span *ngIf="formControls.email.errors.maxlength">L'email est beaucoup trop long!</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row ">
+        <div class="form-group col-md-10 col-xl-7 required">
+          <input type="password" formControlName="password" class="form-control" placeholder="* Mot de passe"
+            maxlength=30 />
+          <div *ngIf="(formControls.password.touched || formControls.password.dirty) && formControls.password.invalid"
+            class="bg-danger text-white px-2">
+            <span *ngIf="formControls.password.errors.required">Si si, il faut un mot de passe!</span>
+            <span *ngIf="formControls.password.errors.strength">Le mot de passe n'est pas assez balèze.</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-10 col-xl-7 required">
+          <input type="password" formControlName="confirmPassword" class="form-control"
+            placeholder="* Confirmation du mot de passe" maxlength=30 />
+          <div
+            *ngIf="(formControls.confirmPassword.touched || formControls.confirmPassword.dirty) && formControls.confirmPassword.invalid"
+            class="bg-danger text-white px-2">
+            <span *ngIf="formControls.confirmPassword.errors.required">Il faut confirmer le mot de passe.</span>
+            <span *ngIf="formControls.confirmPassword.errors.mustMatch">Le mot de passe confirmé est différent.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group ml-1">
+          <textarea formControlName="presentation" class="form-control"
+            placeholder="Quelques mots pour vous présenter touïtement (140 caractères)" rows="3" cols="50" maxlength="140">
           </textarea>
+          <div *ngIf="(formControls.presentation.touched || formControls.presentation.dirty) && formControls.presentation.invalid">
+          <span *ngIf="formControls.presentation?.errors.maxLength">Hou, mais c'est plus long qu'un touït!</span>
           </div>
         </div>
-        <div class="form-row">
-          <div class="form-group col-lg-11 mx-auto">
-            <fa-icon [icon]="uploadIcon" class="text-white"></fa-icon>
-            <label class="d-inline label-file text-color ml-2">Votre photo ou avatar
-              <input type="file" class="d-none" (change)="onFileSelect($event.target.files)"
-                [accept]="acceptFileExtensions">
-            </label>
-            <span class="text-white" *ngIf="photo; else noPix"> : {{photo.name}}</span>
-            <ng-template #noPix>
-              <span class="text-white">: Aucun fichier</span>
-            </ng-template>
-          </div>
-          <div *ngIf="fileStatus['invalid']" class="text-danger"> {{invalidFileMessage}}
-          </div>
-        </div>
-        <div class="row">
-          <div class="text-center col-lg-5 my-3 mx-auto">
-            <button class="btn btn-danger btn-lg" type="submit"
-              [disabled]="registerForm.invalid || fileStatus['invalid']">Et j'envoie la sauce caramel!</button>
-          </div>
-          <div class="text-center col-lg-5 my-3 mx-auto">
-            <button class="btn btn-success btn-lg">Ah mais j'ai déjà un compte!</button>
+      </div>
+      <div class="form-row">
+        <div class="form-group ml-1">
+          <fa-icon [icon]="uploadIcon" class="text-white"></fa-icon>
+          <label class="d-inline label-file text-color ml-2">Photo ou avatar
+            <input type="file" class="d-none" (change)="onFileSelect($event.target.files)"
+              [accept]="acceptFileExtensions">
+          </label>
+          <span class="text-white" *ngIf="photo; else noPix"> : {{photo.name}}</span>
+          <ng-template #noPix>
+            <span class="text-white">: Aucun fichier</span>
+          </ng-template>
+          <div *ngIf="fileStatus['invalid']" class="text-danger mx-auto mb-3"> {{invalidFileMessage}}
           </div>
         </div>
-      </form>
-    </div>
+      </div>
+
+      <div class="text-center col col-xl-5 mt-3">
+        <button class="btn btn-primary" type="submit" [disabled]="registerForm.invalid || fileStatus['invalid']">Et
+          j'envoie la sauce caramel!</button>
+      </div>
+      <div class="text-center col col-xl-5 mt-3">
+        <button class="btn btn-warning" [routerLink]="'/connection/login'">Ah mais j'ai déjà un compte!</button>
+      </div>
+
+
+    </form>
   </div>
 </div>

@@ -1,12 +1,19 @@
 .container-fluid {
-  background: url('../../../assets/img/bg-register1.jpg') no-repeat center center;
+  background: url('../../../assets/img/bg-register4.jpg') center center;
   background-size: cover;
+  /* height: calc(100vh - 6vh); */
+  height: 145vh;
 }
 
 .btn-primary {
-  border: 1px solid #7e3300 !important;
-  background-color: #7e3300 !important;
+  border: 1px solid #ae3006 !important;
+  background-color: #ae3006 !important;
 }
+.btn-warning {
+  border: 1px solid #ffd700!important;
+  background-color: #ffd700 !important;
+}
+
 
 .label-file {
     cursor: pointer;
@@ -14,27 +21,42 @@
 }
 
 fa-icon {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
+  color: darkslategray
 }
 
+/*
 .btn {
   font-size: 1.2rem !important;
-}
-.text-danger {
-  font-weight: bold;
-}
+} */
 
 input, textarea {
   background-color:#f7f5ec;
 }
-fa-icon {
-  color: darkslategray;
-}
+
 .text-dark  {
   color: darkslategray !important;
 }
 .text-white, .label-file  {
   color: ivory !important;
+}
+.bg-progress {
+  background-color: lightgray;
+}
+.bg-verypoor {
+  background-color: #ff0000;
+}
+.bg-poor {
+  background-color: #ff7b00;
+}
+.bg-notsogood {
+  background-color: #efd807;
+}
+.bg-good {
+  background-color: green
+}
+.bg-danger {
+  background-color: #cb7364 !important;
 }
 
 

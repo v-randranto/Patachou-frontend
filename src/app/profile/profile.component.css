@@ -1,0 +1,48 @@
+.container-fluid {
+  background: url('../../assets/img/bg-profile.jpg') center center;
+  background-size: cover;
+  background-color: #ffe4c4;
+  height: calc(100vh - 5vh)
+}
+
+.text-dark {
+  color: darkslategray !important;
+}
+
+.text-white {
+  color: ivory !important;
+}
+
+.card-body,
+ul,
+li {
+  background-color: ivory;
+}
+
+.card-body {
+  border-radius: 2%;
+}
+
+fa-icon {
+  font-size: 1.4rem;
+  color: darkslategray;
+}
+
+footer fa-icon {
+  color: ivory;
+}
+
+.btn-outline-primary {
+  border-color: ivory;
+}
+
+footer {
+  position: absolute;
+  bottom: 5vh;
+  left: 3vh;
+}
+
+.logout {
+  position: relative;
+  left: 95%;
+}

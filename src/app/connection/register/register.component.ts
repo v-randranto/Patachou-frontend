@@ -1,11 +1,11 @@
-import { MemberDataService } from '@app/data/service/member-data.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MustMatch } from '@app/connection/custom-validator/custom-validator.validator';
-
+import { MustMatch, PasswordStrength } from '@app/connection/custom-validator/custom-validator.validator';
+import { MemberDataService } from '@app/data/service/member-data.service';
 import { faUpload, faMars, faVenus, faVenusMars, faBirthdayCake } from '@fortawesome/free-solid-svg-icons';
 import { Member, Photo } from '@app/data/model/member';
 import { Router } from '@angular/router';
+import { AuthenticationService } from '@app/core/service/authentication.service';
 
 const LIMIT_SIZE_FILE = 100 * 1000;
 const allowedFileExtensions = ['.png', '.jpg', '.jpeg', '.gif'];
@@ -14,13 +14,19 @@ const namePatternBase = `a-zA-Zàáâäãåąčćęèéêëėįìíîïłńòó�
 const namesPattern = `^[${namePatternBase}]+(([' -][${namePatternBase}])?[${namePatternBase}]*)*$`;
 const pseudoPattern = `^[${namePatternBase}0-9]+(([' -][${namePatternBase}0-9])?[${namePatternBase}0-9]*)*$`;
 const emailPattern = `^([a-zA-Z0-9.]+)@([a-zA-Z0-9-.]+).([a-zA-Z]{2,5})$`;
-const maxPseudo = 20, maxNames = 30, maxEmail = 50, minPassword = 4, maxPassword = 50;
+const maxPseudo = 30, maxNames = 30, maxEmail = 50, minPassword = 4, maxPassword = 30;
+
+// const pseudoAllowedChar = /[a-zA-Z0-9]/;
+const pseudoAllowedChar = /[a-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšž -]/i;
+const nameAllowedChar = /[a-zàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšž -]/i;
 
 @Component({
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css'],
+  styleUrls: ['./register.component.css']
+
 })
 export class RegisterComponent implements OnInit {
+  @ViewChild('pseudo') pseudoRef: ElementRef;
 
   public registerForm: FormGroup;
   public submitted = false;
@@ -40,9 +46,16 @@ export class RegisterComponent implements OnInit {
   public otherIcon = faVenusMars;
   public birthDateIcon = faBirthdayCake;
 
+  public emailBlurred: boolean;
+  public passwordTooltip = 'Pour un mot de passe costaud, saisir 10 caractères minimum dont 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial';
+  public pseudoTooltip = 'format alphanumérique avec apostrophe, tiret et espace permis';
+  public nameTooltip = 'format alphabétique avec apostrophe, tiret et espace permis';
+  public pseudoUnavailable = false;
+
   constructor(
     private fb: FormBuilder,
     private memberDataService: MemberDataService,
+    private authenticationService: AuthenticationService,
     private router: Router) { }
 
   ngOnInit() {
@@ -53,15 +66,23 @@ export class RegisterComponent implements OnInit {
       email: ['', [Validators.required, Validators.pattern(emailPattern), Validators.maxLength(maxEmail)]],
       sex: [''],
       birthDate: [null],
-      password: ['', [Validators.required, Validators.minLength(minPassword), Validators.maxLength(maxPassword)]],
+      password: ['', [Validators.required, Validators.maxLength(maxPassword)]],
       confirmPassword: ['', Validators.required],
-      presentation: ['', Validators.maxLength(1000)],
+      presentation: ['', Validators.maxLength(140)],
       file: [null]
     },
       {
-        validator: MustMatch("password", "confirmPassword")
-      }
+        validator: [
+          MustMatch("password", "confirmPassword"),
+          PasswordStrength("password")
+        ]
+      },
     );
+
+    if (this.authenticationService.isLoggedIn) {
+      const id = this.authenticationService.getUserId();
+      this.router.navigate(['profile', id]);
+    };
   }
 
   get formControls() {
@@ -70,6 +91,13 @@ export class RegisterComponent implements OnInit {
 
   getDefaultDate() {
     return '1980-01-01';
+  }
+
+  emailOnFocus() {
+    this.emailBlurred = false;
+  }
+  emailOnBlur() {
+    this.emailBlurred = true;
   }
 
   onFileSelect(files) {
@@ -102,6 +130,20 @@ export class RegisterComponent implements OnInit {
     }
   }
 
+  checkPseudoInput(e) {
+    if (this.pseudoUnavailable) {
+      this.pseudoUnavailable = false;
+    }
+    if (pseudoAllowedChar.test(e.key) === false) {
+      e.preventDefault();
+    }
+  }
+  checkNameInput(e) {
+    if (nameAllowedChar.test(e.key) === false) {
+      e.preventDefault();
+    }
+  }
+
   onSubmit() {
     this.submitted = true;
     if (this.registerForm.invalid) {
@@ -109,12 +151,12 @@ export class RegisterComponent implements OnInit {
     }
     // TODO refacto
 
-    this.member.pseudo = this.registerForm.value.pseudo;
-    this.member.firstName = this.registerForm.value.firstName;
-    this.member.lastName = this.registerForm.value.lastName;
+    this.member.pseudo = this.registerForm.value.pseudo.toLowerCase();
+    this.member.firstName = this.registerForm.value.firstName.toLowerCase();
+    this.member.lastName = this.registerForm.value.lastName.toLowerCase();
     this.member.sex = this.registerForm.value.sex;
     this.member.birthDate = this.registerForm.value.birthDate;
-    this.member.email = this.registerForm.value.email;
+    this.member.email = this.registerForm.value.email.toLowerCase();
     this.member.password = this.registerForm.value.password;
     this.member.presentation = this.registerForm.value.presentation;
 
@@ -123,17 +165,20 @@ export class RegisterComponent implements OnInit {
       this.member.photo.content = this.registerForm.value.file;
 
     }
-    this.memberDataService.addMember(this.member).subscribe(
+    this.memberDataService.register(this.member).subscribe(
       res => {
-        this.router.navigate(['/connection/login'])
+        this.pseudoUnavailable = res.pseudoUnavailable;
+        if (this.pseudoUnavailable) {
+          this.pseudoRef.nativeElement.focus();
+        } else {
+          // TODO afficher confirmation (+éventuel pb email) avant redirection
+          this.router.navigate(['/connection/login']);
+        }
       },
       error => {
+        //TODO afficher indisponibilité service
         console.error(error);
       });
   }
 
-  onReset() {
-    this.submitted = false;
-    this.registerForm.reset();
-  }
 }

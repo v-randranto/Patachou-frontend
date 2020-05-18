@@ -1,3 +1,4 @@
+import { AuthenticationGuard } from './core/guard/authentication.guard';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
@@ -8,6 +9,7 @@ import { NotFoundComponent } from './layout/not-found/not-found.component';
 import { AboutComponent } from './about/about.component';
 import { LostPasswordComponent } from './connection/lost-password/lost-password.component';
 import { ContactComponent } from './contact/contact.component';
+import { ProfileComponent } from './profile/profile.component';
 
 const routes: Routes = [
 
@@ -20,10 +22,10 @@ const routes: Routes = [
       { path: '', redirectTo: 'login', pathMatch: 'full' },
       { path: 'register', component: RegisterComponent },
       { path: 'login', component: LoginComponent },
-      { path: 'logout', component: LogoutComponent },
       { path: 'lostpwd', component: LostPasswordComponent }
     ]
   },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthenticationGuard] },
   { path: '**', component: NotFoundComponent }
 ];
 

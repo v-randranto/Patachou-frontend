@@ -1,18 +1,19 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
   <div class="container-fluid">
-    <a routerLinkActive="active" routerLink="home" class="navbar-brand mr-3">Patachou</a>
+    <a href="#" class="navbar-brand mr-3">Patachou</a>
     <button class="navbar-toggler" type="button" (click)="isMenuCollapsed = !isMenuCollapsed">
       &#9776;
     </button>
     <div [ngbCollapse]="isMenuCollapsed" class="collapse navbar-collapse">
       <div class="navbar-nav">
-        <a class="nav-link" routerLinkActive="active" routerLink="/home">Accueil</a>
+        <a *ngIf="!this.authenticationService.isLoggedIn" class="nav-link" routerLinkActive="active" routerLink="/home">Accueil</a>
         <a class="nav-link" routerLinkActive="active" routerLink="/about">A propos de nous</a>
         <a class="nav-link" routerLinkActive="active" routerLink="/contact">Contact</a>
       </div>
       <div class="navbar-nav ml-auto">
-        <a class="nav-link" routerLinkActive="active" routerLink="/connection/register">S'inscrire</a>
-        <a class="nav-link" routerLinkActive="active" routerLink="/connection/login">Se connecter</a>
+        <a *ngIf="!this.authenticationService.isLoggedIn"  class="nav-link" routerLinkActive="active" routerLink="/connection/register">M'inscrire</a>
+        <a *ngIf="!this.authenticationService.isLoggedIn" class="nav-link" routerLinkActive="active" routerLink="/connection/login">Me connecter</a>
+        <a *ngIf="this.authenticationService.isLoggedIn" class="nav-link"  routerLinkActive="active" (click)="logout()">Me déconnecter</a>
       </div>
     </div>
   </div>

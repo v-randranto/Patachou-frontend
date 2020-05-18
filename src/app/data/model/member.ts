@@ -8,6 +8,7 @@ export class Member {
   public password: string;
   public presentation: string;
   public photo: Photo;
+  public creationDate: Date;
 }
 
 export class Photo {
