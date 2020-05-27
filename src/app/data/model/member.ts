@@ -8,7 +8,7 @@ export class Member {
   public birthDate: Date;
   public password: string;
   public presentation: string;
-  public photo: Photo;
+  public photoUrl: string;
   public creationDate: Date;
 }
 
@@ -20,5 +20,10 @@ export class Photo {
     this.name = name;
     this.contentType = type;
   }
+}
+
+export class RegisterData {
+  public member: Member;
+  public photo: Photo;
 }
 

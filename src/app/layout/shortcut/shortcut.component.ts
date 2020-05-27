@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '@app/core/service/authentication.service';
-import { faMars, faVenus, faVenusMars, faBirthdayCake, faIdBadge, faInfoCircle, faSignInAlt, faSignOutAlt, faAt, faBinoculars, faEnvelope, faUserFriends } from '@fortawesome/free-solid-svg-icons';
+import { faSignInAlt, faSignOutAlt, faAt, faBinoculars, faEnvelope, faUserFriends } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
-  selector: 'app-footer',
-  templateUrl: './footer.component.html',
-  styleUrls: ['./footer.component.css']
+  selector: 'app-shortcut',
+  templateUrl: './shortcut.component.html',
+  styleUrls: ['./shortcut.component.css']
 })
-export class FooterComponent implements OnInit {
+export class ShortcutComponent implements OnInit {
+  public isLoggedIn = false;
   public logoutIcon = faSignOutAlt;
   public friendsIcon = faUserFriends;
   public messageIcon = faEnvelope;
@@ -16,6 +17,7 @@ export class FooterComponent implements OnInit {
   constructor(private authenticationService: AuthenticationService) { }
 
   ngOnInit(): void {
+    this.isLoggedIn = this.authenticationService.isLoggedIn;
   }
 
   logout() {

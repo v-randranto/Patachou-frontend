@@ -1,5 +1,5 @@
 .container-fluid {
-  background: url('../../../assets/img/bg-login.jpg') no-repeat center center;
+  background: url('../../../assets/img/bg-login.jpg') no-repeat;
   background-size: cover;
   height: calc(100vh - 6vh);
 }
@@ -10,7 +10,7 @@
 }
 
 .btn-warning {
-  border: 1px solid #ffd700!important;
+  border: 1px solid #ffd700 !important;
   background-color: #ffd700 !important;
 }
 

@@ -1,19 +1,53 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
   <div class="container-fluid">
-    <a href="#" class="navbar-brand mr-3">Patachou</a>
-    <button class="navbar-toggler" type="button" (click)="isMenuCollapsed = !isMenuCollapsed">
+    <a routerLinkActive="active" routerLink="/home" class="navbar-brand mr-3">Patachou</a>
+    <span class="text-white d-inline mx-2">
+      <fa-icon class="mr-1" [icon]="connectedIcon"></fa-icon>: {{connectedNb}} {{connectedLabel}}
+    </span>
+    <button class="navbar-toggler" type="button" (click)="menuCollapse()">
       &#9776;
     </button>
-    <div [ngbCollapse]="isMenuCollapsed" class="collapse navbar-collapse">
+
+    <div [ngbCollapse]="isMenuCollapsed" class="collapse navbar-collapse text-left ml-md-5">
       <div class="navbar-nav">
-        <a *ngIf="!this.authenticationService.isLoggedIn" class="nav-link" routerLinkActive="active" routerLink="/home">Accueil</a>
-        <a class="nav-link" routerLinkActive="active" routerLink="/about">A propos de nous</a>
-        <a class="nav-link" routerLinkActive="active" routerLink="/contact">Contact</a>
+        <a class="nav-link" routerLinkActive="active" routerLink="/about" (click)="menuCollapse()">
+          <fa-icon [icon]="aboutIcon" class="mr-2"></fa-icon>A propos de nous
+        </a>
+        <a class="nav-link" routerLinkActive="active" routerLink="/contact" (click)="menuCollapse()">
+          <fa-icon [icon]="infoIcon" class="mr-2"></fa-icon>Contact
+        </a>
       </div>
+
+      <div *ngIf="this.authenticationService.isLoggedIn" class="navbar-nav">
+        <a class="nav-link" routerLinkActive="" routerLink="/home" (click)="menuCollapse()">
+          <fa-icon [icon]="searchIcon" class="mr-2"></fa-icon>Recherche de membres
+        </a>
+        <span dropdown>
+          <a class="nav-link" href id="basic-link" dropdownToggle (click)="false"
+             aria-controls="basic-link-dropdown"><fa-icon [icon]="networkIcon" class="mr-2"></fa-icon>Mon réseau</a>
+          <ul id="basic-link-dropdown" *dropdownMenu class="dropdown-menu p-0"
+              role="menu" aria-labelledby="basic-link">
+            <li *ngFor="let choice of networkMenu"  >
+              <a class="dropdown-item text-white" href="#">{{choice}}</a>
+            </li>
+          </ul>
+        </span>
+        <!-- <a class="nav-link" routerLinkActive="" routerLink="/home" (click)="menuCollapse()">
+          <fa-icon [icon]="networkIcon" class="mr-1"></fa-icon>Mon réseau
+        </a> -->
+        <a class="nav-link" routerLinkActive="" routerLink="/home" (click)="menuCollapse()">
+          <fa-icon [icon]="messagingIcon" class="mr-2"></fa-icon>Ma messagerie
+        </a>
+      </div>
+
       <div class="navbar-nav ml-auto">
-        <a *ngIf="!this.authenticationService.isLoggedIn"  class="nav-link" routerLinkActive="active" routerLink="/connection/register">M'inscrire</a>
-        <a *ngIf="!this.authenticationService.isLoggedIn" class="nav-link" routerLinkActive="active" routerLink="/connection/login">Me connecter</a>
-        <a *ngIf="this.authenticationService.isLoggedIn" class="nav-link"  routerLinkActive="active" (click)="logout()">Me déconnecter</a>
+        <a *ngIf="!this.authenticationService.isLoggedIn" class="nav-link" routerLinkActive="active"
+          routerLink="/connection/register" (click)="menuCollapse()"><fa-icon [icon]="registerIcon" class="mr-2"></fa-icon>M'inscrire</a>
+        <a *ngIf="!this.authenticationService.isLoggedIn" class="nav-link" routerLinkActive="active"
+          routerLink="/connection/login" (click)="menuCollapse()"><fa-icon [icon]="loginIcon" class="mr-1"></fa-icon>Me connecter</a>
+        <a *ngIf="this.authenticationService.isLoggedIn" class="nav-link" routerLinkActive="active" (click)="logout()">
+          <fa-icon [icon]="logoutIcon" class="mr-2"></fa-icon>Me déconnecter
+        </a>
       </div>
     </div>
   </div>

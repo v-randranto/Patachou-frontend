@@ -5,9 +5,10 @@ fa-icon {
   color: ivory;
 }
 
-footer {
+
+header {
   position: absolute;
-  bottom: 5vh;
+  top: 10vh;
   left: 3vh;
 }
 

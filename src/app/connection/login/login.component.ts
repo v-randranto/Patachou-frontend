@@ -24,14 +24,14 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    if (this.authenticationService.isLoggedIn) {
+      this.router.navigate(['profile']);
+    };
     this.loginForm = this.fb.group({
       pseudo: ['', Validators.required],
       password: ['', Validators.required]
     });
-    if (this.authenticationService.isLoggedIn) {
-      const id = localStorage.getItem('user_id');
-      this.router.navigate(['profile', id]);
-    };
+
   }
 
   get formControls() {
@@ -45,8 +45,12 @@ export class LoginComponent implements OnInit {
     }
     this.user = this.loginForm.value;
     this.user.pseudo = this.loginForm.value.pseudo.toLowerCase();
-// TODO gestion retour KO
-    this.authenticationService.login(this.user);
+    // TODO gestion retour KO
+    try {
+      this.authenticationService.login(this.user);
+    } catch (error) {
+      console.log('erreur auth', error)
+    }
 
   }
 }

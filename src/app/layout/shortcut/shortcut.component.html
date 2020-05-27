@@ -1,4 +1,4 @@
-<footer class="bottom d-md-none">
+<header *ngIf="isLoggedIn" class="d-md-none ">
   <div class="d-inline">
     <button class="btn btn-outline-primary d-inline mr-3">
       <fa-icon [icon]="messageIcon"></fa-icon>
@@ -11,4 +11,4 @@
   <button class="btn btn-outline-primary d-inline logout" (click)="logout()">
     <fa-icon [icon]="logoutIcon"></fa-icon>
   </button>
-</footer>
+</header>

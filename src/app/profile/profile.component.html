@@ -2,7 +2,7 @@
   <div class="card" class="mx-auto pt-4" style="width: 20rem;">
     <h5 class="card-title text-center text-white">{{member.pseudo | titlecase}}</h5>
     <div class="mx-auto text-white" style="width: 3rem;">
-      <img class="card-img-top" src="../../assets/img/avatar.png">
+      <img class="card-img-top" [src]="member.photoUrl">
     </div>
     <div class="text-center">
       <small class="text-white">Membre depuis le {{member.creationDate | date:'short':'':'fr'}}</small>

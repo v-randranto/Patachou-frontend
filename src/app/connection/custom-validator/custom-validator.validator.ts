@@ -43,7 +43,7 @@ export function PasswordStrength(controlName: string) {
     }
 
     const minLength = 4;
-    const minPassedTests = 3;
+    const minPassedTests = 4;
     const upperCaseCharacters = /[A-Z]+/g;
     const lowerCaseCharacters = /[a-z]+/g;
     const numberCharacters = /[0-9]+/g;

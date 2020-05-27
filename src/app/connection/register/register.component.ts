@@ -1,20 +1,21 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MustMatch, PasswordStrength } from '@app/connection/custom-validator/custom-validator.validator';
 import { MemberDataService } from '@app/data/service/member-data.service';
 import { faUpload, faMars, faVenus, faVenusMars, faBirthdayCake } from '@fortawesome/free-solid-svg-icons';
-import { Member, Photo } from '@app/data/model/member';
+import { Member, Photo, RegisterData } from '@app/data/model/member';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '@app/core/service/authentication.service';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
-const LIMIT_SIZE_FILE = 100 * 1000;
+const LIMIT_SIZE_FILE = 500 * 1000;
 const allowedFileExtensions = ['.png', '.jpg', '.jpeg', '.gif'];
 
 const namePatternBase = `a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð`;
 const namesPattern = `^[${namePatternBase}]+(([' -][${namePatternBase}])?[${namePatternBase}]*)*$`;
 const pseudoPattern = `^[${namePatternBase}0-9]+(([' -][${namePatternBase}0-9])?[${namePatternBase}0-9]*)*$`;
 const emailPattern = `^([a-zA-Z0-9.]+)@([a-zA-Z0-9-.]+).([a-zA-Z]{2,5})$`;
-const maxPseudo = 30, maxNames = 30, maxEmail = 50, minPassword = 4, maxPassword = 30;
+const maxPseudo = 30, maxNames = 30, maxEmail = 50, maxPassword = 30;
 
 // const pseudoAllowedChar = /[a-zA-Z0-9]/;
 const pseudoAllowedChar = /[a-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšž -]/i;
@@ -27,12 +28,23 @@ const nameAllowedChar = /[a-zàáâäãåąčćęèéêëėįìíîïłńòóô�
 })
 export class RegisterComponent implements OnInit {
   @ViewChild('pseudo') pseudoRef: ElementRef;
-
+  @ViewChild('confirmation') confirmationRef: TemplateRef<any>;
+  @ViewChild('error') errorRef: TemplateRef<any>;
+  public modalRef: BsModalRef;
+  modalConfig = {
+    animated: true
+  };
   public registerForm: FormGroup;
   public submitted = false;
+  public registerStatus = {
+    pseudoUnavailable: false,
+    save: true,
+    email: true
+  }
   public defaultBirthDate = '1980-01-01';
   public member = new Member();
   public photo: Photo;
+  public registerData = new RegisterData();
   public fileStatus = {
     invalid: false,
     invalidSizeMsg: `La taille du fichier est limitée à ${LIMIT_SIZE_FILE / 1000}ko.`,
@@ -46,19 +58,26 @@ export class RegisterComponent implements OnInit {
   public otherIcon = faVenusMars;
   public birthDateIcon = faBirthdayCake;
 
+  public maxBirthDate = '2002-12-31';
+  public birthDateValue = '1979-01-01';
+
   public emailBlurred: boolean;
-  public passwordTooltip = 'Pour un mot de passe costaud, saisir 10 caractères minimum dont 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial';
+  public passwordTooltip = 'Saisir 8 caractères minimum avec 3 des caractéristiques suivantes: 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial';
   public pseudoTooltip = 'format alphanumérique avec apostrophe, tiret et espace permis';
   public nameTooltip = 'format alphabétique avec apostrophe, tiret et espace permis';
-  public pseudoUnavailable = false;
 
   constructor(
     private fb: FormBuilder,
     private memberDataService: MemberDataService,
     private authenticationService: AuthenticationService,
-    private router: Router) { }
+    private router: Router,
+    private modalService: BsModalService
+  ) { }
 
   ngOnInit() {
+    if (this.authenticationService.isLoggedIn) {
+      this.router.navigate(['profile']);
+    };
     this.registerForm = this.fb.group({
       pseudo: ['', [Validators.required, Validators.pattern(pseudoPattern), Validators.maxLength(maxPseudo)]],
       firstName: ['', [Validators.required, Validators.pattern(namesPattern), Validators.maxLength(maxNames)]],
@@ -78,11 +97,11 @@ export class RegisterComponent implements OnInit {
         ]
       },
     );
-
     if (this.authenticationService.isLoggedIn) {
       const id = this.authenticationService.getUserId();
       this.router.navigate(['profile', id]);
-    };
+    }
+    this.formControls.birthDate.setValue('1980-01-01');
   }
 
   get formControls() {
@@ -118,29 +137,45 @@ export class RegisterComponent implements OnInit {
         return;
       }
 
-      this.photo = new Photo(files[0].name, files[0].type);
-
       const file = files[0];
       reader.readAsDataURL(file);
       reader.onload = () => {
         this.registerForm.patchValue({
-          file: file
+          file: reader.result
         });
       };
+      this.photo = new Photo(files[0].name, files[0].type);
     }
   }
 
+  // Les 2 fonctions ci-dessous bloquent la saisie de caractères interdits (inopérant sur mobile)
   checkPseudoInput(e) {
-    if (this.pseudoUnavailable) {
-      this.pseudoUnavailable = false;
+    if (this.registerStatus.pseudoUnavailable) {
+      this.registerStatus.pseudoUnavailable = false;
     }
     if (pseudoAllowedChar.test(e.key) === false) {
       e.preventDefault();
     }
   }
+
   checkNameInput(e) {
     if (nameAllowedChar.test(e.key) === false) {
       e.preventDefault();
+    }
+  }
+
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, this.modalConfig);
+  }
+
+  closeModal() {
+    this.modalRef.hide();
+    if (this.registerStatus.save) {
+      console.log('save ok => login')
+      this.router.navigate(['/connection/login']);
+    } else {
+      console.log('save ko => home')
+      this.router.navigate(['home']);
     }
   }
 
@@ -150,7 +185,6 @@ export class RegisterComponent implements OnInit {
       return;
     }
     // TODO refacto
-
     this.member.pseudo = this.registerForm.value.pseudo.toLowerCase();
     this.member.firstName = this.registerForm.value.firstName.toLowerCase();
     this.member.lastName = this.registerForm.value.lastName.toLowerCase();
@@ -159,25 +193,31 @@ export class RegisterComponent implements OnInit {
     this.member.email = this.registerForm.value.email.toLowerCase();
     this.member.password = this.registerForm.value.password;
     this.member.presentation = this.registerForm.value.presentation;
-
+    this.registerData.member = this.member;
     if (this.photo) {
-      this.member.photo = this.photo;
-      this.member.photo.content = this.registerForm.value.file;
-
+      this.photo.content = this.registerForm.value.file;
+      console.log('photo', this.photo)
+      this.registerData.photo = this.photo;
     }
-    this.memberDataService.register(this.member).subscribe(
+    this.memberDataService.register(this.registerData).subscribe(
       res => {
-        this.pseudoUnavailable = res.pseudoUnavailable;
-        if (this.pseudoUnavailable) {
+        this.registerStatus = res;
+        console.log('regiserStatus', this.registerStatus)
+        if (this.registerStatus.pseudoUnavailable) {
           this.pseudoRef.nativeElement.focus();
         } else {
-          // TODO afficher confirmation (+éventuel pb email) avant redirection
-          this.router.navigate(['/connection/login']);
+          if (this.registerStatus.save) {
+            this.openModal(this.confirmationRef);
+          } else {
+            // TODO refacto
+            this.openModal(this.errorRef);
+          }
         }
       },
       error => {
-        //TODO afficher indisponibilité service
         console.error(error);
+        this.registerStatus.save = false;
+        this.openModal(this.errorRef);
       });
   }
 

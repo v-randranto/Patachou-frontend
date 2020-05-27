@@ -6,17 +6,23 @@ import { throwError, Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { User } from '@app/data/model/user';
 import { MemberDataService } from '@app/data/service/member-data.service';
+import { SocketIoService } from './socket-io.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
 
-  constructor(private memberDataService: MemberDataService, private router: Router) { }
+  constructor(
+    private memberDataService: MemberDataService,
+    private router: Router,
+    private socketService: SocketIoService
+    ) { }
 
   login(user: User) {
     this.memberDataService.login(user)
       .subscribe((res) => {
+        this.socketService.connectMember({id: res.id, pseudo: user.pseudo});
         const token = res.token;
         localStorage.setItem('jwt_token', res.token);
         localStorage.setItem('user_id', res.id);
@@ -24,7 +30,7 @@ export class AuthenticationService {
       },
         error => {
           console.error('Auth service : login KO', error);
-          return error;
+          throw error;
         });
   }
 
@@ -42,8 +48,8 @@ export class AuthenticationService {
   }
 
   logout() {
-    localStorage.removeItem('jwt_token');
-    localStorage.removeItem('user_id');
+    this.socketService.disconnectMember();
+    localStorage.clear();
     this.router.navigate(['home']);
   }
 }

@@ -11,7 +11,6 @@ import { AppComponent } from './app.component';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { PopoverModule } from 'ngx-bootstrap/popover';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
@@ -19,8 +18,8 @@ import { DataModule } from './data/data.module';
 import { CoreModule } from './core/core.module';
 import { ConnectionModule } from './connection/connection.module';
 import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
-import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
-import { ChatService } from './chat.service';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 import { NavbarComponent } from './layout/navbar/navbar.component';
 import { AboutComponent } from './about/about.component';
@@ -29,7 +28,7 @@ import { NotFoundComponent } from './layout/not-found/not-found.component';
 import { ErrorComponent } from './layout/error/error.component';
 import { MemberDataService } from './data/service/member-data.service';
 import { ContactComponent } from './contact/contact.component';
-import { FooterComponent } from './layout/footer/footer.component';
+import { ShortcutComponent } from './layout/shortcut/shortcut.component';
 
 const config: SocketIoConfig = {
   url: environment.ws_url,
@@ -45,7 +44,7 @@ const config: SocketIoConfig = {
     AboutComponent,
     ErrorComponent,
     ContactComponent,
-    FooterComponent
+    ShortcutComponent
   ],
   imports: [
     BrowserModule,
@@ -54,16 +53,16 @@ const config: SocketIoConfig = {
     SocketIoModule.forRoot(config),
     BrowserAnimationsModule,
     NgbModule,
+    NgbCollapseModule,
+    ModalModule.forRoot(),
+    BsDropdownModule.forRoot(),
     FontAwesomeModule,
     ConnectionModule,
     CoreModule,
     DataModule,
-    NgbCollapseModule,
-    PopoverModule.forRoot(),
     ProfileModule
   ],
   providers: [
-    ChatService,
     MemberDataService,
     AuthenticationService,
     JwtInterceptorService,

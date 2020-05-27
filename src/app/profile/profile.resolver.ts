@@ -11,7 +11,6 @@ export class ProfileResolver implements Resolve<Member> {
 
   resolve(): Observable<Member> {
     const id = localStorage.getItem('user_id');
-    console.log('Resolving for member id:' + id);
     return this.memberDataService.getProfile({id: id})
   }
 }

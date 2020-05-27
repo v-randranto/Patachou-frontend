@@ -1,3 +1,4 @@
+import { RegisterData } from './../model/member';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -20,9 +21,9 @@ export class MemberDataService {
     return this.http.post<Member>(url, idObj);
   }
 
-  public register(member: Member): Observable<any> {
+  public register(data: RegisterData): Observable<any> {
     const url = '/api/connection/register';
-    return this.http.post<any>(url, member)
+    return this.http.post<any>(url, data)
   }
 
 }
