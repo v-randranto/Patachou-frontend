@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Routes, RouterModule } from '@angular/router';
+import { ProfileResolver } from './profile.resolver';
 
 const routes: Routes = [];
 
@@ -15,6 +16,7 @@ const routes: Routes = [];
     CommonModule,
     FontAwesomeModule,
     [RouterModule.forChild(routes)]
-  ]
+  ],
+  providers: [ProfileResolver]
 })
 export class ProfileModule { }

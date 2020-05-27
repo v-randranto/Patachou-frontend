@@ -5,8 +5,8 @@
       <img class="card-img-top" src="../../assets/img/avatar.png">
     </div>
     <div class="text-center">
-    <small class="text-white">Membre depuis le {{member.creationDate | date}}</small>
-  </div>
+      <small class="text-white">Membre depuis le {{member.creationDate | date:'short':'':'fr'}}</small>
+    </div>
     <div class="card-body">
       <p *ngIf="member.presentation" class="card-text">{{member.presentation}}</p>
 
@@ -24,7 +24,7 @@
           <span class="d-inline mr-2">
             <fa-icon class="align-self-center" [icon]="birthDateIcon"></fa-icon>
           </span>
-          <span class="d-inline">{{member.birthDate | date}}</span></li>
+          <span class="d-inline">{{member.birthDate | date:'short':'':'fr'}}</span></li>
         <li class="list-group-item p-1">
           <span class="d-inline">
             <fa-icon class="align-self-center" [icon]="emailIcon"></fa-icon>
@@ -35,19 +35,5 @@
     </div>
 
   </div>
-  <footer class="bottom d-md-none">
-    <div class="d-inline">
-      <button class="btn btn-outline-primary d-inline mr-3">
-        <fa-icon [icon]="messageIcon"></fa-icon>
-      </button>
-      <button class="btn btn-outline-primary d-inline">
-        <fa-icon [icon]="friendsIcon"></fa-icon>
-      </button>
-    </div>
 
-      <button class="btn btn-outline-primary d-inline logout" (click)="logout()">
-        <fa-icon [icon]="logoutIcon"></fa-icon>
-      </button>
-
-  </footer>
 </div>

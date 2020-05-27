@@ -32,17 +32,4 @@ footer fa-icon {
   color: ivory;
 }
 
-.btn-outline-primary {
-  border-color: ivory;
-}
 
-footer {
-  position: absolute;
-  bottom: 5vh;
-  left: 3vh;
-}
-
-.logout {
-  position: relative;
-  left: 95%;
-}

@@ -10,6 +10,8 @@ import { AboutComponent } from './about/about.component';
 import { LostPasswordComponent } from './connection/lost-password/lost-password.component';
 import { ContactComponent } from './contact/contact.component';
 import { ProfileComponent } from './profile/profile.component';
+import { ErrorComponent } from './layout/error/error.component';
+import { ProfileResolver } from '@app/profile/profile.resolver';
 
 const routes: Routes = [
 
@@ -17,6 +19,7 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'about', component: AboutComponent },
   { path: 'contact', component: ContactComponent },
+  { path: 'error', component: ErrorComponent },
   { path: 'connection',
     children: [
       { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -25,7 +28,12 @@ const routes: Routes = [
       { path: 'lostpwd', component: LostPasswordComponent }
     ]
   },
-  { path: 'profile', component: ProfileComponent, canActivate: [AuthenticationGuard] },
+  { path: 'profile',
+  component: ProfileComponent,
+  canActivate: [AuthenticationGuard],
+  resolve: {
+    member: ProfileResolver
+  } },
   { path: '**', component: NotFoundComponent }
 ];
 

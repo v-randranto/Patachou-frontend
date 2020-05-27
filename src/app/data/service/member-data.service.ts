@@ -15,9 +15,9 @@ export class MemberDataService {
     const url = '/api/connection/login';
     return this.http.post<TokenData>(url, user);
   }
-  public getProfile(id: any): Observable<Member> {
+  public getProfile(idObj: any): Observable<Member> {
     const url = '/api/profile/get';
-    return this.http.post<Member>(url, id);
+    return this.http.post<Member>(url, idObj);
   }
 
   public register(member: Member): Observable<any> {

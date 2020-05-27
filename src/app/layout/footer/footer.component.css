@@ -1,0 +1,17 @@
+.btn-outline-primary {
+  border-color: ivory;
+}
+fa-icon {
+  color: ivory;
+}
+
+footer {
+  position: absolute;
+  bottom: 5vh;
+  left: 3vh;
+}
+
+.logout {
+  position: relative;
+  left: 95%;
+}

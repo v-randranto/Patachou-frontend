@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
       password: ['', Validators.required]
     });
     if (this.authenticationService.isLoggedIn) {
-      const id = this.authenticationService.getUserId();
+      const id = localStorage.getItem('user_id');
       this.router.navigate(['profile', id]);
     };
   }

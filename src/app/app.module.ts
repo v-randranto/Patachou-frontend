@@ -29,6 +29,7 @@ import { NotFoundComponent } from './layout/not-found/not-found.component';
 import { ErrorComponent } from './layout/error/error.component';
 import { MemberDataService } from './data/service/member-data.service';
 import { ContactComponent } from './contact/contact.component';
+import { FooterComponent } from './layout/footer/footer.component';
 
 const config: SocketIoConfig = {
   url: environment.ws_url,
@@ -43,7 +44,9 @@ const config: SocketIoConfig = {
     NavbarComponent,
     AboutComponent,
     ErrorComponent,
-    ContactComponent],
+    ContactComponent,
+    FooterComponent
+  ],
   imports: [
     BrowserModule,
     HttpClientModule,
