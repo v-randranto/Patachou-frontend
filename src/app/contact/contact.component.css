@@ -1,5 +1,13 @@
 .container-fluid {
   background-color: #f1ddbc;
-  height: calc(100vh - 8vh);
+  height: 100%;
 }
 
+a {
+  text-decoration: none;
+}
+
+.btn:hover,
+a:hover {
+  color: white !important;
+}

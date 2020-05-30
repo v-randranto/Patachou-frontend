@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, TemplateRef } from '@angular/
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MustMatch, PasswordStrength } from '@app/connection/custom-validator/custom-validator.validator';
 import { MemberDataService } from '@app/data/service/member-data.service';
-import { faUpload, faMars, faVenus, faVenusMars, faBirthdayCake } from '@fortawesome/free-solid-svg-icons';
+import { faUpload, faMars, faVenus, faVenusMars, faBirthdayCake, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { Member, Photo, RegisterData } from '@app/data/model/member';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '@app/core/service/authentication.service';
@@ -32,7 +32,8 @@ export class RegisterComponent implements OnInit {
   @ViewChild('error') errorRef: TemplateRef<any>;
   public modalRef: BsModalRef;
   modalConfig = {
-    animated: true
+    animated: true,
+    ignoreBackdropClick: true
   };
   public registerForm: FormGroup;
   public submitted = false;
@@ -57,6 +58,7 @@ export class RegisterComponent implements OnInit {
   public maleIcon = faMars;
   public otherIcon = faVenusMars;
   public birthDateIcon = faBirthdayCake;
+  public closeIcon = faTimes;
 
   public maxBirthDate = '2002-12-31';
   public birthDateValue = '1979-01-01';
@@ -98,7 +100,7 @@ export class RegisterComponent implements OnInit {
       },
     );
     if (this.authenticationService.isLoggedIn) {
-      const id = this.authenticationService.getUserId();
+      const id = this.authenticationService.userId;
       this.router.navigate(['profile', id]);
     }
     this.formControls.birthDate.setValue('1980-01-01');
@@ -164,6 +166,10 @@ export class RegisterComponent implements OnInit {
     }
   }
 
+  resetPseudo() {
+    this.pseudoRef.nativeElement.value = '';
+  }
+
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template, this.modalConfig);
   }
@@ -171,10 +177,8 @@ export class RegisterComponent implements OnInit {
   closeModal() {
     this.modalRef.hide();
     if (this.registerStatus.save) {
-      console.log('save ok => login')
       this.router.navigate(['/connection/login']);
     } else {
-      console.log('save ko => home')
       this.router.navigate(['home']);
     }
   }
@@ -192,17 +196,15 @@ export class RegisterComponent implements OnInit {
     this.member.birthDate = this.registerForm.value.birthDate;
     this.member.email = this.registerForm.value.email.toLowerCase();
     this.member.password = this.registerForm.value.password;
-    this.member.presentation = this.registerForm.value.presentation;
+    this.member.presentation = this.registerForm.value.presentation || 'Pas de présentation';
     this.registerData.member = this.member;
     if (this.photo) {
       this.photo.content = this.registerForm.value.file;
-      console.log('photo', this.photo)
       this.registerData.photo = this.photo;
     }
     this.memberDataService.register(this.registerData).subscribe(
       res => {
         this.registerStatus = res;
-        console.log('regiserStatus', this.registerStatus)
         if (this.registerStatus.pseudoUnavailable) {
           this.pseudoRef.nativeElement.focus();
         } else {

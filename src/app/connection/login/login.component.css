@@ -1,7 +1,7 @@
-.container-fluid {
-  background: url('../../../assets/img/bg-login.jpg') no-repeat;
+.login {
+  background: url('../../../assets/img/bg-login.jpg') no-repeat center center;
   background-size: cover;
-  height: calc(100vh - 6vh);
+  height: 100%;
 }
 
 .btn-primary {

@@ -1,20 +1,16 @@
 .text-white {
   color: ivory !important;
 }
-.bg-dark {
-  background-color: #ae3006 !important;
-}
 
-.btn-outline-primary {
-  border-color: ivory !important;
-  color: ivory !important;
+
+input[type=search] {
+  height:2rem;
 }
-.btn-primary {
-  background-color:ivory !important;
+ul {
+  list-style: none;
 }
-.dropdown-menu {
-  background-color:#ae3006 ;
-  border: none;
-  color: ivory;
-}
+/* .bg-modal {
+  background-color: ivory;
+} */
+
 

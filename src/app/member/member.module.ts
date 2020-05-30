@@ -1,22 +1,24 @@
-import { ProfileComponent } from './profile.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Routes, RouterModule } from '@angular/router';
-import { ProfileResolver } from './profile.resolver';
+import { MemberResolver } from '../member/member.resolver';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { ProfileComponent } from '@app/member/profile/profile.component';
 
 const routes: Routes = [];
 
 @NgModule({
   declarations: [
-    ProfileComponent
+    ProfileComponent,
+    DashboardComponent
   ],
   imports: [
     CommonModule,
     FontAwesomeModule,
     [RouterModule.forChild(routes)]
   ],
-  providers: [ProfileResolver]
+  providers: [MemberResolver]
 })
-export class ProfileModule { }
+export class MemberModule { }

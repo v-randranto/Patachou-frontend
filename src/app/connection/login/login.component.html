@@ -1,38 +1,48 @@
-<div class="container-fluid">
-    <h3 class="text-center text-color pt-4">Je me connecte...</h3>
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <div class="form-row my-3">
-        <div class="form-group col-10 col-sm-7 col-md-5 col-lg-4 col-xl-3 mx-auto">
-          <input type="text" formControlName="pseudo" class="form-control" placeholder="* Pseudonyme" maxlength=30 />
+<div class="login ">
+  <div class="col-md-8 col-lg-6 mx-auto">
+  <h3 class="text-center text-color py-5">Je me connecte...</h3>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div class="form-row my-3">
+      <div class="form-group col mx-4">
+        <input type="text" formControlName="pseudo" class="form-control" placeholder="* Pseudonyme" maxlength=30 />
+      </div>
+    </div>
+
+    <div class="form-row ">
+      <div class="form-group col mx-4 mt-2">
+        <input type="password" formControlName="password" class="form-control" placeholder="* Password" maxlength=30 />
+        <div *ngIf="badCredentials">
+          <div class="bg-danger">Oups, le pseudo ou le mot passe n'est pas correct.</div>
+        </div>
+        <div *ngIf="technicalFailure">
+          <div class="bg-danger">Oups, il y a une saucisse dans la pâte à choux. On s'occupe du problème, veuillez-nous
+            excuser pour cet incident technique.</div>
         </div>
       </div>
+    </div>
 
-      <div class="form-row my-3">
-        <div class="form-group col-10 col-sm-7 col-md-5 col-lg-4 col-xl-3 mx-auto">
-          <input type="password" formControlName="password" class="form-control" placeholder="* Password"
-            maxlength=30 />
-        </div>
-      </div>
+    <div class="text-center col mt-3">
+      <button class="btn btn-primary col mt-3" type="submit"
+        [disabled]="loginForm.invalid">Et j'envoie la sauce
+        caramel!</button>
+    </div>
+    <div class="text-center col mt-3">
+      <button class="btn btn-warning col mt-3"
+        [routerLink]="'/connection/register'">Ah mais je n'ai pas de
+        compte!</button>
+    </div>
+  </form>
 
-      <div class="my-3 mx-auto" *ngIf="badCredentials">
-        <div class="bg-danger">Oups, le pseudo ou le mot passe n'est pas correct.</div>
-      </div>
-
-      <div class="my-3 mx-auto" *ngIf="technicalFailure">
-        <div class="bg-danger">Oups, il y a une saucisse dans la pâte à choux. On s'occupe du problème, veuillez-nous excuser pour cet incident technique.</div>
-      </div>
-
-      <div class="row">
-        <button class="btn btn-primary col-8 col-sm-6 col-md-5 col-lg-3 col-xl-2 mx-auto my-3" type="submit"
-          [disabled]="loginForm.invalid">Et j'envoie la sauce
-          caramel!</button>
-      </div>
-      <div class="row my-1">
-        <button class="btn btn-warning col-8 col-sm-6 col-md-5 col-lg-3 col-xl-2 mx-auto "
-          [routerLink]="'/connection/register'">Ah mais je n'ai pas de
-          compte!</button>
-      </div>
-
-    </form>
-  </div>
-
+  <ng-template #error>
+    <div class="modal-header bg-danger">
+      <h5 class="modal-title pull-left text-white">Oups, une saucisse dans la pâte!</h5>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      Nous sommes désolés, un incident est intervenu. Merci de réessayer plus tard.
+    </div>
+  </ng-template>
+</div>
+</div>

@@ -1,9 +1,7 @@
-import { ProfileModule } from './profile/profile.module';
-import { JwtInterceptorService } from './core/service/jwt-interceptor.service';
-import { AuthenticationService } from './core/service/authentication.service';
-import { environment } from './../environments/environment';
+import { SearchService } from '@app/core/service/search.service';
+
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -14,12 +12,17 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
+import { AuthenticationService } from '@core/service/authentication.service';
+import { environment } from './../environments/environment';
+
 import { DataModule } from './data/data.module';
-import { CoreModule } from './core/core.module';
-import { ConnectionModule } from './connection/connection.module';
+import { CoreModule } from '@core/core.module';
+import { ConnectionModule } from '@app/connection/connection.module';
 import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { PopoverModule } from 'ngx-bootstrap/popover';
 
 import { NavbarComponent } from './layout/navbar/navbar.component';
 import { AboutComponent } from './about/about.component';
@@ -28,7 +31,9 @@ import { NotFoundComponent } from './layout/not-found/not-found.component';
 import { ErrorComponent } from './layout/error/error.component';
 import { MemberDataService } from './data/service/member-data.service';
 import { ContactComponent } from './contact/contact.component';
-import { ShortcutComponent } from './layout/shortcut/shortcut.component';
+import { MemberModule } from './member/member.module';
+import { GlobalErrorHandlerService } from '@core/service/global-error-handler.service';
+import { GlobalHttpInterceptorService } from '@app/core/service/global-http-interceptor.service';
 
 const config: SocketIoConfig = {
   url: environment.ws_url,
@@ -43,8 +48,7 @@ const config: SocketIoConfig = {
     NavbarComponent,
     AboutComponent,
     ErrorComponent,
-    ContactComponent,
-    ShortcutComponent
+    ContactComponent
   ],
   imports: [
     BrowserModule,
@@ -56,19 +60,20 @@ const config: SocketIoConfig = {
     NgbCollapseModule,
     ModalModule.forRoot(),
     BsDropdownModule.forRoot(),
+    PopoverModule.forRoot(),
+    AccordionModule.forRoot(),
     FontAwesomeModule,
     ConnectionModule,
     CoreModule,
     DataModule,
-    ProfileModule
+    MemberModule
   ],
   providers: [
     MemberDataService,
     AuthenticationService,
-    JwtInterceptorService,
-    {provide: HTTP_INTERCEPTORS,
-      useClass: JwtInterceptorService,
-      multi: true}
+    SearchService,
+    { provide: HTTP_INTERCEPTORS, useClass: GlobalHttpInterceptorService, multi: true },
+    { provide: ErrorHandler, useClass: GlobalErrorHandlerService },
   ],
   bootstrap: [AppComponent],
 })

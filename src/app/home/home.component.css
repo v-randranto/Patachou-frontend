@@ -1,7 +1,7 @@
-.container-fluid {
+.home {
   background: url('../../assets/img/bg-home.jpg') no-repeat center center;
   background-size: cover;
-  height: calc(100vh - 6vh);
+  height: 100%;
 }
 
 .btn-primary {

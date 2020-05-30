@@ -1,4 +1,8 @@
+import { Router } from '@angular/router';
+import { SocketIoService } from '@app/core/service/socket-io.service';
+import { AuthenticationService } from '@core/service/authentication.service';
 import { Component, OnInit } from '@angular/core';
+
 
 @Component({
   selector: 'app-root',
@@ -8,6 +12,16 @@ import { Component, OnInit } from '@angular/core';
 
 export class AppComponent implements OnInit {
 
-  constructor() { }
-  ngOnInit() { }
+  constructor(
+    private authenticationService: AuthenticationService,
+    private socketService: SocketIoService,
+    private router: Router
+  ) { }
+  ngOnInit(): void {
+    if (this.authenticationService.isLoggedIn) {
+      const member = this.authenticationService.userProfile;
+      this.socketService.connectMember({ id: member.id, pseudo: member.pseudo });
+      this.router.navigate(['member/dashboard']);
+    }
+  }
 }

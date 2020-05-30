@@ -16,14 +16,18 @@ export class MemberDataService {
     const url = '/api/connection/login';
     return this.http.post<TokenData>(url, user);
   }
-  public getProfile(idObj: any): Observable<Member> {
-    const url = '/api/profile/get';
+  public getMember(idObj: any): Observable<Member> {
+    const url = '/api/member/get';
     return this.http.post<Member>(url, idObj);
+  }
+
+  public searchMembers(): Observable<Member[]> {
+    const url = '/api/member/search';
+    return this.http.get<Member[]>(url);
   }
 
   public register(data: RegisterData): Observable<any> {
     const url = '/api/connection/register';
     return this.http.post<any>(url, data)
   }
-
 }

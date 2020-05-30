@@ -16,7 +16,7 @@ export class AuthenticationGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    if (this.authenticationService.isLoggedIn !== true) {
+    if (!this.authenticationService.isLoggedIn) {
       window.alert("Oups, il faut être connecté.e!");
       this.router.navigate(['login'])
     }

@@ -9,9 +9,10 @@ import { NotFoundComponent } from './layout/not-found/not-found.component';
 import { AboutComponent } from './about/about.component';
 import { LostPasswordComponent } from './connection/lost-password/lost-password.component';
 import { ContactComponent } from './contact/contact.component';
-import { ProfileComponent } from './profile/profile.component';
+import { ProfileComponent } from './member/profile/profile.component';
 import { ErrorComponent } from './layout/error/error.component';
-import { ProfileResolver } from '@app/profile/profile.resolver';
+import { MemberResolver } from '@app/member/member.resolver';
+import { DashboardComponent } from './member/dashboard/dashboard.component';
 
 const routes: Routes = [
 
@@ -20,7 +21,8 @@ const routes: Routes = [
   { path: 'about', component: AboutComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'error', component: ErrorComponent },
-  { path: 'connection',
+  {
+    path: 'connection',
     children: [
       { path: '', redirectTo: 'login', pathMatch: 'full' },
       { path: 'register', component: RegisterComponent },
@@ -28,12 +30,16 @@ const routes: Routes = [
       { path: 'lostpwd', component: LostPasswordComponent }
     ]
   },
-  { path: 'profile',
-  component: ProfileComponent,
-  canActivate: [AuthenticationGuard],
-  resolve: {
-    member: ProfileResolver
-  } },
+  {
+    path: 'member',
+    canActivate: [AuthenticationGuard],
+    resolve: { member: MemberResolver },
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: DashboardComponent },
+      { path: 'profile', component: ProfileComponent }
+    ]
+  },
   { path: '**', component: NotFoundComponent }
 ];
 

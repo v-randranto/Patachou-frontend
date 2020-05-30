@@ -1,8 +1,7 @@
-.container-fluid {
+.register {
   background: url('../../../assets/img/bg-register4.jpg') center center;
   background-size: cover;
-  /* height: calc(100vh - 6vh); */
-  height: 145vh;
+
 }
 
 .btn-primary {
@@ -57,5 +56,6 @@ input, textarea {
 .bg-danger {
   background-color: #cb7364 !important;
 }
-
-
+.popover {
+  border-radius: 50%;
+}

@@ -1,11 +1,11 @@
-<div class="container-fluid">
+  <div class="profile">
   <div class="card" class="mx-auto pt-4" style="width: 20rem;">
     <h5 class="card-title text-center text-white">{{member.pseudo | titlecase}}</h5>
     <div class="mx-auto text-white" style="width: 3rem;">
-      <img class="card-img-top" [src]="member.photoUrl">
+      <img class="card-img-top rounded" [src]="member.photoUrl" alt="photo membre">
     </div>
     <div class="text-center">
-      <small class="text-white">Membre depuis le {{member.creationDate | date:'short':'':'fr'}}</small>
+      <small class="text-white">Membre depuis le {{member.creationDate | date:'mediumDate':'':'fr'}}</small>
     </div>
     <div class="card-body">
       <p *ngIf="member.presentation" class="card-text">{{member.presentation}}</p>
@@ -13,27 +13,27 @@
       <ul class="list-group list-group-flush">
         <li class="list-group-item p-1">
           <span *ngIf="member.sex" class="d-inline mr-2" [ngSwitch]="member.sex">
-            <fa-icon class="align-self-center" *ngSwitchCase="'female'" [icon]="femaleIcon"></fa-icon>
-            <fa-icon class="align-self-center" *ngSwitchCase="'male'" [icon]="maleIcon"></fa-icon>
-            <fa-icon class="align-self-center" *ngSwitchCase="'other'" [icon]="otherIcon"></fa-icon>
+            <fa-icon *ngSwitchCase="'female'" [icon]="femaleIcon"></fa-icon>
+            <fa-icon *ngSwitchCase="'male'" [icon]="maleIcon"></fa-icon>
+            <fa-icon *ngSwitchCase="'other'" [icon]="otherIcon"></fa-icon>
           </span>
           <span class="d-inline">
             {{member.firstName  | titlecase}} {{member.lastName  | titlecase}}
-          </span></li>
+          </span>
+        </li>
         <li *ngIf="member.birthDate" class="list-group-item p-1">
           <span class="d-inline mr-2">
-            <fa-icon class="align-self-center" [icon]="birthDateIcon"></fa-icon>
+            <fa-icon [icon]="birthDateIcon"></fa-icon>
           </span>
-          <span class="d-inline">{{member.birthDate | date:'short':'':'fr'}}</span></li>
+          <span class="d-inline">{{member.birthDate | date:'mediumDate':'':'fr'}}</span>
+        </li>
         <li class="list-group-item p-1">
           <span class="d-inline">
-            <fa-icon class="align-self-center" [icon]="emailIcon"></fa-icon>
+            <fa-icon [icon]="emailIcon"></fa-icon>
           </span>
           <span class="d-inline pl-2">{{member.email}}</span>
         </li>
       </ul>
     </div>
-
   </div>
-
-</div>
+  </div>

@@ -1,12 +1,9 @@
-import { TokenData } from './../../data/model/user';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { throwError, Observable } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
 import { User } from '@app/data/model/user';
 import { MemberDataService } from '@app/data/service/member-data.service';
 import { SocketIoService } from './socket-io.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -17,16 +14,19 @@ export class AuthenticationService {
     private memberDataService: MemberDataService,
     private router: Router,
     private socketService: SocketIoService
-    ) { }
+  ) { }
 
   login(user: User) {
+    console.log('>login', user)
+    localStorage.clear();
+    console.log('> login', localStorage)
     this.memberDataService.login(user)
       .subscribe((res) => {
-        this.socketService.connectMember({id: res.id, pseudo: user.pseudo});
-        const token = res.token;
+        console.log('>login ok, connectMember')
+        this.socketService.connectMember({ id: res.id, pseudo: user.pseudo });
         localStorage.setItem('jwt_token', res.token);
         localStorage.setItem('user_id', res.id);
-        this.router.navigate(['profile']);
+        this.router.navigate(['member/dashboard']);
       },
         error => {
           console.error('Auth service : login KO', error);
@@ -38,18 +38,28 @@ export class AuthenticationService {
     return localStorage.getItem('jwt_token');
   }
 
-  getUserId() {
+  get userId() {
     return localStorage.getItem('user_id');
   }
+  get userProfile() {
+    return JSON.parse(localStorage.getItem('user_data'));
+  }
+
 
   get isLoggedIn(): boolean {
     let token = localStorage.getItem('jwt_token');
     return (token !== null) ? true : false;
   }
 
+  setUserProfile(member) {
+
+    localStorage.setItem('user_data', JSON.stringify(member));
+  }
+
   logout() {
-    this.socketService.disconnectMember();
     localStorage.clear();
+    console.log('logout', localStorage)
+    this.socketService.disconnectMember();
     this.router.navigate(['home']);
   }
 }
