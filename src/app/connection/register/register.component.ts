@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild, ElementRef, TemplateRef } from '@angular/core';
+import { ErrorModalComponent } from '@shared/modal/error-modal/error-modal.component';
+import { NotificationModalComponent } from '@shared/modal/notification-modal/notification-modal.component';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MustMatch, PasswordStrength } from '@app/connection/custom-validator/custom-validator.validator';
 import { MemberDataService } from '@app/data/service/member-data.service';
-import { faUpload, faMars, faVenus, faVenusMars, faBirthdayCake, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { Member, Photo, RegisterData } from '@app/data/model/member';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '@app/core/service/authentication.service';
@@ -28,12 +29,20 @@ const nameAllowedChar = /[a-zàáâäãåąčćęèéêëėįìíîïłńòóô�
 })
 export class RegisterComponent implements OnInit {
   @ViewChild('pseudo') pseudoRef: ElementRef;
-  @ViewChild('confirmation') confirmationRef: TemplateRef<any>;
-  @ViewChild('error') errorRef: TemplateRef<any>;
   public modalRef: BsModalRef;
-  modalConfig = {
+  public notificationModalConfig = {
     animated: true,
-    ignoreBackdropClick: true
+    ignoreBackdropClick: true,
+    initialState: {
+      title: 'A y est, vous êtes des nôtres!',
+      text: `Un email vous a été envoyé pour confirmer votre inscription. Si vous ne le recevez pas, vérifiez votre adresse dans le profil de votre compte.`,
+      redirection: `/connection/login`
+    }
+  };
+  public errorModalConfig = {
+    animated: true,
+    ignoreBackdropClick: true,
+    redirection: `/home`
   };
   public registerForm: FormGroup;
   public submitted = false;
@@ -53,12 +62,6 @@ export class RegisterComponent implements OnInit {
   };
   public acceptFileExtensions = allowedFileExtensions.join(',');
   public invalidFileMessage: string;
-  public uploadIcon = faUpload;
-  public femaleIcon = faVenus;
-  public maleIcon = faMars;
-  public otherIcon = faVenusMars;
-  public birthDateIcon = faBirthdayCake;
-  public closeIcon = faTimes;
 
   public maxBirthDate = '2002-12-31';
   public birthDateValue = '1979-01-01';
@@ -78,7 +81,7 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {
     if (this.authenticationService.isLoggedIn) {
-      this.router.navigate(['profile']);
+      this.router.navigate(['member/dashboard']);
     };
     this.registerForm = this.fb.group({
       pseudo: ['', [Validators.required, Validators.pattern(pseudoPattern), Validators.maxLength(maxPseudo)]],
@@ -99,10 +102,7 @@ export class RegisterComponent implements OnInit {
         ]
       },
     );
-    if (this.authenticationService.isLoggedIn) {
-      const id = this.authenticationService.userId;
-      this.router.navigate(['profile', id]);
-    }
+
     this.formControls.birthDate.setValue('1980-01-01');
   }
 
@@ -170,20 +170,15 @@ export class RegisterComponent implements OnInit {
     this.pseudoRef.nativeElement.value = '';
   }
 
-  openModal(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(template, this.modalConfig);
+  openErrorModal() {
+    this.modalRef = this.modalService.show(ErrorModalComponent, this.errorModalConfig);
   }
 
-  closeModal() {
-    this.modalRef.hide();
-    if (this.registerStatus.save) {
-      this.router.navigate(['/connection/login']);
-    } else {
-      this.router.navigate(['home']);
-    }
+  openNotificationModal() {
+    this.modalRef = this.modalService.show(NotificationModalComponent, this.notificationModalConfig);
   }
 
-  onSubmit() {
+    onSubmit() {
     this.submitted = true;
     if (this.registerForm.invalid) {
       return;
@@ -202,6 +197,7 @@ export class RegisterComponent implements OnInit {
       this.photo.content = this.registerForm.value.file;
       this.registerData.photo = this.photo;
     }
+    console.log(`title case ${this.member.pseudo} ${this.member.firstName} ${this.member.lastName}`)
     this.memberDataService.register(this.registerData).subscribe(
       res => {
         this.registerStatus = res;
@@ -209,17 +205,17 @@ export class RegisterComponent implements OnInit {
           this.pseudoRef.nativeElement.focus();
         } else {
           if (this.registerStatus.save) {
-            this.openModal(this.confirmationRef);
+            this.openNotificationModal();
           } else {
             // TODO refacto
-            this.openModal(this.errorRef);
+            this.openErrorModal();
           }
         }
       },
       error => {
         console.error(error);
         this.registerStatus.save = false;
-        this.openModal(this.errorRef);
+        this.openErrorModal();
       });
   }
 

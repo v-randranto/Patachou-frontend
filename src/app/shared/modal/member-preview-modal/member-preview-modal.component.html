@@ -1,0 +1,23 @@
+<div class="modal-body align-items-center">
+  <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <div>
+    <img class="rounded img-fluid mr-2" [src]="selectedMember.photoUrl" width="10%" height="auto" alt="photo membre">
+    <span *ngIf="selectedMember.sex" class="d-inline mr-2" [ngSwitch]="selectedMember.sex">
+      <fa-icon *ngSwitchCase="'female'" [icon]="['fas','venus']"></fa-icon>
+      <fa-icon *ngSwitchCase="'male'" [icon]="['fas','mars']"></fa-icon>
+      <fa-icon *ngSwitchCase="'other'" [icon]="['fas','venus-mars']"></fa-icon>
+    </span>
+    <span>{{ selectedMember.pseudo | customTitleCase }}, {{ selectedMember.firstName | customTitleCase }}
+      {{ selectedMember.lastName | customTitleCase }}
+    </span>
+
+  </div>
+
+  <div>{{selectedMember.presentation}}</div>
+
+  <button type="button" class="btn btn-primary d-block mx-auto my-2" (click)="relationRequest()">L'ajouter à mes amis
+  </button>
+  <button type="button" class="btn btn-primary d-block mx-auto my-2">Voir ses amis (todo)
+  </button>

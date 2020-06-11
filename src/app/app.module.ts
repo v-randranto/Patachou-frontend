@@ -1,3 +1,4 @@
+import { SharedModule } from '@app/shared/shared.module';
 import { SearchService } from '@app/core/service/search.service';
 
 import { BrowserModule } from '@angular/platform-browser';
@@ -10,7 +11,8 @@ import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { faUpload, faMars, faVenus, faVenusMars, faBirthdayCake, faTimes, faIdBadge, faAt, faPlug, faEnvelope, faSearch, faUserFriends, faPencilAlt, faUsers, faUser, faUserMinus, faUserPlus, faSignOutAlt, faSignInAlt, faInfoCircle, faSmileBeam, faAngleDown, faCaretDown, faColumns } from '@fortawesome/free-solid-svg-icons';
 
 import { AuthenticationService } from '@core/service/authentication.service';
 import { environment } from './../environments/environment';
@@ -20,9 +22,7 @@ import { CoreModule } from '@core/core.module';
 import { ConnectionModule } from '@app/connection/connection.module';
 import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { PopoverModule } from 'ngx-bootstrap/popover';
 
 import { NavbarComponent } from './layout/navbar/navbar.component';
 import { AboutComponent } from './about/about.component';
@@ -48,7 +48,7 @@ const config: SocketIoConfig = {
     NavbarComponent,
     AboutComponent,
     ErrorComponent,
-    ContactComponent
+    ContactComponent,
   ],
   imports: [
     BrowserModule,
@@ -60,13 +60,12 @@ const config: SocketIoConfig = {
     NgbCollapseModule,
     ModalModule.forRoot(),
     BsDropdownModule.forRoot(),
-    PopoverModule.forRoot(),
-    AccordionModule.forRoot(),
     FontAwesomeModule,
     ConnectionModule,
     CoreModule,
     DataModule,
-    MemberModule
+    MemberModule,
+    SharedModule
   ],
   providers: [
     MemberDataService,
@@ -77,4 +76,8 @@ const config: SocketIoConfig = {
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {
+  constructor(library: FaIconLibrary) {
+    library.addIcons(faUpload, faMars, faVenus, faVenusMars, faBirthdayCake, faTimes, faIdBadge, faAt, faPlug, faEnvelope, faSearch, faUserFriends, faPencilAlt, faUsers, faUser, faUserMinus, faUserPlus, faSignOutAlt, faSignInAlt, faInfoCircle, faSmileBeam, faAngleDown, faCaretDown, faColumns);
+  }
+}

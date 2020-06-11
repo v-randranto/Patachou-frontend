@@ -7,6 +7,7 @@ import { LostPasswordComponent } from './lost-password/lost-password.component';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Routes, RouterModule } from '@angular/router';
+import { SharedModule } from '@app/shared/shared.module';
 
 const routes: Routes = [];
 
@@ -20,7 +21,8 @@ const routes: Routes = [];
     CommonModule,
     ReactiveFormsModule,
     FontAwesomeModule,
-    [RouterModule.forChild(routes)]
+    [RouterModule.forChild(routes)],
+    SharedModule
   ],
 })
 export class ConnectionModule {}

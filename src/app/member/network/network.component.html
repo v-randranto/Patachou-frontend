@@ -1,0 +1,71 @@
+<div class="network">
+  <div class="col-md-10 col-lg-8 mx-auto">
+    <tabset type="pills" [justified]="true">
+      <tab heading="Mes z'amis">
+        <ul *ngIf="confirmedRelations?.length; else noFriends">
+          <li *ngFor="let relation of confirmedRelations">
+            <span *ngIf="relation.receiver">
+              <img class="rounded img-fluid mr-1" [src]="relation.receiver.photoUrl" width="25" height="auto"
+                alt="photo membre">
+              {{relation.receiver.pseudo}},
+              {{relation.receiver.fistName}} {{relation.receiver.lastName}}
+            </span>
+            <span *ngIf="relation.requester">
+              <img class="rounded img-fluid mr-1" [src]="relation.requester.photoUrl" width="25" height="auto"
+                alt="photo membre">
+              {{relation.requester.pseudo}},
+              {{relation.requester.fistName}} {{relation.requester.lastName}}
+            </span>
+          </li>
+        </ul>
+        <ng-template #noFriends>
+          <span>Je n'ai pas d'amis</span>
+          <img class="img-fluid ml-1" src="../../../assets/img/sad-face.png" width="25" height="auto" alt="sad face">
+        </ng-template>
+      </tab>
+      <tab heading="A valider">
+        <p>Demandes d'ajout d'ami reçues à valider</p>
+        <ul *ngIf="relationsToValidate?.length; else noValidations">
+          <li *ngFor="let relation of relationsToValidate">
+            <img class="rounded img-fluid mr-1" [src]="relation.requester.photoUrl" width="25" height="auto"
+              alt="photo membre">
+            {{relation.requester.pseudo}},
+            {{relation.requester.firstName}} {{relation.requester.lastName}}
+          </li>
+        </ul>
+        <ng-template #noValidations>Je n'ai pas de demandes à valider</ng-template>
+      </tab>
+      <tab heading="En attente">
+        <p>Demandes d'ajout d'ami envoyées et en attente</p>
+        <ul *ngIf="relationsInWaiting?.length">
+          <li *ngFor="let relation of relationsInWaiting">
+            <img class="rounded img-fluid mr-1" [src]="relation.receiver.photoUrl" width="25" height="auto"
+              alt="photo membre">
+            {{relation.receiver.pseudo}},
+            {{relation.receiver.firstName}} {{relation.receiver.lastName}}
+          </li>
+        </ul>
+        <ng-template #noValidations>Je n'ai pas de demandes en attente</ng-template>
+      </tab>
+      <tab heading="Se faire des z'amis">
+        <!-- Recherche membres -->
+        <form *ngIf="authenticationService.isLoggedIn" class="form-inline my-2 my-lg-0">
+          <input class="form-control col mr-sm-2" type="search" placeholder="Recherche par pseudo ou nom"
+            (keyup)="searchTerm$.next($event.target.value)">
+        </form>
+
+        <div *ngIf="results" class="list-group position-absolute" style="top:100px">
+          <button class="list-group-item py-0 px-1" (click)="closeResults()">
+            <span class="float-right" aria-hidden="true">&times;</span>
+          </button>
+          <button #result *ngFor="let result of results" class="list-group-item list-group-item-action"
+            (click)="selectMember(result)">
+            <img class="rounded img-fluid" [src]="result.photoUrl" width="25px" height="auto" alt="avatar">
+            {{ result.pseudo | customTitleCase }}, {{ result.firstName | customTitleCase }}
+            {{ result.lastName | customTitleCase }}
+          </button>
+        </div>
+      </tab>
+    </tabset>
+  </div>
+</div>

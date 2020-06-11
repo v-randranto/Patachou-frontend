@@ -13,6 +13,8 @@ import { ProfileComponent } from './member/profile/profile.component';
 import { ErrorComponent } from './layout/error/error.component';
 import { MemberResolver } from '@app/member/member.resolver';
 import { DashboardComponent } from './member/dashboard/dashboard.component';
+import { NetworkComponent } from './member/network/network.component';
+import { NetworkResolver } from './member/network/network.resolver';
 
 const routes: Routes = [
 
@@ -37,7 +39,12 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },
-      { path: 'profile', component: ProfileComponent }
+      { path: 'profile', component: ProfileComponent },
+      {
+        path: 'network',
+        component: NetworkComponent,
+        resolve: { network: NetworkResolver }
+      }
     ]
   },
   { path: '**', component: NotFoundComponent }

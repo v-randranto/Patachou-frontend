@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { faMars, faVenus, faVenusMars, faBirthdayCake, faIdBadge, faInfoCircle, faAt } from '@fortawesome/free-solid-svg-icons';
 import { Member, Photo } from '@app/data/model/member';
 import { Router } from '@angular/router';
 import { registerLocaleData } from '@angular/common';
@@ -13,13 +12,6 @@ import { AuthenticationService } from '@app/core/service/authentication.service'
 export class ProfileComponent implements OnInit {
   public member: Member;
   public photo: Photo;
-  public nameIcon = faIdBadge;
-  public aboutMeIcon = faInfoCircle;
-  public femaleIcon = faVenus;
-  public maleIcon = faMars;
-  public otherIcon = faVenusMars;
-  public birthDateIcon = faBirthdayCake;
-  public emailIcon = faAt;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -33,7 +25,7 @@ export class ProfileComponent implements OnInit {
       this.member = this.authenticationService.userProfile;
     } else {
       this.authenticationService.logout();
-      this.router.navigate(['home']);
+      this.router.navigate(['connection/login']);
     }
   }
 

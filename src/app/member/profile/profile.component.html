@@ -1,6 +1,6 @@
-  <div class="profile">
+<div class="profile">
   <div class="card" class="mx-auto pt-4" style="width: 20rem;">
-    <h5 class="card-title text-center text-white">{{member.pseudo | titlecase}}</h5>
+    <h5 class="card-title text-center text-white">{{ member.pseudo | customTitleCase }}</h5>
     <div class="mx-auto text-white" style="width: 3rem;">
       <img class="card-img-top rounded" [src]="member.photoUrl" alt="photo membre">
     </div>
@@ -13,27 +13,28 @@
       <ul class="list-group list-group-flush">
         <li class="list-group-item p-1">
           <span *ngIf="member.sex" class="d-inline mr-2" [ngSwitch]="member.sex">
-            <fa-icon *ngSwitchCase="'female'" [icon]="femaleIcon"></fa-icon>
-            <fa-icon *ngSwitchCase="'male'" [icon]="maleIcon"></fa-icon>
-            <fa-icon *ngSwitchCase="'other'" [icon]="otherIcon"></fa-icon>
+            <fa-icon *ngSwitchCase="'female'" [icon]="['fas','venus']"></fa-icon>
+            <fa-icon *ngSwitchCase="'male'" [icon]="['fas','mars']"></fa-icon>
+            <fa-icon *ngSwitchCase="'other'" [icon]="['fas','venus-mars']"></fa-icon>
           </span>
           <span class="d-inline">
-            {{member.firstName  | titlecase}} {{member.lastName  | titlecase}}
+            {{ member.firstName | customTitleCase }} {{ member.lastName | customTitleCase }}
           </span>
         </li>
         <li *ngIf="member.birthDate" class="list-group-item p-1">
           <span class="d-inline mr-2">
-            <fa-icon [icon]="birthDateIcon"></fa-icon>
+            <fa-icon [icon]="['fas','birthday-cake']"></fa-icon>
           </span>
           <span class="d-inline">{{member.birthDate | date:'mediumDate':'':'fr'}}</span>
         </li>
         <li class="list-group-item p-1">
           <span class="d-inline">
-            <fa-icon [icon]="emailIcon"></fa-icon>
+            <fa-icon [icon]="['fas','at']"></fa-icon>
           </span>
           <span class="d-inline pl-2">{{member.email}}</span>
         </li>
       </ul>
+      <button class="btn btn-primary mt-3">Je modifie mon profil (todo)</button>
     </div>
   </div>
-  </div>
+</div>

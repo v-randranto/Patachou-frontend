@@ -4,6 +4,8 @@ import { User } from '@app/data/model/user';
 import { MemberDataService } from '@app/data/service/member-data.service';
 import { SocketIoService } from './socket-io.service';
 import { Observable } from 'rxjs';
+import { Member } from '@app/data/model/member';
+import { Relationship } from '@app/data/model/relationship';
 
 @Injectable({
   providedIn: 'root'
@@ -45,15 +47,22 @@ export class AuthenticationService {
     return JSON.parse(localStorage.getItem('user_data'));
   }
 
+  get userRelationships() {
+    return JSON.parse(localStorage.getItem('user_relations'));
+  }
+
 
   get isLoggedIn(): boolean {
     let token = localStorage.getItem('jwt_token');
     return (token !== null) ? true : false;
   }
 
-  setUserProfile(member) {
-
+  setUserProfile(member: Member) {
     localStorage.setItem('user_data', JSON.stringify(member));
+  }
+
+  setUserRelationships(relations: Relationship[]) {
+    localStorage.setItem('user_data', JSON.stringify(relations));
   }
 
   logout() {

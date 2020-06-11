@@ -1,4 +1,5 @@
 export class Member {
+  public _id: string;
   public pseudo: string;
   public isAdmin: boolean;
   public firstName: string;
