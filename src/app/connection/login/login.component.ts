@@ -33,6 +33,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.authenticationService.isLoggedIn) {
+      console.log('>login onInit : isLoggedIn => dashboard')
       this.router.navigate(['member/dashboard']);
     };
     this.loginForm = this.fb.group({

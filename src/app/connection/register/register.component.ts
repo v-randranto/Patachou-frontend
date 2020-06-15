@@ -81,6 +81,7 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {
     if (this.authenticationService.isLoggedIn) {
+      console.log('>login onInit : isLoggedIn => dashboard');
       this.router.navigate(['member/dashboard']);
     };
     this.registerForm = this.fb.group({

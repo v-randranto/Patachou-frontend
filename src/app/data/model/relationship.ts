@@ -1,6 +1,6 @@
 export class Relationship {
+  public _id: string;
   public category: string;
-  public friend: any;
   public requester: any;
   public receiver: any;
   public recommander: string;

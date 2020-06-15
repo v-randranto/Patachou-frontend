@@ -11,13 +11,29 @@
     </span>
     <span>{{ selectedMember.pseudo | customTitleCase }}, {{ selectedMember.firstName | customTitleCase }}
       {{ selectedMember.lastName | customTitleCase }}
-    </span>
-
+      </span>
+  </div>
+  <div>{{selectedMember.presentation}}</div>
+  <div *ngIf="selectedRelation">
+    {{dateLabel}} {{ selectedRelation.creationDate | date:'mediumDate':'':'fr' }}
   </div>
 
-  <div>{{selectedMember.presentation}}</div>
-
-  <button type="button" class="btn btn-primary d-block mx-auto my-2" (click)="relationRequest()">L'ajouter à mes amis
+  <!-- affichage des boutons en fonction de la relation avec le membre sélectionné -->
+  <button *ngIf="isConfirmed" type="button" class="btn btn-outline-primary d-block mx-auto my-2">Voir son profil (todo)
   </button>
-  <button type="button" class="btn btn-primary d-block mx-auto my-2">Voir ses amis (todo)
+  <button *ngIf="isConfirmed" type="button" class="btn btn-outline-primary d-block mx-auto my-2"
+    (click)="relationUpdate(status_terminated)">Supprimer
+  </button>
+  <div *ngIf="toValidate" class="mx-auto">
+    <button type="button" class="btn btn-outline-primary mx-2 my-2"
+      (click)="relationUpdate(status_confirmed)">Accepter
+    </button>
+    <button type="button" class="btn btn-outline-primary mx-2 my-2"
+      (click)="relationUpdate(status_rejected)">Refuser
+    </button>
+  </div>
+  <button *ngIf="toBefriend" type="button" class="btn btn-outline-primary d-block mx-auto my-2"
+    (click)="relationRequest()">Ajouter en ami
+  </button>
+  <button type="button" class="btn btn-outline-primary d-block mx-auto my-2">Voir ses amis (todo)
   </button>

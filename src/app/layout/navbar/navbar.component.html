@@ -21,45 +21,46 @@
       <a class="nav-link" routerLinkActive="active" routerLink="/contact">
         <fa-icon [icon]="['fas','info-circle']" class="mr-1"></fa-icon><span class="d-md-none">Contact</span>
       </a>
-      <!-- menu pour membre connecté -->
+
+      <!-- Membre connecté -->
       <div *ngIf="isLoggedIn" class="navbar-nav">
         <!-- Profil -->
         <div *ngIf="currentMember" class="navbar-nav">
           <a class="nav-link" routerLinkActive="active" routerLink="/member/profile" (click)="menuCollapse()">
             <img class="rounded img-fluid d-inline mr-2" width="25px" height="auto" [src]="currentMember.photoUrl"
               alt="">
-            <small>{{ currentMember.pseudo }}</small>
+            <span class="d-md-none">Profil</span>
           </a>
         </div>
         <!-- Tableau de bord -->
         <a class="nav-link" routerLinkActive="" routerLink="/member/dashboard" (click)="menuCollapse()">
-          <fa-icon [icon]="['fas','columns']" class="mr-2"></fa-icon><span class="d-md-none">Tableau de board (todo)</span>
+          <fa-icon [icon]="['fas','columns']" class="mr-2"></fa-icon><span class="d-md-none">Quoi de neuf (todo)</span>
         </a>
         <!-- Messagerie -->
         <a class="nav-link" href="#">
-          <fa-icon [icon]="['fas','envelope']" class="mr-2"></fa-icon><span class="d-md-none">Messagerie (todo)</span>
+          <fa-icon [icon]="['fas','envelope']" class="mr-2"></fa-icon><span class="d-md-none">Papotage (todo)</span>
         </a>
 
         <!-- Réseautage -->
-        <a class="nav-link" routerLinkActive="" routerLink="/member/network" (click)="menuCollapse()">
-          <fa-icon [icon]="['fas','users']" class="mr-2"></fa-icon><span class="d-md-none">Réseauterie</span>
+        <a class="nav-link" routerLinkActive="active" routerLink="/member/network" (click)="menuCollapse()">
+          <fa-icon [icon]="['fas','users']" class="mr-2"></fa-icon><span class="d-md-none">Réseautage</span>
         </a>
 
         <!--Déconnexion -->
         <a class="nav-link" routerLinkActive="active" (click)="logout()">
-          <fa-icon [icon]="['fas','sign-out-alt']" class="mr-2"></fa-icon><span class="d-md-none"> Se déconnecter</span>
+          <fa-icon [icon]="['fas','sign-out-alt']" class="mr-2"></fa-icon><span class="d-md-none">Déconnexion</span>
         </a>
       </div>
 
-      <!-- Menu pour un utilisateur non connecté -->
+      <!-- Utilisateur non connecté -->
       <div *ngIf="!isLoggedIn" class="navbar-nav ml-md-auto">
         <!-- Inscription -->
         <a class="nav-link" routerLinkActive="active" routerLink="/connection/register" (click)="menuCollapse()">
-          <fa-icon [icon]="['fas','user-plus']" class="mr-2"></fa-icon><span class="d-md-none">S'inscrire</span>
+          <fa-icon [icon]="['fas','user-plus']" class="mr-2"></fa-icon><span class="d-md-none">Inscription</span>
         </a>
         <!-- Connexion -->
         <a class="nav-link" routerLinkActive="active" routerLink="/connection/login" (click)="menuCollapse()">
-          <fa-icon [icon]="['fas','sign-in-alt']" class="mr-2"></fa-icon><span class="d-md-none">Se connecter</span>
+          <fa-icon [icon]="['fas','sign-in-alt']" class="mr-2"></fa-icon><span class="d-md-none">Connexion</span>
         </a>
       </div>
     </div>

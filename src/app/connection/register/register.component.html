@@ -1,7 +1,7 @@
 <div class="register">
 
   <div class="col-md-8 col-lg-6 mx-auto">
-    <h3 class="text-dark text-center py-5">J'ouvre une compote...</h3>
+    <h3 class="text-dark text-center py-5">Je m'inscris...</h3>
 
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
       <div class="form-row my-3">
@@ -13,7 +13,6 @@
             <div class="rounded" *ngIf="formControls.pseudo.errors.required">Saisissez votre pseudo.</div>
             <div *ngIf="formControls.pseudo.errors.pattern">Format incorrect ou caractère non permis.</div>
             <div *ngIf="formControls.pseudo.errors.maxlength">Le pseudonyme ne peut dépasser 20 caractères</div>
-
           </div>
           <div class="bg-danger text-white px-2" *ngIf="registerStatus.pseudoUnavailable">Le pseudonyme est déjà utilisé
           </div>

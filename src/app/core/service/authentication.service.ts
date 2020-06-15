@@ -19,15 +19,16 @@ export class AuthenticationService {
   ) { }
 
   login(user: User) {
-    console.log('>login', user)
+    console.log('>authentService login user', user)
     localStorage.clear();
-    console.log('> login', localStorage)
+    console.log('> login localStorage cleared', localStorage)
     this.memberDataService.login(user)
       .subscribe((res) => {
-        console.log('>login ok, connectMember')
+        console.log('>login memberDataService.subcribe');
         this.socketService.connectMember({ id: res.id, pseudo: user.pseudo });
         localStorage.setItem('jwt_token', res.token);
         localStorage.setItem('user_id', res.id);
+        console.log('> login localStorage set', localStorage)
         this.router.navigate(['member/dashboard']);
       },
         error => {
@@ -62,12 +63,12 @@ export class AuthenticationService {
   }
 
   setUserRelationships(relations: Relationship[]) {
-    localStorage.setItem('user_data', JSON.stringify(relations));
+    localStorage.setItem('user_relations', JSON.stringify(relations));
   }
 
   logout() {
+    console.log('>logout localStorage before clearing', localStorage)
     localStorage.clear();
-    console.log('logout', localStorage)
     this.socketService.disconnectMember();
     this.router.navigate(['home']);
   }

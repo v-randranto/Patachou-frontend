@@ -1,68 +1,111 @@
+<!--
+  Les relations du membre en cours sont affichées dans des onglets selon leur type
+  - les amis confirmés
+  - les demandes d'ajout d'amis reçues en attente
+  - les demandes d'amis envoyées et en attente
+
+  Les relations peuvent être sélectionnées :
+  - affichage des données du membre ami dans une modale
+  - actions possibles selon le statut de la relation : voir le profil, confirmation, rejet ou suppression de la relation
+
+  La recherche d'amis se fait dans un 4ème onglet:
+  - saisie d'un pseudo, nom ou prénom
+  - sélection et affichage des données d'un membre dans un modale
+  - possibilité de faire la demande d'ajout d'ami
+ -->
+
 <div class="network">
   <div class="col-md-10 col-lg-8 mx-auto">
+    <h4>Mon réseau d'amis</h4>
     <tabset type="pills" [justified]="true">
-      <tab heading="Mes z'amis">
-        <ul *ngIf="confirmedRelations?.length; else noFriends">
-          <li *ngFor="let relation of confirmedRelations">
-            <span *ngIf="relation.receiver">
-              <img class="rounded img-fluid mr-1" [src]="relation.receiver.photoUrl" width="25" height="auto"
-                alt="photo membre">
-              {{relation.receiver.pseudo}},
-              {{relation.receiver.fistName}} {{relation.receiver.lastName}}
+
+      <!--======================================================================================================
+             les amis confirmés
+      ==========================================================================================================-->
+      <tab heading="Amis">
+        <div clas="list-group" *ngIf="confirmedRelations?.length; else noFriends">
+          <button *ngFor="let relation of confirmedRelations" class="list-group-item list-group-item-action"
+            (click)="selectRelation(relation, relation_confirmed)">
+            <span *ngIf="isRequester(relation); else isReceiver">
+              <img class="rounded img-fluid" [src]="relation.receiver.photoUrl" width="25px" height="auto" alt="avatar">
+              {{ relation.receiver.pseudo | customTitleCase }}, {{ relation.receiver.firstName | customTitleCase }}
+              {{ relation.receiver.lastName | customTitleCase }}
             </span>
-            <span *ngIf="relation.requester">
-              <img class="rounded img-fluid mr-1" [src]="relation.requester.photoUrl" width="25" height="auto"
-                alt="photo membre">
-              {{relation.requester.pseudo}},
-              {{relation.requester.fistName}} {{relation.requester.lastName}}
-            </span>
-          </li>
-        </ul>
+
+            <ng-template #isReceiver>
+              <span>
+                <img class="rounded img-fluid" [src]="relation.requester.photoUrl" width="25px" height="auto"
+                  alt="avatar">
+                {{ relation.requester.pseudo | customTitleCase }}, {{ relation.requester.firstName | customTitleCase }}
+                {{ relation.requester.lastName | customTitleCase }}
+              </span>
+            </ng-template>
+          </button>
+        </div>
+
         <ng-template #noFriends>
           <span>Je n'ai pas d'amis</span>
           <img class="img-fluid ml-1" src="../../../assets/img/sad-face.png" width="25" height="auto" alt="sad face">
         </ng-template>
       </tab>
+
+      <!--======================================================================================================
+             Demandes d'ajout reçues et à valider
+      ==========================================================================================================-->
+
       <tab heading="A valider">
-        <p>Demandes d'ajout d'ami reçues à valider</p>
-        <ul *ngIf="relationsToValidate?.length; else noValidations">
-          <li *ngFor="let relation of relationsToValidate">
-            <img class="rounded img-fluid mr-1" [src]="relation.requester.photoUrl" width="25" height="auto"
-              alt="photo membre">
-            {{relation.requester.pseudo}},
-            {{relation.requester.firstName}} {{relation.requester.lastName}}
-          </li>
-        </ul>
+        <div clas="list-group" *ngIf="relationsToValidate?.length; else noValidations">
+          <p>Demandes d'ajout d'ami reçues</p>
+          <button *ngFor="let relation of relationsToValidate" class="list-group-item list-group-item-action"
+            (click)="selectRelation(relation, relation_to_validate)">
+            <img class="rounded img-fluid" [src]="relation.requester.photoUrl" width="25px" height="auto" alt="avatar">
+            {{ relation.requester.pseudo | customTitleCase }}, {{ relation.requester.firstName | customTitleCase }}
+            {{ relation.requester.lastName | customTitleCase }}
+          </button>
+        </div>
         <ng-template #noValidations>Je n'ai pas de demandes à valider</ng-template>
       </tab>
-      <tab heading="En attente">
-        <p>Demandes d'ajout d'ami envoyées et en attente</p>
-        <ul *ngIf="relationsInWaiting?.length">
-          <li *ngFor="let relation of relationsInWaiting">
-            <img class="rounded img-fluid mr-1" [src]="relation.receiver.photoUrl" width="25" height="auto"
-              alt="photo membre">
-            {{relation.receiver.pseudo}},
-            {{relation.receiver.firstName}} {{relation.receiver.lastName}}
-          </li>
-        </ul>
-        <ng-template #noValidations>Je n'ai pas de demandes en attente</ng-template>
+
+      <!--======================================================================================================
+             Demandes d'ajout envoyées en attente de confirmation
+      ==========================================================================================================-->
+
+      <tab heading="Attente">
+        <div clas="list-group" *ngIf="relationsInWaiting?.length; else noneInWaiting">
+          <p>Demandes d'ajout d'ami envoyées</p>
+          <button *ngFor="let relation of relationsInWaiting" class="list-group-item list-group-item-action"
+            (click)="selectRelation(relation, relation_in_waiting)">
+            <img class="rounded img-fluid" [src]="relation.receiver.photoUrl" width="25px" height="auto" alt="avatar">
+            {{ relation.receiver.pseudo | customTitleCase }}, {{ relation.receiver.firstName | customTitleCase }}
+            {{ relation.receiver.lastName | customTitleCase }}
+          </button>
+        </div>
+        <ng-template #noneInWaiting>Je n'ai pas de demandes en attente</ng-template>
       </tab>
-      <tab heading="Se faire des z'amis">
-        <!-- Recherche membres -->
-        <form *ngIf="authenticationService.isLoggedIn" class="form-inline my-2 my-lg-0">
+
+      <!--======================================================================================================
+             Recherche membres
+      ==========================================================================================================-->
+
+      <tab heading="Recherche">
+        <p>Trouver de nouveaux amis</p>
+
+        <!-- formulaire de recherche -->
+        <form class="form-inline my-2 my-lg-0">
           <input class="form-control col mr-sm-2" type="search" placeholder="Recherche par pseudo ou nom"
             (keyup)="searchTerm$.next($event.target.value)">
         </form>
 
-        <div *ngIf="results" class="list-group position-absolute" style="top:100px">
+        <!-- résultats de la recherche -->
+        <div *ngIf="members" class="list-group position-absolute" style="top:100px">
           <button class="list-group-item py-0 px-1" (click)="closeResults()">
             <span class="float-right" aria-hidden="true">&times;</span>
           </button>
-          <button #result *ngFor="let result of results" class="list-group-item list-group-item-action"
-            (click)="selectMember(result)">
-            <img class="rounded img-fluid" [src]="result.photoUrl" width="25px" height="auto" alt="avatar">
-            {{ result.pseudo | customTitleCase }}, {{ result.firstName | customTitleCase }}
-            {{ result.lastName | customTitleCase }}
+          <button *ngFor="let member of members" class="list-group-item list-group-item-action"
+            (click)="selectMember(member)">
+            <img class="rounded img-fluid" [src]="member.photoUrl" width="25px" height="auto" alt="avatar">
+            {{ member.pseudo | customTitleCase }}, {{ member.firstName | customTitleCase }}
+            {{ member.lastName | customTitleCase }}
           </button>
         </div>
       </tab>
