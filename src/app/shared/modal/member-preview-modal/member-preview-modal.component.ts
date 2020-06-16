@@ -72,6 +72,7 @@ export class MemberPreviewModalComponent implements OnInit {
     this.relations = this.authenticationService.userRelationships;
     console.log('onInit', this.relations)
     this.currentMember = this.authenticationService.userProfile;
+    console.log('currentMember', this.currentMember)
     if (this.selectedRelation) {
       switch (this.relationType) {
         case this.relation_confirmed:

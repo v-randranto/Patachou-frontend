@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Routes, RouterModule } from '@angular/router';
-import { MemberResolver } from '../member/member.resolver';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProfileComponent } from '@app/member/profile/profile.component';
 import { NetworkComponent } from './network/network.component';
@@ -27,7 +26,6 @@ const routes: Routes = [];
     SharedModule
   ],
   providers: [
-    MemberResolver,
     NetworkResolver
   ]
 })

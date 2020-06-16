@@ -17,16 +17,11 @@ export class ProfileComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private router: Router
   ) {
-
+    this.member = this.authenticationService.userProfile;
+    console.log('Member', this.member)
   }
   ngOnInit(): void {
     registerLocaleData(localeFr, 'fr');
-    if (this.authenticationService.userProfile) {
-      this.member = this.authenticationService.userProfile;
-    } else {
-      this.authenticationService.logout();
-      this.router.navigate(['connection/login']);
-    }
   }
 
 }

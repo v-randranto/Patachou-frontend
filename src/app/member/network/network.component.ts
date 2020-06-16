@@ -58,12 +58,7 @@ export class NetworkComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.authenticationService.isLoggedIn) {
-      if (this.authenticationService.userProfile) {
         this.currentMember = this.authenticationService.userProfile;
-      } else {
-        this.authenticationService.logout();
-        this.router.navigate(['connection/login']);
-      }
       if (this.authenticationService.userRelationships) {
         this.relations = this.authenticationService.userRelationships;
       } else {

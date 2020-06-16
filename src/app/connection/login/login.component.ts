@@ -1,10 +1,10 @@
+import { LoginData } from './../../data/model/user';
 import { AuthenticationService } from './../../core/service/authentication.service';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-
-import { User } from '@app/data/model/user';
-import { Router } from '@angular/router';
+import { first } from 'rxjs/operators';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   templateUrl: './login.component.html',
@@ -19,27 +19,37 @@ export class LoginComponent implements OnInit {
   };
 
   public loginForm: FormGroup;
+  public loginData: LoginData;
+  public loginStatus: any
   public submitted = false;
+  public loading = false;
+  public returnUrl: string;
   public badCredentials = false;
+  public passwordExpired = false;
   public technicalFailure = false;
-  public user: User;
+  public message: string;
 
   constructor(
     private fb: FormBuilder,
     private authenticationService: AuthenticationService,
+    private route: ActivatedRoute,
     private router: Router,
     private modalService: BsModalService
-  ) { }
-
-  ngOnInit(): void {
+  ) {
     if (this.authenticationService.isLoggedIn) {
       console.log('>login onInit : isLoggedIn => dashboard')
       this.router.navigate(['member/dashboard']);
     };
+  }
+
+  ngOnInit(): void {
+
     this.loginForm = this.fb.group({
       pseudo: ['', Validators.required],
       password: ['', Validators.required]
     });
+    // get return url from route parameters or default to '/'
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || 'member/dashboard';
   }
 
   get formControls() {
@@ -61,19 +71,28 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.invalid) {
       return;
     }
-    this.user = this.loginForm.value;
-    this.user.pseudo = this.loginForm.value.pseudo.toLowerCase();
+    this.loginData = this.loginForm.value;
+    this.loginData.pseudo = this.loginForm.value.pseudo.toLowerCase();
     // TODO gestion retour KO
-    try {
-      console.log('>login verif auth')
-      this.authenticationService.login(this.user);
-    } catch (error) {
-      if (error.status === 401) {
-        this.badCredentials = true;
-      } else {
-        this.technicalFailure = true;
-      }
-      console.log('bad cred', error)
-    }
+    this.loading = true;
+    this.authenticationService.login(this.loginData)
+      .pipe(first())
+      .subscribe(
+        data => {
+          console.log('data', data);
+          this.router.navigate([this.returnUrl]);
+          // this.router.navigate(['member/dashboard']);
+        },
+        error => {
+          console.log('error login', error)
+
+          if (error.notFound || error.authKO) {
+            this.badCredentials = true;
+          }
+          if (error.exp) {
+            this.passwordExpired = true;
+          }
+          this.loading = false;
+        });
   }
 }

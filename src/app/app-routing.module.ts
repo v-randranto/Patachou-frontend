@@ -11,7 +11,6 @@ import { LostPasswordComponent } from './connection/lost-password/lost-password.
 import { ContactComponent } from './contact/contact.component';
 import { ProfileComponent } from './member/profile/profile.component';
 import { ErrorComponent } from './layout/error/error.component';
-import { MemberResolver } from '@app/member/member.resolver';
 import { DashboardComponent } from './member/dashboard/dashboard.component';
 import { NetworkComponent } from './member/network/network.component';
 import { NetworkResolver } from './member/network/network.resolver';
@@ -35,7 +34,6 @@ const routes: Routes = [
   {
     path: 'member',
     canActivate: [AuthenticationGuard],
-    resolve: { member: MemberResolver },
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent },

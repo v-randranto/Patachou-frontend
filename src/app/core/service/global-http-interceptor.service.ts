@@ -15,28 +15,32 @@ export class GlobalHttpInterceptorService implements HttpInterceptor {
     private router: Router
   ) { }
 
+
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const jwtToken = this.authenticationService.getToken();
-    request = request.clone({
-      setHeaders: {
-        Authorization: "Bearer " + jwtToken
-      }
-    });
+    if (this.authenticationService.isLoggedIn) {
+      const token = this.authenticationService.token;
+      request = request.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+    }
 
     return next.handle(request).pipe(
-      catchError((error) => {
-        console.error(error);
-        // login non autorisé
-        if (error.status === 401) {
-          // jeton expiré, il faut déconnecter l'utilisteur
-          if (this.authenticationService.isLoggedIn) {
+      catchError((err) => {
+        console.error('intercept http error', err.error);
+        if (this.authenticationService.isLoggedIn) {
+          if (err.status === 401) {
             console.log('à déconnecter')
             this.authenticationService.logout();
-            // location.reload(true);
+            location.reload(true);
           }
         }
-  
-        this.router.navigate(['connection/login']);
+        if (err.error.loginStatus ) {
+          console.log(err.error.loginStatus);
+          return throwError(err.error.loginStatus)
+        }
+        const error = err.error.message || err.statusText;
         return throwError(error);
       })
     )

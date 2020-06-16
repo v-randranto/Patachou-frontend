@@ -16,26 +16,20 @@ export class DashboardComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private activatedRoute: ActivatedRoute,
     private router: Router
-  ) { }
+  ) {
+    if (this.authenticationService.isLoggedIn) {
+      this.member = this.authenticationService.userProfile;
+      // this.member = this.authenticationService.currentUserValue.member;
+      console.log('member', this.member)
+
+    } else {
+      console.log('redirect home')
+      this.router.navigate(['home']);
+    }
+  }
 
   ngOnInit(): void {
-    if (this.authenticationService.isLoggedIn) {
-      if (this.authenticationService.userProfile) {
-        this.member = this.authenticationService.userProfile;
-      } else {
-        this.activatedRoute.data.subscribe((data: { member: Member }) => {
-          if (data?.member) {
-            this.member = data.member;
-            this.authenticationService.setUserProfile(this.member);
-          } else {
-            this.authenticationService.logout();
-            this.router.navigate(['home']);
-          }
-        });
-      }
-    } else {
-      this.router.navigate(['home']);
-    };
+
   }
 
 }

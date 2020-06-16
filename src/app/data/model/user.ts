@@ -1,4 +1,6 @@
-export class User {
+import { Member } from './member';
+
+export class LoginData {
   pseudo: string;
   password: string;
   constructor(pseudo: string, password: string) {
@@ -7,8 +9,7 @@ export class User {
   }
 }
 
-export class TokenData {
+export class User {
+  member: Member;
   token: any;
-  expiresIn: number;
-  id: string;
 }

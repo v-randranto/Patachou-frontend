@@ -25,16 +25,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     // récup données du membre s'il est connecté
     if (this.authenticationService.isLoggedIn) {
       console.log('> onInit membre connecté');
-      if (this.authenticationService.userProfile) {
-        console.log('> onInit user profile', this.authenticationService.userProfile);
         this.currentMember = this.authenticationService.userProfile;
-      } else {
-        console.log('> onInit NO user profile');
-      }
-    } else {
-      console.log('> onInit membre DEconnecté');
     }
-
     // requêtes socket.io pour récupérer nombre de membres connectés
     this.socketService
       .getConnectionsNb()
@@ -55,13 +47,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   get isLoggedIn() {
-    if (this.authenticationService.userProfile) {
+    if (this.authenticationService.isLoggedIn) {
       console.log('> onInit user profile', this.authenticationService.userProfile);
       this.currentMember = this.authenticationService.userProfile;
       return this.authenticationService.isLoggedIn;
     }
   }
-
 
   logout() {
     this.authenticationService.logout();

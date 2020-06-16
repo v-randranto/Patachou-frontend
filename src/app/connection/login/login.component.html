@@ -12,11 +12,10 @@
       <div class="form-group col mx-4 mt-2">
         <input type="password" formControlName="password" class="form-control" placeholder="* Password" maxlength=30 />
         <div *ngIf="badCredentials">
-          <div class="bg-danger">Oups, le pseudo ou le mot passe n'est pas correct.</div>
+          <div class="alert alert-danger mt-2">Oups, le pseudo ou le mot passe n'est pas correct.</div>
         </div>
         <div *ngIf="technicalFailure">
-          <div class="bg-danger">Oups, il y a une saucisse dans la pâte à choux. On s'occupe du problème, veuillez-nous
-            excuser pour cet incident technique.</div>
+          <div class="alert alert-danger mt-2">Oups, il y a une saucisse dans la pâte à choux. Veuillez réessayer plus tard.</div>
         </div>
       </div>
     </div>
@@ -26,6 +25,11 @@
         [disabled]="loginForm.invalid">Et j'envoie la sauce
         caramel!</button>
     </div>
+     <!-- <button [disabled]="loading" class="btn btn-primary">
+      <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+      Login
+  </button> -->
+
     <div class="text-center col mt-3">
       <button class="btn btn-warning col mt-3"
         [routerLink]="'/connection/register'">Ah mais je n'ai pas de

@@ -21,6 +21,11 @@ export class AuthenticationGuard implements CanActivate {
       this.router.navigate(['login'])
     }
     return true;
+    // const currentUser = this.authenticationService.currentUserValue;
+    //     if (currentUser) {
+    //         // logged in so return true
+    //         return true;
+    //     }
   }
 
 }
