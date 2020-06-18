@@ -8,9 +8,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./notification-modal.component.css']
 })
 export class NotificationModalComponent {
+  public bgColor: string;
   public title: string;
   public text: string;
   public redirection: string;
+  public bgColorStyle: string;
 
   constructor(
     public modalRef: BsModalRef,

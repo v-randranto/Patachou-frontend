@@ -21,9 +21,14 @@ export class MemberDataService {
     return this.http.post<Member>(url, idObj);
   }
 
-  public searchMembers(): Observable<Member[]> {
+  public searchMembers(data: any): Observable<Member[]> {
     const url = '/api/member/search';
-    return this.http.get<Member[]>(url);
+    return this.http.post<Member[]>(url, data);
+  }
+
+  public checkPseudo(pseudoObj: any): Observable<boolean> {
+    const url = '/api/connection/pseudo';
+    return this.http.post<boolean>(url, pseudoObj)
   }
 
   public register(data: RegisterData): Observable<any> {

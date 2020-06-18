@@ -2,18 +2,17 @@ import { AuthenticationGuard } from './core/guard/authentication.guard';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-import { RegisterComponent } from './connection/register/register.component';
 import { LoginComponent } from './connection/login/login.component';
-import { LogoutComponent } from './connection/logout/logout.component';
 import { NotFoundComponent } from './layout/not-found/not-found.component';
 import { AboutComponent } from './about/about.component';
 import { LostPasswordComponent } from './connection/lost-password/lost-password.component';
 import { ContactComponent } from './contact/contact.component';
 import { ProfileComponent } from './member/profile/profile.component';
 import { ErrorComponent } from './layout/error/error.component';
-import { DashboardComponent } from './member/dashboard/dashboard.component';
 import { NetworkComponent } from './member/network/network.component';
 import { NetworkResolver } from './member/network/network.resolver';
+import { MessageComponent } from './member/message/message.component';
+import { RegisterComponent } from './connection/register/register.component';
 
 const routes: Routes = [
 
@@ -35,14 +34,14 @@ const routes: Routes = [
     path: 'member',
     canActivate: [AuthenticationGuard],
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'dashboard', component: DashboardComponent },
+      { path: '', redirectTo: 'profile', pathMatch: 'full' },
       { path: 'profile', component: ProfileComponent },
       {
         path: 'network',
         component: NetworkComponent,
         resolve: { network: NetworkResolver }
-      }
+      },
+      { path: 'message', component: MessageComponent },
     ]
   },
   { path: '**', component: NotFoundComponent }

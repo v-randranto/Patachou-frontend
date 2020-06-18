@@ -37,8 +37,8 @@ export class LoginComponent implements OnInit {
     private modalService: BsModalService
   ) {
     if (this.authenticationService.isLoggedIn) {
-      console.log('>login onInit : isLoggedIn => dashboard')
-      this.router.navigate(['member/dashboard']);
+      console.log('>login onInit : isLoggedIn => profile')
+      this.router.navigate(['member/profile']);
     };
   }
 
@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
       password: ['', Validators.required]
     });
     // get return url from route parameters or default to '/'
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || 'member/dashboard';
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || 'member/profile';
   }
 
   get formControls() {
@@ -81,7 +81,6 @@ export class LoginComponent implements OnInit {
         data => {
           console.log('data', data);
           this.router.navigate([this.returnUrl]);
-          // this.router.navigate(['member/dashboard']);
         },
         error => {
           console.log('error login', error)

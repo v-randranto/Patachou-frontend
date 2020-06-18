@@ -1,5 +1,5 @@
 <div class="profile">
-  <div class="card" class="mx-auto pt-4" style="width: 20rem;">
+  <div class="card" class="mx-auto pt-4 col-md-8 col-lg-6">
     <h5 class="card-title text-center text-white">{{ member.pseudo | customTitleCase }}</h5>
     <div class="mx-auto text-white" style="width: 3rem;">
       <img class="card-img-top rounded" [src]="member.photoUrl" alt="photo membre">
@@ -34,7 +34,10 @@
           <span class="d-inline pl-2">{{member.email}}</span>
         </li>
       </ul>
-      <button class="btn btn-primary mt-3">Je modifie mon profil (todo)</button>
+      <button class="btn btn-outline-primary mt-3 d-block mx-auto">Je modifie mon profil (todo)</button>
+      <button class="btn btn-outline-primary mt-3 d-block mx-auto">Mon mur (todo)</button>
+      <button class="btn btn-outline-primary mt-3 d-block mx-auto">Ma messagerie (todo)</button>
     </div>
+
   </div>
 </div>

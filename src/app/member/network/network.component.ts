@@ -47,6 +47,7 @@ export class NetworkComponent implements OnInit {
   public results: any;
   public showResults = false;
   public searchTerm$ = new Subject<string>();
+  public searchTerm = '';
 
   constructor(
     private authenticationService: AuthenticationService,

@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
     if (this.authenticationService.isLoggedIn) {
       const member = this.authenticationService.userProfile;
       this.socketService.connectMember({ id: member.id, pseudo: member.pseudo });
-      this.router.navigate(['member/dashboard']);
+      this.router.navigate(['member/profile']);
     }
   }
 }

@@ -1,7 +1,7 @@
 .register {
   background: url('../../../assets/img/bg-home.jpg') center center;
   background-size: cover;
-
+  height: 100%;
 }
 
 .btn-primary {
@@ -32,30 +32,26 @@ input, textarea {
   background-color:#f7f5ec;
 }
 
+label.required::after {
+  content: "*";
+  color: red;
+  font-weight: bold;
+}
+
 .text-dark  {
   color: darkslategray !important;
 }
 .text-white, .label-file  {
   color: ivory !important;
 }
-.bg-progress {
-  background-color: lightgray;
-}
-.bg-verypoor {
-  background-color: #ff0000;
-}
-.bg-poor {
-  background-color: #ff7b00;
-}
-.bg-notsogood {
-  background-color: #efd807;
-}
-.bg-good {
-  background-color: green
-}
+
 .bg-danger {
   background-color: #cb7364 !important;
 }
-.popover {
-  border-radius: 50%;
-}
+/*
+.main-container {
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid gray;
+  border-radius: 10px;
+} */

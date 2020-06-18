@@ -13,7 +13,7 @@
   color: ivory !important;
 }
 
-.card-body,
+.card-body, .card-footer,
 ul,
 li {
   background-color: ivory;

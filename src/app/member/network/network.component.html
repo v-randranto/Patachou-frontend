@@ -15,37 +15,42 @@
  -->
 
 <div class="network">
-  <div class="col-md-10 col-lg-8 mx-auto">
-    <h4>Mon réseau d'amis</h4>
+  <div class="col-md-8 mx-auto pt-2">
+    <h5 class="text-white">Mon réseau d'amis <small>(Design todo)</small></h5>
     <tabset type="pills" [justified]="true">
 
       <!--======================================================================================================
              les amis confirmés
       ==========================================================================================================-->
       <tab heading="Amis">
-        <div clas="list-group" *ngIf="confirmedRelations?.length; else noFriends">
+        <div class="list-group mt-3" *ngIf="confirmedRelations?.length; else noFriends">
           <button *ngFor="let relation of confirmedRelations" class="list-group-item list-group-item-action"
             (click)="selectRelation(relation, relation_confirmed)">
-            <span *ngIf="isRequester(relation); else isReceiver">
+            <div *ngIf="isRequester(relation); else isReceiver">
               <img class="rounded img-fluid" [src]="relation.receiver.photoUrl" width="25px" height="auto" alt="avatar">
               {{ relation.receiver.pseudo | customTitleCase }}, {{ relation.receiver.firstName | customTitleCase }}
               {{ relation.receiver.lastName | customTitleCase }}
-            </span>
+            </div>
 
             <ng-template #isReceiver>
-              <span>
+              <div>
                 <img class="rounded img-fluid" [src]="relation.requester.photoUrl" width="25px" height="auto"
                   alt="avatar">
                 {{ relation.requester.pseudo | customTitleCase }}, {{ relation.requester.firstName | customTitleCase }}
                 {{ relation.requester.lastName | customTitleCase }}
-              </span>
+              </div>
             </ng-template>
           </button>
         </div>
 
         <ng-template #noFriends>
-          <span>Je n'ai pas d'amis</span>
-          <img class="img-fluid ml-1" src="../../../assets/img/sad-face.png" width="25" height="auto" alt="sad face">
+          <div class="list-group mt-3">
+            <div class="list-group-item">
+              <span> Je n'ai pas d'amis</span>
+              <img class="img-fluid ml-1" src="../../../assets/img/sad-face.png" width="50" height="auto"
+                alt="sad face">
+            </div>
+          </div>
         </ng-template>
       </tab>
 
@@ -53,9 +58,8 @@
              Demandes d'ajout reçues et à valider
       ==========================================================================================================-->
 
-      <tab heading="A valider">
-        <div clas="list-group" *ngIf="relationsToValidate?.length; else noValidations">
-          <p>Demandes d'ajout d'ami reçues</p>
+      <tab heading="Validation">
+        <div class="list-group mt-3" *ngIf="relationsToValidate?.length; else noValidations">
           <button *ngFor="let relation of relationsToValidate" class="list-group-item list-group-item-action"
             (click)="selectRelation(relation, relation_to_validate)">
             <img class="rounded img-fluid" [src]="relation.requester.photoUrl" width="25px" height="auto" alt="avatar">
@@ -63,7 +67,15 @@
             {{ relation.requester.lastName | customTitleCase }}
           </button>
         </div>
-        <ng-template #noValidations>Je n'ai pas de demandes à valider</ng-template>
+        <ng-template #noValidations>
+          <div class="list-group mt-3">
+            <div class="list-group-item">
+              <span> Je n'ai pas de demandes à valider.</span>
+              <img class="img-fluid ml-1" src="../../../assets/img/bored.gif" width="100" height="auto"
+                alt="bored cat">
+            </div>
+          </div>
+        </ng-template>
       </tab>
 
       <!--======================================================================================================
@@ -71,8 +83,7 @@
       ==========================================================================================================-->
 
       <tab heading="Attente">
-        <div clas="list-group" *ngIf="relationsInWaiting?.length; else noneInWaiting">
-          <p>Demandes d'ajout d'ami envoyées</p>
+        <div class="list-group mt-3" *ngIf="relationsInWaiting?.length; else noneInWaiting">
           <button *ngFor="let relation of relationsInWaiting" class="list-group-item list-group-item-action"
             (click)="selectRelation(relation, relation_in_waiting)">
             <img class="rounded img-fluid" [src]="relation.receiver.photoUrl" width="25px" height="auto" alt="avatar">
@@ -80,7 +91,15 @@
             {{ relation.receiver.lastName | customTitleCase }}
           </button>
         </div>
-        <ng-template #noneInWaiting>Je n'ai pas de demandes en attente</ng-template>
+        <ng-template #noneInWaiting>
+          <div class="list-group mt-3">
+            <div class="list-group-item">
+              <span> Je n'ai pas de demandes en attente.</span>
+              <img class="img-fluid ml-1" src="../../../assets/img/bored.gif" width="100" height="auto"
+                alt="bored cat">
+            </div>
+          </div>
+        </ng-template>
       </tab>
 
       <!--======================================================================================================
@@ -88,26 +107,36 @@
       ==========================================================================================================-->
 
       <tab heading="Recherche">
-        <p>Trouver de nouveaux amis</p>
 
         <!-- formulaire de recherche -->
-        <form class="form-inline my-2 my-lg-0">
-          <input class="form-control col mr-sm-2" type="search" placeholder="Recherche par pseudo ou nom"
+        <form class="form-inline my-2 mt-3 ">
+          <input #searchTerm class="form-control w-100" type="search" placeholder="Recherche par pseudo ou nom"
             (keyup)="searchTerm$.next($event.target.value)">
         </form>
 
         <!-- résultats de la recherche -->
-        <div *ngIf="members" class="list-group position-absolute" style="top:100px">
-          <button class="list-group-item py-0 px-1" (click)="closeResults()">
-            <span class="float-right" aria-hidden="true">&times;</span>
-          </button>
-          <button *ngFor="let member of members" class="list-group-item list-group-item-action"
-            (click)="selectMember(member)">
-            <img class="rounded img-fluid" [src]="member.photoUrl" width="25px" height="auto" alt="avatar">
-            {{ member.pseudo | customTitleCase }}, {{ member.firstName | customTitleCase }}
-            {{ member.lastName | customTitleCase }}
-          </button>
+        <div *ngIf="members; else noResults">
+          <div class="list-group overflow-auto my-lg-0">
+            <button class="list-group-item py-1 px-2 mt-2 text-left">
+              Résultats pour "{{searchTerm.value}}"
+            </button>
+            <button *ngFor="let member of members" class="list-group-item list-group-item-action"
+              (click)="selectMember(member)">
+              <img class="rounded img-fluid" [src]="member.photoUrl" width="25px" height="auto" alt="avatar">
+              {{ member.pseudo | customTitleCase }}, {{ member.firstName | customTitleCase }}
+              {{ member.lastName | customTitleCase }}
+            </button>
+          </div>
         </div>
+        <ng-template #noResults>
+          <div class="list-group mt-3">
+            <div class="list-group-item">
+              <span>Aucun membre trouvé</span>
+              <img class="img-fluid ml-1" src="../../../assets/img/no-results.png" width="50" height="auto"
+                alt="no results">
+            </div>
+          </div>
+        </ng-template>
       </tab>
     </tabset>
   </div>

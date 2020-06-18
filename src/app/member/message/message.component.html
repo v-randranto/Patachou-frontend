@@ -1,0 +1,55 @@
+<!--
+  Les relations du membre en cours sont affichées dans des onglets selon leur type
+  - les amis confirmés
+  - les demandes d'ajout d'amis reçues en attente
+  - les demandes d'amis envoyées et en attente
+
+  Les relations peuvent être sélectionnées :
+  - affichage des données du membre ami dans une modale
+  - actions possibles selon le statut de la relation : voir le profil, confirmation, rejet ou suppression de la relation
+
+  La recherche d'amis se fait dans un 4ème onglet:
+  - saisie d'un pseudo, nom ou prénom
+  - sélection et affichage des données d'un membre dans un modale
+  - possibilité de faire la demande d'ajout d'ami
+ -->
+
+ <div class="message">
+  <div class="col-md-8 mx-auto pt-2">
+    <h5 class="text-white">Ma messagerie (TODO)</h5>
+    <tabset  type="pills" [justified]="true">
+
+      <!--======================================================================================================
+             les amis confirmés
+      ==========================================================================================================-->
+      <tab heading="Ecrire">
+
+      </tab>
+
+      <!--======================================================================================================
+             Demandes d'ajout reçues et à valider
+      ==========================================================================================================-->
+
+      <tab heading="Boîte de réception">
+
+      </tab>
+
+      <!--======================================================================================================
+             Demandes d'ajout envoyées en attente de confirmation
+      ==========================================================================================================-->
+
+      <tab heading="Envoyé">
+        <div class="list-group mt-3">
+          <span>Pas de messages envoyés</span>
+          </div>
+      </tab>
+
+      <tab heading="Corbeille">
+        <div class="list-group mt-3">
+          <span>Pas de messages envoyés</span>
+          </div>
+      </tab>
+
+    </tabset>
+  </div>
+</div>

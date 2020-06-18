@@ -1,3 +1,4 @@
+import { FORMAT_RULES } from '@shared/constant/profile-form';
 import { ErrorModalComponent } from '@shared/modal/error-modal/error-modal.component';
 import { NotificationModalComponent } from '@shared/modal/notification-modal/notification-modal.component';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
@@ -8,19 +9,6 @@ import { Member, Photo, RegisterData } from '@app/data/model/member';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '@app/core/service/authentication.service';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-
-const LIMIT_SIZE_FILE = 500 * 1000;
-const allowedFileExtensions = ['.png', '.jpg', '.jpeg', '.gif'];
-
-const namePatternBase = `a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð`;
-const namesPattern = `^[${namePatternBase}]+(([' -][${namePatternBase}])?[${namePatternBase}]*)*$`;
-const pseudoPattern = `^[${namePatternBase}0-9]+(([' -][${namePatternBase}0-9])?[${namePatternBase}0-9]*)*$`;
-const emailPattern = `^([a-zA-Z0-9.]+)@([a-zA-Z0-9-.]+).([a-zA-Z]{2,5})$`;
-const maxPseudo = 30, maxNames = 30, maxEmail = 50, maxPassword = 30;
-
-// const pseudoAllowedChar = /[a-zA-Z0-9]/;
-const pseudoAllowedChar = /[a-z0-9àáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšž -]/i;
-const nameAllowedChar = /[a-zàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšž -]/i;
 
 @Component({
   templateUrl: './register.component.html',
@@ -33,7 +21,9 @@ export class RegisterComponent implements OnInit {
   public notificationModalConfig = {
     animated: true,
     ignoreBackdropClick: true,
+    class: 'modal-dialog-centered',
     initialState: {
+      bgColor: '#a5d152',
       title: 'A y est, vous êtes des nôtres!',
       text: `Un email vous a été envoyé pour confirmer votre inscription. Si vous ne le recevez pas, vérifiez votre adresse dans le profil de votre compte.`,
       redirection: `/connection/login`
@@ -42,25 +32,33 @@ export class RegisterComponent implements OnInit {
   public errorModalConfig = {
     animated: true,
     ignoreBackdropClick: true,
-    redirection: `/home`
+    class: 'modal-dialog-centered',
+    initialState: {
+      redirection: `/home`
+    }
   };
-  public registerForm: FormGroup;
+  public registerForm = [];
+  public currentStepNb = 0;
+  public stepOneForm: FormGroup;
+  public stepTwoForm: FormGroup;
+  public stepThreeForm: FormGroup;
   public submitted = false;
+  public pseudoUnavailable = false;
   public registerStatus = {
     pseudoUnavailable: false,
     save: true,
     email: true
   }
-  public defaultBirthDate = '1980-01-01';
+
   public member = new Member();
   public photo: Photo;
   public registerData = new RegisterData();
   public fileStatus = {
     invalid: false,
-    invalidSizeMsg: `La taille du fichier est limitée à ${LIMIT_SIZE_FILE / 1000}ko.`,
+    invalidSizeMsg: `La taille du fichier est limitée à ${FORMAT_RULES.fileLimit / 1000}ko.`,
     invalidExtensionMsg: `L'extension du fichier n'est pas autorisée.`
   };
-  public acceptFileExtensions = allowedFileExtensions.join(',');
+  public acceptFileExtensions = FORMAT_RULES.fileExtensions.join(',');
   public invalidFileMessage: string;
 
   public maxBirthDate = '2002-12-31';
@@ -81,20 +79,15 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {
     if (this.authenticationService.isLoggedIn) {
-      console.log('>login onInit : isLoggedIn => dashboard');
-      this.router.navigate(['member/dashboard']);
+      console.log('>login onInit : isLoggedIn => profile');
+      this.router.navigate(['member/profile']);
     };
-    this.registerForm = this.fb.group({
-      pseudo: ['', [Validators.required, Validators.pattern(pseudoPattern), Validators.maxLength(maxPseudo)]],
-      firstName: ['', [Validators.required, Validators.pattern(namesPattern), Validators.maxLength(maxNames)]],
-      lastName: ['', [Validators.required, Validators.pattern(namesPattern), Validators.maxLength(maxNames)]],
-      email: ['', [Validators.required, Validators.pattern(emailPattern), Validators.maxLength(maxEmail)]],
-      sex: [''],
-      birthDate: [null],
-      password: ['', [Validators.required, Validators.maxLength(maxPassword)]],
-      confirmPassword: ['', Validators.required],
-      presentation: ['', Validators.maxLength(140)],
-      file: [null]
+
+    // formGroup de l'étape 1 du formulaire
+    this.stepOneForm = this.fb.group({
+      pseudo: ['', [Validators.required, Validators.pattern(FORMAT_RULES.pseudoPattern), Validators.maxLength(FORMAT_RULES.pseudoMax)]],
+      password: ['', [Validators.required, Validators.maxLength(FORMAT_RULES.passwordMax)]],
+      confirmPassword: ['', Validators.required]
     },
       {
         validator: [
@@ -103,16 +96,51 @@ export class RegisterComponent implements OnInit {
         ]
       },
     );
+    this.registerForm.push(this.stepOneForm);
 
-    this.formControls.birthDate.setValue('1980-01-01');
+    // formGroup de l'étape 2 du formulaire
+    this.stepTwoForm = this.fb.group({
+      firstName: ['', [Validators.required, Validators.pattern(FORMAT_RULES.namePattern), Validators.maxLength(FORMAT_RULES.nameMax)]],
+      lastName: ['', [Validators.required, Validators.pattern(FORMAT_RULES.namePattern), Validators.maxLength(FORMAT_RULES.nameMax)]],
+      email: ['', [Validators.required, Validators.pattern(FORMAT_RULES.emailPattern), Validators.maxLength(FORMAT_RULES.emailMax)]],
+    });
+    this.registerForm.push(this.stepTwoForm);
+
+    // formGroup de l'étape 3 du formulaire
+    this.stepThreeForm = this.fb.group({
+      sex: [''],
+      birthDate: [new Date('1980-01-01')],
+      presentation: ['', Validators.maxLength(140)],
+      file: [null]
+    });
+    this.registerForm.push(this.stepThreeForm);
+
+    this.stepThree.birthDate.setValue('1980-01-01');
+    console.log("step1Form", this.stepOneForm.status)
+    console.log("step2Form", this.stepTwoForm.status)
+    console.log("step3Form", this.stepThreeForm.status)
+
   }
 
-  get formControls() {
-    return this.registerForm.controls;
+  get currentStepValid() {
+    return this.registerForm[this.currentStepNb].status === "VALID" ? true : false;
   }
 
-  getDefaultDate() {
-    return '1980-01-01';
+  goToStep(step: string): void {
+    console.log('>goToStep step', this.currentStepNb)
+    console.log('form status', this.registerForm[this.currentStepNb].status)
+    this.currentStepNb =
+      step === 'prev' ? this.currentStepNb - 1 : this.currentStepNb + 1;
+  }
+
+  get stepOne() {
+    return this.registerForm[0].controls;
+  }
+  get stepTwo() {
+    return this.registerForm[1].controls;
+  }
+  get stepThree() {
+    return this.registerForm[2].controls;
   }
 
   emailOnFocus() {
@@ -134,7 +162,7 @@ export class RegisterComponent implements OnInit {
         return;
       }
 
-      if (files[0].size > LIMIT_SIZE_FILE) {
+      if (files[0].size > FORMAT_RULES.fileLimit) {
         this.fileStatus.invalid = true;
         this.invalidFileMessage = this.fileStatus.invalidSizeMsg;
         return;
@@ -143,7 +171,7 @@ export class RegisterComponent implements OnInit {
       const file = files[0];
       reader.readAsDataURL(file);
       reader.onload = () => {
-        this.registerForm.patchValue({
+        this.stepThreeForm.patchValue({
           file: reader.result
         });
       };
@@ -153,16 +181,16 @@ export class RegisterComponent implements OnInit {
 
   // Les 2 fonctions ci-dessous bloquent la saisie de caractères interdits (inopérant sur mobile)
   checkPseudoInput(e) {
-    if (this.registerStatus.pseudoUnavailable) {
-      this.registerStatus.pseudoUnavailable = false;
-    }
-    if (pseudoAllowedChar.test(e.key) === false) {
+    // if (this.registerStatus.pseudoUnavailable) {
+    //   this.registerStatus.pseudoUnavailable = false;
+    // }
+    if (FORMAT_RULES.pseudoAllowedChars.test(e.key) === false) {
       e.preventDefault();
     }
   }
 
   checkNameInput(e) {
-    if (nameAllowedChar.test(e.key) === false) {
+    if (FORMAT_RULES.nameAllowedChars.test(e.key) === false) {
       e.preventDefault();
     }
   }
@@ -170,6 +198,19 @@ export class RegisterComponent implements OnInit {
   resetPseudo() {
     this.pseudoRef.nativeElement.value = '';
   }
+
+  // checkPseudoAvailability(pseudo) {
+  //   console.log('>checkPseudo', pseudo)
+  //   this.memberDataService.checkPseudo({ pseudo }).subscribe(
+  //     res => {
+  //       this.pseudoUnavailable = res;
+  //       alert(`pseudo unavailable? ${this.pseudoUnavailable}`)
+  //       this.pseudoUnavailable;
+  //     },
+  //     error => {
+  //       console.error(error);
+  //     });
+  // }
 
   openErrorModal() {
     this.modalRef = this.modalService.show(ErrorModalComponent, this.errorModalConfig);
@@ -179,31 +220,35 @@ export class RegisterComponent implements OnInit {
     this.modalRef = this.modalService.show(NotificationModalComponent, this.notificationModalConfig);
   }
 
-    onSubmit() {
+  onSubmit() {
     this.submitted = true;
-    if (this.registerForm.invalid) {
-      return;
+    if (this.currentStepNb < 2) {
+      this.goToStep('next')
     }
-    // TODO refacto
-    this.member.pseudo = this.registerForm.value.pseudo.toLowerCase();
-    this.member.firstName = this.registerForm.value.firstName.toLowerCase();
-    this.member.lastName = this.registerForm.value.lastName.toLowerCase();
-    this.member.sex = this.registerForm.value.sex;
-    this.member.birthDate = this.registerForm.value.birthDate;
-    this.member.email = this.registerForm.value.email.toLowerCase();
-    this.member.password = this.registerForm.value.password;
-    this.member.presentation = this.registerForm.value.presentation || 'Pas de présentation';
+
+    // // TODO refacto
+    this.member.pseudo = this.stepOneForm.value.pseudo.toLowerCase();
+    this.member.password = this.stepOneForm.value.password;
+    this.member.firstName = this.stepTwoForm.value.firstName.toLowerCase();
+    this.member.lastName = this.stepTwoForm.value.lastName.toLowerCase();
+    this.member.email = this.stepTwoForm.value.email.toLowerCase();
+    this.member.sex = this.stepThreeForm.value.sex;
+    this.member.birthDate = this.stepThreeForm.value.birthDate;
+    this.member.presentation = this.stepThreeForm.value.presentation || 'Pas de présentation';
     this.registerData.member = this.member;
     if (this.photo) {
-      this.photo.content = this.registerForm.value.file;
+      this.photo.content = this.stepThreeForm.value.file;
       this.registerData.photo = this.photo;
     }
-    console.log(`title case ${this.member.pseudo} ${this.member.firstName} ${this.member.lastName}`)
+    console.log('member', this.registerData.member);
     this.memberDataService.register(this.registerData).subscribe(
       res => {
+        console.log('res', res)
         this.registerStatus = res;
+        console.log('register status', this.registerStatus);
         if (this.registerStatus.pseudoUnavailable) {
-          this.pseudoRef.nativeElement.focus();
+          this.currentStepNb = 0;
+          // this.pseudoRef.nativeElement.focus();
         } else {
           if (this.registerStatus.save) {
             this.openNotificationModal();

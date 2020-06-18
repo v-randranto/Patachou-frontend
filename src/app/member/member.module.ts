@@ -4,19 +4,19 @@ import { CommonModule } from '@angular/common';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Routes, RouterModule } from '@angular/router';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProfileComponent } from '@app/member/profile/profile.component';
 import { NetworkComponent } from './network/network.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { SharedModule } from '@app/shared/shared.module';
+import { MessageComponent } from './message/message.component';
 
 const routes: Routes = [];
 
 @NgModule({
   declarations: [
     ProfileComponent,
-    DashboardComponent,
     NetworkComponent,
+    MessageComponent,
   ],
   imports: [
     CommonModule,

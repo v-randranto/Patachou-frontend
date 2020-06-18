@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg  navbar-dark bg-dark sticky-top py-0 px-2">
+<nav class="navbar navbar-default navbar-fixed-top navbar-expand-lg  navbar-dark bg-dark  py-0 px-2" role="navigation">
 
   <a class="navbar-brand nav-link" routerLinkActive="active" routerLink="home"><img src="../../../assets/img/brand.jpg"
       width="35" height="35" class="rounded" alt=""></a>
@@ -12,57 +12,67 @@
 
   <div [ngbCollapse]="isMenuCollapsed" class="collapse navbar-collapse">
 
-    <div class="navbar-nav">
-      <!-- A propos -->
-      <a class="nav-link" routerLinkActive="active" routerLink="/about">
-        <fa-icon [icon]="['fas','smile-beam']" class="mr-1"></fa-icon><span class="d-md-none">A propos de nous</span>
-      </a>
-      <!-- Contact -->
-      <a class="nav-link" routerLinkActive="active" routerLink="/contact">
-        <fa-icon [icon]="['fas','info-circle']" class="mr-1"></fa-icon><span class="d-md-none">Contact</span>
-      </a>
-
-      <!-- Membre connecté -->
-      <div *ngIf="isLoggedIn" class="navbar-nav">
-        <!-- Profil -->
-        <div *ngIf="currentMember" class="navbar-nav">
-          <a class="nav-link" routerLinkActive="active" routerLink="/member/profile" (click)="menuCollapse()">
-            <img class="rounded img-fluid d-inline mr-2" width="25px" height="auto" [src]="currentMember.photoUrl"
-              alt="">
-            <span class="d-md-none">Profil</span>
-          </a>
-        </div>
-        <!-- Tableau de bord -->
-        <a class="nav-link" routerLinkActive="" routerLink="/member/dashboard" (click)="menuCollapse()">
-          <fa-icon [icon]="['fas','columns']" class="mr-2"></fa-icon><span class="d-md-none">Quoi de neuf (todo)</span>
+    <ul class="navbar-nav">
+       <!-- Informations -->
+      <li dropdown>
+        <a class="nav-link" data-toggle="dropdown" href id="basic-link" dropdownToggle (click)="false" aria-controls="basic-link-dropdown">
+          <fa-icon [icon]="['fas','info-circle']" class="mr-2"></fa-icon><span class="d-md-none">Informations </span><fa-icon [icon]="['fas','caret-down']" class="ml-2"></fa-icon>
         </a>
-        <!-- Messagerie -->
-        <a class="nav-link" href="#">
-          <fa-icon [icon]="['fas','envelope']" class="mr-2"></fa-icon><span class="d-md-none">Papotage (todo)</span>
-        </a>
+        <ul id="basic-link-dropdown" *dropdownMenu class="dropdown-menu bg-dark border-dark m-0 p-0 pl-4"  role="menu" aria-labelledby="basic-link">
+          <!-- A propos -->
+          <li class="m-0" role="menuitem">
+            <a class="nav-link dropdown-item p-1" routerLinkActive="active" routerLink="/about" (click)="menuCollapse()">
+              <span>A propos</span>
+            </a>
+          </li>
+          <!-- Contact -->
+          <li class="m-0" role="menuitem">
+            <a class="nav-link dropdown-item p-1 m-0" routerLinkActive="active" routerLink="/contact" (click)="menuCollapse()">
+              <span>Contacter</span>
+            </a>
+          </li>
 
-        <!-- Réseautage -->
-        <a class="nav-link" routerLinkActive="active" routerLink="/member/network" (click)="menuCollapse()">
-          <fa-icon [icon]="['fas','users']" class="mr-2"></fa-icon><span class="d-md-none">Réseautage</span>
-        </a>
+        </ul>
+      </li>
 
-        <!--Déconnexion -->
-        <a class="nav-link" routerLinkActive="active" (click)="logout()">
-          <fa-icon [icon]="['fas','sign-out-alt']" class="mr-2"></fa-icon><span class="d-md-none">Déconnexion</span>
+    </ul>
+    <!-- Membre connecté -->
+    <div *ngIf="isLoggedIn" class="navbar-nav">
+      <!-- Profil -->
+      <div *ngIf="currentMember" class="navbar-nav">
+        <a class="nav-link" routerLinkActive="active" routerLink="/member/profile" (click)="menuCollapse()">
+          <img class="rounded img-fluid d-inline mr-2" width="25px" height="auto" [src]="currentMember.photoUrl" alt="">
+          <span class="d-md-none">Profil</span>
         </a>
       </div>
+     
+      <!-- Messagerie -->
+      <a class="nav-link" routerLinkActive="" routerLink="/member/message" (click)="menuCollapse()">
+        <fa-icon [icon]="['fas','envelope']" class="mr-2"></fa-icon><span class="d-md-none">Papotage</span>
+      </a>
 
-      <!-- Utilisateur non connecté -->
-      <div *ngIf="!isLoggedIn" class="navbar-nav ml-md-auto">
-        <!-- Inscription -->
-        <a class="nav-link" routerLinkActive="active" routerLink="/connection/register" (click)="menuCollapse()">
-          <fa-icon [icon]="['fas','user-plus']" class="mr-2"></fa-icon><span class="d-md-none">Inscription</span>
-        </a>
-        <!-- Connexion -->
-        <a class="nav-link" routerLinkActive="active" routerLink="/connection/login" (click)="menuCollapse()">
-          <fa-icon [icon]="['fas','sign-in-alt']" class="mr-2"></fa-icon><span class="d-md-none">Connexion</span>
-        </a>
-      </div>
+      <!-- Réseautage -->
+      <a class="nav-link" routerLinkActive="active" routerLink="/member/network" (click)="menuCollapse()">
+        <fa-icon [icon]="['fas','users']" class="mr-2"></fa-icon><span class="d-md-none">Réseautage</span>
+      </a>
+
+      <!--Déconnexion -->
+      <a class="nav-link" routerLinkActive="active" (click)="logout()">
+        <fa-icon [icon]="['fas','sign-out-alt']" class="mr-2"></fa-icon><span class="d-md-none">Déconnexion</span>
+      </a>
+    </div>
+
+    <!-- Utilisateur non connecté -->
+    <div *ngIf="!isLoggedIn" class="navbar-nav ml-md-auto">
+      <!-- Inscription -->
+      <a class="nav-link" routerLinkActive="active" routerLink="/connection/register" (click)="menuCollapse()">
+        <fa-icon [icon]="['fas','user-plus']" class="mr-2"></fa-icon><span class="d-md-none">Inscription</span>
+      </a>
+      <!-- Connexion -->
+      <a class="nav-link" routerLinkActive="active" routerLink="/connection/login" (click)="menuCollapse()">
+        <fa-icon [icon]="['fas','sign-in-alt']" class="mr-2"></fa-icon><span class="d-md-none">Connexion</span>
+      </a>
     </div>
   </div>
+
 </nav>

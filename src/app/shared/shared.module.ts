@@ -5,7 +5,7 @@ import { ErrorModalComponent } from './modal/error-modal/error-modal.component';
 import { MemberPreviewModalComponent } from './modal/member-preview-modal/member-preview-modal.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CustomTitleCasePipe } from './custom-pipe/custom-title-case.pipe';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -17,10 +17,13 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     FontAwesomeModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   exports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     NotificationModalComponent,
     ErrorModalComponent,
     MemberPreviewModalComponent,

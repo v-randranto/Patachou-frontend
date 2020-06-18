@@ -40,7 +40,6 @@ export class AuthenticationService {
         }
         this.socketService.connectMember({ id: JSON.stringify(data.member._id), pseudo: data.member.pseudo });
         localStorage.setItem('user_data', JSON.stringify(user));
-        // localStorage.setItem('user_id', JSON.stringify(data.member._id));
         console.log('> login localStorage set', localStorage);
         console.log('user', user);
         return user;
