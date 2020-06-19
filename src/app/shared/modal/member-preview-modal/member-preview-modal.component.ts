@@ -125,6 +125,7 @@ export class MemberPreviewModalComponent implements OnInit {
         break;
     }
     const initialState = {
+      bgColor: '#a5d152',
       title: 'A y est, demande prise en compte!',
       text: text
     }
@@ -154,6 +155,7 @@ export class MemberPreviewModalComponent implements OnInit {
           this.openErrorModal();
         } else {
           const initialState = {
+            bgColor: '#a5d152',
             title: 'A y est, demande prise en compte!',
             text: `${this.toTitleCase(this.selectedMember.pseudo)} est notifié.e de votre demande.`
           }
