@@ -13,7 +13,8 @@
   color: ivory !important;
 }
 
-.card-body, .card-footer,
+.card-body,
+.card-footer,
 ul,
 li {
   background-color: ivory;
@@ -28,8 +29,7 @@ fa-icon {
   color: darkslategray;
 }
 
-footer fa-icon {
-  color: ivory;
+fa-icon.action {
+  font-size: 1rem;
+  color: #007bff;
 }
-
-

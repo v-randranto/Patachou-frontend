@@ -40,7 +40,6 @@ export class NetworkComponent implements OnInit {
     }
   };
 
-
   // variables recherche de membres
   public members: any;
   public searchSubmitted = false;

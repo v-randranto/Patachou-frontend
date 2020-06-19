@@ -32,26 +32,13 @@ input, textarea {
   background-color:#f7f5ec;
 }
 
-label.required::after {
-  content: "*";
-  color: red;
-  font-weight: bold;
-}
-
-.text-dark  {
+.text-dark , .label-file {
   color: darkslategray !important;
 }
-.text-white, .label-file  {
+.text-white  {
   color: ivory !important;
 }
 
 .bg-danger {
   background-color: #cb7364 !important;
 }
-/*
-.main-container {
-  margin: 0 auto;
-  padding: 20px;
-  border: 1px solid gray;
-  border-radius: 10px;
-} */

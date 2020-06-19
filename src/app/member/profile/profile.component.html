@@ -34,9 +34,20 @@
           <span class="d-inline pl-2">{{member.email}}</span>
         </li>
       </ul>
-      <button class="btn btn-outline-primary mt-3 d-block mx-auto">Je modifie mon profil (todo)</button>
-      <button class="btn btn-outline-primary mt-3 d-block mx-auto">Mon mur (todo)</button>
-      <button class="btn btn-outline-primary mt-3 d-block mx-auto">Ma messagerie (todo)</button>
+      <div class="button-container row">
+        <div class="col-md my-3">
+        <button class="btn btn-outline-primary d-inline-block mr-4 mt-3 ">
+          <fa-icon class='action mr-2' [icon]="['fas','edit']"></fa-icon>
+          <span>Identifiants</span>
+        </button>
+        <button class="btn btn-outline-primary d-inline-block mt-3">
+          <fa-icon class='action mr-2' [icon]="['fas','edit']"></fa-icon>
+          <span>Données profil</span>
+        </button>
+
+      </div>
+
+      </div>
     </div>
 
   </div>

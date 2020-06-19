@@ -12,7 +12,7 @@ import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faUpload, faMars, faVenus, faVenusMars, faBirthdayCake, faTimes, faIdBadge, faAt, faPlug, faEnvelope, faSearch, faUserFriends, faPencilAlt, faUsers, faUser, faUserMinus, faUserPlus, faSignOutAlt, faSignInAlt, faInfoCircle, faSmileBeam, faAngleDown, faCaretDown, faColumns } from '@fortawesome/free-solid-svg-icons';
+import { faUpload, faMars, faVenus, faVenusMars, faBirthdayCake, faTimes, faIdBadge, faAt, faPlug, faEnvelope, faSearch, faUserFriends, faPencilAlt, faUsers, faUser, faUserMinus, faUserPlus, faSignOutAlt, faSignInAlt, faInfoCircle, faSmileBeam, faAngleDown, faCaretDown, faColumns, faUserEdit, faComments, faPaperPlane, faInbox, faBullhorn, faUserSecret, faEdit } from '@fortawesome/free-solid-svg-icons';
 
 import { AuthenticationService } from '@core/service/authentication.service';
 import { environment } from './../environments/environment';
@@ -78,6 +78,6 @@ const config: SocketIoConfig = {
 })
 export class AppModule {
   constructor(library: FaIconLibrary) {
-    library.addIcons(faUpload, faMars, faVenus, faVenusMars, faBirthdayCake, faTimes, faIdBadge, faAt, faPlug, faEnvelope, faSearch, faUserFriends, faPencilAlt, faUsers, faUser, faUserMinus, faUserPlus, faSignOutAlt, faSignInAlt, faInfoCircle, faSmileBeam, faAngleDown, faCaretDown, faColumns);
+    library.addIcons(faUpload, faMars, faVenus, faVenusMars, faBirthdayCake, faTimes, faIdBadge, faAt, faPlug, faEnvelope, faSearch, faUserFriends, faPencilAlt, faUsers, faUser, faUserMinus, faUserPlus, faSignOutAlt, faSignInAlt, faInfoCircle, faSmileBeam, faAngleDown, faCaretDown, faColumns, faUserEdit, faEnvelope, faComments, faPaperPlane, faInbox, faBullhorn, faUserSecret, faEdit);
   }
 }
