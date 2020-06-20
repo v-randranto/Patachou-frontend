@@ -9,3 +9,12 @@ ul {
   list-style: none;
 }
 
+.dropdown-item.active {
+  background-color: gray !important;
+}
+.dropdown-menu {
+  background-color: #343a40 !important;
+}
+.dropdown-menu {
+  border-color: #343a40;
+}

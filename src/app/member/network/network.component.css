@@ -4,6 +4,7 @@
   background-color: #ffe4c4;
   height: 100%;
 }
+
 .text-white {
   color: ivory !important;
 }
@@ -12,4 +13,23 @@
   background-color: ivory;
 }
 
+.nav-tabs .nav-link {
+  background-color: #0d1323;
+  border: 1px solid #0d1323;
+  color: #fff;
+  font-size: 12px;
+}
 
+.nav-tabs .nav-link:hover {
+  background-color: gray;
+}
+
+.nav-tabs .nav-link.active {
+  background-color: #038F43 !important;
+  color: #fff !important;
+  font-size: 12px;
+}
+
+.nav-tabs .nav-link.active:hover {
+  background-color: gray;
+}

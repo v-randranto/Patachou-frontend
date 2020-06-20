@@ -23,6 +23,7 @@ import { ConnectionModule } from '@app/connection/connection.module';
 import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
 
 import { NavbarComponent } from './layout/navbar/navbar.component';
 import { AboutComponent } from './about/about.component';

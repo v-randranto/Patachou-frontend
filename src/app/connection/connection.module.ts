@@ -8,6 +8,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Routes, RouterModule } from '@angular/router';
 import { SharedModule } from '@app/shared/shared.module';
 import { RegisterComponent } from './register/register.component';
+import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
 
 const routes: Routes = [];
 
@@ -21,6 +22,7 @@ const routes: Routes = [];
     CommonModule,
     ReactiveFormsModule,
     FontAwesomeModule,
+    ProgressbarModule.forRoot(),
     [RouterModule.forChild(routes)],
     SharedModule
   ],

@@ -39,6 +39,7 @@ export class RegisterComponent implements OnInit {
   };
   public registerForm = [];
   public currentStepNb = 0;
+  public progressValue = 0;
   public stepOneForm: FormGroup;
   public stepTwoForm: FormGroup;
   public stepThreeForm: FormGroup;
@@ -129,8 +130,16 @@ export class RegisterComponent implements OnInit {
   goToStep(step: string): void {
     console.log('>goToStep step', this.currentStepNb)
     console.log('form status', this.registerForm[this.currentStepNb].status)
-    this.currentStepNb =
-      step === 'prev' ? this.currentStepNb - 1 : this.currentStepNb + 1;
+    if (step === 'prev') {
+      this.currentStepNb = this.currentStepNb - 1;
+      this.progressValue--;
+    } else {
+      this.currentStepNb = this.currentStepNb + 1;
+      this.progressValue++;
+    }
+
+    // this.currentStepNb =
+    //   step === 'prev' ? this.currentStepNb - 1 : this.currentStepNb + 1;
   }
 
   get stepOne() {

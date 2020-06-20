@@ -1,8 +1,8 @@
-<nav class="navbar navbar-default navbar-fixed-top navbar-expand-lg  navbar-dark bg-dark  py-0 pl-0 pr-2" role="navigation">
+<nav class="navbar navbar-default navbar-fixed-top navbar-expand-lg navbar-dark bg-dark py-0 px-2" role="navigation">
 
   <a class="navbar-brand nav-link" routerLinkActive="active" routerLink="home"><img src="../../../assets/img/brand.png"
-      width="35" height="35" class="rounded" alt=""></a>
-  <span class="text-white d-inline mx-2">
+      width="35" height="35" class="border rounded" alt=""></a>
+  <span class="d-inline mx-2 text-white">
     <fa-icon class="mr-1" style="font-size:0.7rem" [icon]="['fas','plug']"></fa-icon><small>: {{connectedNb}}</small>
   </span>
 
@@ -18,16 +18,16 @@
         <a class="nav-link" data-toggle="dropdown" href id="basic-link" dropdownToggle (click)="false" aria-controls="basic-link-dropdown">
           <fa-icon [icon]="['fas','info-circle']" class="mr-2"></fa-icon><span class="d-md-none">Informations </span><fa-icon [icon]="['fas','caret-down']" class="ml-2"></fa-icon>
         </a>
-        <ul id="basic-link-dropdown" *dropdownMenu class="dropdown-menu bg-dark border-dark m-0 p-0 pl-4"  role="menu" aria-labelledby="basic-link">
+        <ul id="basic-link-dropdown" *dropdownMenu class="dropdown-menu m-0 py-0"  role="menu" aria-labelledby="basic-link">
           <!-- A propos -->
-          <li class="m-0" role="menuitem">
-            <a class="nav-link dropdown-item p-1" routerLinkActive="active" routerLink="/about" (click)="menuCollapse()">
+          <li class="my-0 py-0" role="menuitem">
+            <a class="nav-link dropdown-item" routerLinkActive="active" routerLink="/about" (click)="menuCollapse()">
               <span>A propos</span>
             </a>
           </li>
           <!-- Contact -->
-          <li class="m-0" role="menuitem">
-            <a class="nav-link dropdown-item p-1 m-0" routerLinkActive="active" routerLink="/contact" (click)="menuCollapse()">
+          <li class="my-0 py-0" role="menuitem">
+            <a class="nav-link dropdown-item" routerLinkActive="active" routerLink="/contact" (click)="menuCollapse()">
               <span>Contacter</span>
             </a>
           </li>
@@ -37,7 +37,7 @@
 
     </ul>
     <!-- Membre connecté -->
-    <div *ngIf="isLoggedIn" class="navbar-nav">
+    <div *ngIf="isLoggedIn" class="navbar-nav ml-md-auto">
       <!-- Profil -->
       <div *ngIf="currentMember" class="navbar-nav">
         <a class="nav-link" routerLinkActive="active" routerLink="/member/profile" (click)="menuCollapse()">
