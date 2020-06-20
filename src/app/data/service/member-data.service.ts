@@ -35,4 +35,10 @@ export class MemberDataService {
     const url = '/api/connection/register';
     return this.http.post<any>(url, data)
   }
+
+  public update(data: any): Observable<any> {
+    const url = '/api/member/update';
+    return this.http.post<any>(url, data)
+  }
+
 }

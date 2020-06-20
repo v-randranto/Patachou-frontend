@@ -38,6 +38,11 @@ export function PasswordStrength(controlName: string) {
   return (formGroup: FormGroup) => {
     const control = formGroup.controls[controlName];
 
+    //ce contrôle ne doit pas être fait que si le password est saisi (cas modification du profil)
+    if (control.untouched && control.pristine) {
+      return;
+    }
+
     if (control.errors && !control.errors.strength) {
       return;
     }

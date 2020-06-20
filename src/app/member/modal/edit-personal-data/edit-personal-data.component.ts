@@ -1,42 +1,45 @@
-import { FORMAT_RULES, TOOL_TIPS} from '@shared/constant/profile-form';
-import { ErrorModalComponent } from '@shared/modal/error-modal/error-modal.component';
-import { NotificationModalComponent } from '@shared/modal/notification-modal/notification-modal.component';
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MustMatch, PasswordStrength } from '@app/connection/custom-validator/custom-validator.validator';
-import { MemberDataService } from '@app/data/service/member-data.service';
+import { Component, OnInit } from '@angular/core';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
 import { Member, Photo, RegisterData } from '@app/data/model/member';
-import { Router } from '@angular/router';
 import { AuthenticationService } from '@app/core/service/authentication.service';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { NotificationModalComponent } from '@app/shared/modal/notification-modal/notification-modal.component';
+import { ErrorModalComponent } from '@app/shared/modal/error-modal/error-modal.component';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FORMAT_RULES, TOOL_TIPS } from '@app/shared/constant/profile-form';
+import { MemberDataService } from '@app/data/service/member-data.service';
+import { Router } from '@angular/router';
+import { MustMatch, PasswordStrength } from '@app/connection/custom-validator/custom-validator.validator';
 
 @Component({
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
-
+  selector: 'app-edit-personal-data',
+  templateUrl: './edit-personal-data.component.html',
+  styleUrls: ['./edit-personal-data.component.css']
 })
-export class RegisterComponent implements OnInit {
-  @ViewChild('pseudo') pseudoRef: ElementRef;
-  public modalRef: BsModalRef;
+export class EditPersonalDataComponent implements OnInit {
+  //données passées par le composant Profil
+  public title: string;
+  public currentMember: Member;
+
+  public nestedModalRef: BsModalRef;
   public notificationModalConfig = {
     animated: true,
     ignoreBackdropClick: true,
     class: 'modal-dialog-centered',
     initialState: {
       bgColor: '#a5d152',
-      title: 'A y est, vous êtes des nôtres!',
-      text: `Un email vous a été envoyé pour confirmer votre inscription. Si vous ne le recevez pas, vérifiez votre adresse dans le profil de votre compte.`,
-      redirection: `/connection/login`
+      title: 'A y est, demande prise en compte!',
+      text: 'Vos données personnelles sont mise à jour.'
     }
   };
   public errorModalConfig = {
     animated: true,
     ignoreBackdropClick: true,
     class: 'modal-dialog-centered',
-    initialState: {
-      redirection: `/home`
-    }
   };
+
+  public member: Member;
   public registerForm = [];
   public currentStepNb = 0;
   public progressValue = 0;
@@ -51,7 +54,6 @@ export class RegisterComponent implements OnInit {
     email: true
   }
 
-  public member = new Member();
   public photo: Photo;
   public registerData = new RegisterData();
   public fileStatus = {
@@ -64,26 +66,26 @@ export class RegisterComponent implements OnInit {
 
   public maxBirthDate = '2002-12-31';
   public birthDateValue = '1979-01-01';
+
   public emailBlurred: boolean;
+
   public nameTooltip = TOOL_TIPS.name;
   public passwordTooltip = TOOL_TIPS.password;
   public pseudoTooltip = TOOL_TIPS.pseudo;
 
   constructor(
+    public modalRef: BsModalRef,
+    private modalService: BsModalService,
     private fb: FormBuilder,
     private memberDataService: MemberDataService,
-    private authenticationService: AuthenticationService,
     private router: Router,
-    private modalService: BsModalService
+    public authenticationService: AuthenticationService
   ) { }
 
-  ngOnInit() {
-    if (this.authenticationService.isLoggedIn) {
-      this.router.navigate(['member/profile']);
-    };
-
-    // formGroup de l'étape 1 du formulaire
-    this.stepOneForm = this.fb.group({
+  ngOnInit(): void {
+    registerLocaleData(localeFr, 'fr');
+     // formGroup de l'étape 1 du formulaire
+     this.stepOneForm = this.fb.group({
       pseudo: ['', [Validators.required, Validators.pattern(FORMAT_RULES.pseudoPattern), Validators.maxLength(FORMAT_RULES.pseudoMax)]],
       password: ['', [Validators.required, Validators.maxLength(FORMAT_RULES.passwordMax)]],
       confirmPassword: ['', Validators.required]
@@ -113,14 +115,21 @@ export class RegisterComponent implements OnInit {
       file: [null]
     });
     this.registerForm.push(this.stepThreeForm);
+
     this.stepThree.birthDate.setValue('1980-01-01');
+    console.log("step1Form", this.stepOneForm.status)
+    console.log("step2Form", this.stepTwoForm.status)
+    console.log("step3Form", this.stepThreeForm.status)
   }
+
 
   get currentStepValid() {
     return this.registerForm[this.currentStepNb].status === "VALID" ? true : false;
   }
 
   goToStep(step: string): void {
+    console.log('>goToStep step', this.currentStepNb)
+    console.log('form status', this.registerForm[this.currentStepNb].status)
     if (step === 'prev') {
       this.currentStepNb = this.currentStepNb - 1;
       this.progressValue--;
@@ -195,17 +204,6 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  resetPseudo() {
-    this.pseudoRef.nativeElement.value = '';
-  }
-
-  openErrorModal() {
-    this.modalRef = this.modalService.show(ErrorModalComponent, this.errorModalConfig);
-  }
-
-  openNotificationModal() {
-    this.modalRef = this.modalService.show(NotificationModalComponent, this.notificationModalConfig);
-  }
 
   onSubmit() {
     this.submitted = true;
@@ -227,9 +225,12 @@ export class RegisterComponent implements OnInit {
       this.photo.content = this.stepThreeForm.value.file;
       this.registerData.photo = this.photo;
     }
+    console.log('member', this.registerData.member);
     this.memberDataService.register(this.registerData).subscribe(
       res => {
+        console.log('res', res)
         this.registerStatus = res;
+        console.log('register status', this.registerStatus);
         if (this.registerStatus.pseudoUnavailable) {
           this.currentStepNb = 0;
           // this.pseudoRef.nativeElement.focus();
@@ -237,6 +238,7 @@ export class RegisterComponent implements OnInit {
           if (this.registerStatus.save) {
             this.openNotificationModal();
           } else {
+            // TODO refacto
             this.openErrorModal();
           }
         }
@@ -248,4 +250,38 @@ export class RegisterComponent implements OnInit {
       });
   }
 
+  closeModal() {
+    this.modalRef.hide();
+  }
+
+  openErrorModal() {
+    this.closeModal();
+    this.nestedModalRef = this.modalService.show(ErrorModalComponent, this.errorModalConfig);
+  }
+
+  valueInitialState(dataStatus) {
+    let text: string;
+    switch (dataStatus) {
+      // case this.status_confirmed:
+      //   text = `Vous êtes pote avec ${this.toTitleCase(this.selectedMember.pseudo)}.`;
+      //   break;
+      // case this.status_rejected:
+      //   text = `La demande de ${this.toTitleCase(this.selectedMember.pseudo)} est rejetée.`;
+      //   break;
+      // case this.status_terminated:
+      //   text = `Vous n'êtes plus pote avec ${this.toTitleCase(this.selectedMember.pseudo)}.`;
+      //   break;
+    }
+    const initialState = {
+      bgColor: '#a5d152',
+      title: 'A y est, demande prise en compte!',
+      text: text
+    }
+    this.notificationModalConfig.initialState = initialState;;
+  }
+
+  openNotificationModal() {
+    this.closeModal();
+    this.nestedModalRef = this.modalService.show(NotificationModalComponent, this.notificationModalConfig);
+  }
 }

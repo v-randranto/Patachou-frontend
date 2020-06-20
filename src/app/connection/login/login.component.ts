@@ -37,7 +37,6 @@ export class LoginComponent implements OnInit {
     private modalService: BsModalService
   ) {
     if (this.authenticationService.isLoggedIn) {
-      console.log('>login onInit : isLoggedIn => profile')
       this.router.navigate(['member/profile']);
     };
   }
@@ -62,7 +61,6 @@ export class LoginComponent implements OnInit {
 
   closeModal() {
     this.modalRef.hide();
-    console.log('incident login ko => home')
     this.router.navigate(['home']);
   }
 
@@ -79,12 +77,9 @@ export class LoginComponent implements OnInit {
       .pipe(first())
       .subscribe(
         data => {
-          console.log('data', data);
           this.router.navigate([this.returnUrl]);
         },
         error => {
-          console.log('error login', error)
-
           if (error.notFound || error.authKO) {
             this.badCredentials = true;
           }

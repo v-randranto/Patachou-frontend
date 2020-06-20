@@ -27,8 +27,8 @@ export class NetworkComponent implements OnInit {
   public relation_in_waiting = 'IN_WAITING';
   public relation_to_validate = 'TO_VALIDATE';
   public relation_to_befriend = 'TO_BEFRIEND';
-  public modalRef: BsModalRef;
 
+  public modalRef: BsModalRef;
   public modalConfig = {
     animated: true,
     ignoreBackdropClick: true,

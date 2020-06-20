@@ -13,6 +13,10 @@
   background-color: #ffd700 !important;
 }
 
+.progress {
+  background-color: #c6c6c6 !important;
+}
+
 .label-file {
     cursor: pointer;
     font-weight: bold;
@@ -22,11 +26,6 @@ fa-icon {
   font-size: 1.4rem;
   color: darkslategray
 }
-
-/*
-.btn {
-  font-size: 1.2rem !important;
-} */
 
 input, textarea {
   background-color:#f7f5ec;
@@ -39,6 +38,3 @@ input, textarea {
   color: ivory !important;
 }
 
-.bg-danger {
-  background-color: #cb7364 !important;
-}

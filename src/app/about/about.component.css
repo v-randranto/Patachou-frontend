@@ -1,4 +1,5 @@
 .container-fluid {
-  background-color: #b0f2b6;
+  background: url('../../assets/img/bg-home.jpg') center center;
+  background-size: cover;
   height: 100%;
 }

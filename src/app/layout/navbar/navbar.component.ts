@@ -37,7 +37,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.socketService
       .disconnected()
       .subscribe((res) => {
-        console.log('>disconnected', res)
         this.connectedNb++;
       });
   }
@@ -48,7 +47,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   get isLoggedIn() {
     if (this.authenticationService.isLoggedIn) {
-      console.log('> onInit user profile', this.authenticationService.userProfile);
+      // console.log('> onInit user profile', this.authenticationService.userProfile);
       this.currentMember = this.authenticationService.userProfile;
       return this.authenticationService.isLoggedIn;
     }

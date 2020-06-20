@@ -36,13 +36,13 @@
       </ul>
       <div class="button-container row">
         <div class="col-md my-3">
-        <button class="btn btn-outline-primary d-inline-block mr-4 mt-3 ">
+        <button class="btn btn-outline-primary d-inline-block mr-4 mt-3" (click)="update(updCredentials)">
           <fa-icon class='action mr-2' [icon]="['fas','edit']"></fa-icon>
           <span>Identifiants</span>
         </button>
-        <button class="btn btn-outline-primary d-inline-block mt-3">
+        <button class="btn btn-outline-primary d-inline-block mt-3" (click)="update(updPersonalData)">
           <fa-icon class='action mr-2' [icon]="['fas','edit']"></fa-icon>
-          <span>Données profil</span>
+          <span>Données personnelles (todo)</span>
         </button>
 
       </div>

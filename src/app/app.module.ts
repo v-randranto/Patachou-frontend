@@ -49,7 +49,7 @@ const config: SocketIoConfig = {
     NavbarComponent,
     AboutComponent,
     ErrorComponent,
-    ContactComponent,
+    ContactComponent
   ],
   imports: [
     BrowserModule,

@@ -10,11 +10,14 @@ ul {
 }
 
 .dropdown-item.active {
-  background-color: gray !important;
+  background-color: #343a40 !important;
+}
+
+.dropdown-item:hover {
+  background-color:  gray !important;
 }
 .dropdown-menu {
   background-color: #343a40 !important;
-}
-.dropdown-menu {
-  border-color: #343a40;
+  /* border-color: #343a40; */
+  border-color: none;
 }
