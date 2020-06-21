@@ -1,3 +1,4 @@
+import { UtilService } from './service/util.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NotificationModalComponent } from './modal/notification-modal/notification-modal.component';
@@ -19,6 +20,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FontAwesomeModule,
     FormsModule,
     ReactiveFormsModule,
+  ],
+  providers: [
+    UtilService
   ],
   exports: [
     CommonModule,

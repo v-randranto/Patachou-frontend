@@ -14,7 +14,7 @@ export class AuthenticationGuard implements CanActivate {
     animated: true,
     ignoreBackdropClick: true,
     initialState: {
-      bgGolor: '#d3d0c6',
+      color: '#17a2b8',
       title: 'Session expirée!',
       text: `Veuillez vous connecter à nouveau.`,
       redirection: `/connection/login`

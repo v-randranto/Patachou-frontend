@@ -1,7 +1,8 @@
-import { FORMAT_RULES, TOOL_TIPS} from '@shared/constant/profile-form';
+import { UtilService } from '@app/shared/service/util.service';
+import { FORMAT_RULES, TOOL_TIPS } from '@shared/constant/profile-form';
 import { ErrorModalComponent } from '@shared/modal/error-modal/error-modal.component';
 import { NotificationModalComponent } from '@shared/modal/notification-modal/notification-modal.component';
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MustMatch, PasswordStrength } from '@app/connection/custom-validator/custom-validator.validator';
 import { MemberDataService } from '@app/data/service/member-data.service';
@@ -9,23 +10,26 @@ import { Member, Photo, RegisterData } from '@app/data/model/member';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '@app/core/service/authentication.service';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { REGISTER_PROFILE } from '@app/shared/constant/notification-modal';
+
 
 @Component({
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, AfterViewInit {
   @ViewChild('pseudo') pseudoRef: ElementRef;
+  @ViewChild('firstName') firstNameRef: ElementRef;
   public modalRef: BsModalRef;
   public notificationModalConfig = {
     animated: true,
     ignoreBackdropClick: true,
     class: 'modal-dialog-centered',
     initialState: {
-      bgColor: '#a5d152',
-      title: 'A y est, vous êtes des nôtres!',
-      text: `Un email vous a été envoyé pour confirmer votre inscription. Si vous ne le recevez pas, vérifiez votre adresse dans le profil de votre compte.`,
+      color: REGISTER_PROFILE.color,
+      title: REGISTER_PROFILE.title,
+      text: REGISTER_PROFILE.text,
       redirection: `/connection/login`
     }
   };
@@ -44,6 +48,7 @@ export class RegisterComponent implements OnInit {
   public stepTwoForm: FormGroup;
   public stepThreeForm: FormGroup;
   public submitted = false;
+  public loading = false;
   public pseudoUnavailable = false;
   public registerStatus = {
     pseudoUnavailable: false,
@@ -62,8 +67,9 @@ export class RegisterComponent implements OnInit {
   public acceptFileExtensions = FORMAT_RULES.fileExtensions.join(',');
   public invalidFileMessage: string;
 
-  public maxBirthDate = '2002-12-31';
-  public birthDateValue = '1979-01-01';
+  public minBirthDate: string;
+  public maxBirthDate: string;
+  public defaultBirthDate: string;
   public emailBlurred: boolean;
   public nameTooltip = TOOL_TIPS.name;
   public passwordTooltip = TOOL_TIPS.password;
@@ -74,13 +80,18 @@ export class RegisterComponent implements OnInit {
     private memberDataService: MemberDataService,
     private authenticationService: AuthenticationService,
     private router: Router,
-    private modalService: BsModalService
+    private modalService: BsModalService,
+    private utilService: UtilService
   ) { }
 
   ngOnInit() {
     if (this.authenticationService.isLoggedIn) {
       this.router.navigate(['member/profile']);
     };
+
+    this.minBirthDate = this.utilService.subtractYears(new Date(), 100);
+    this.maxBirthDate = this.utilService.subtractYears(new Date(), 1);
+    this.defaultBirthDate = this.utilService.subtractYears(new Date(), 35);
 
     // formGroup de l'étape 1 du formulaire
     this.stepOneForm = this.fb.group({
@@ -108,12 +119,17 @@ export class RegisterComponent implements OnInit {
     // formGroup de l'étape 3 du formulaire
     this.stepThreeForm = this.fb.group({
       sex: [''],
-      birthDate: [new Date('1980-01-01')],
+      birthDate: [this.defaultBirthDate],
       presentation: ['', Validators.maxLength(140)],
       file: [null]
     });
     this.registerForm.push(this.stepThreeForm);
-    this.stepThree.birthDate.setValue('1980-01-01');
+    console.log(this.stepThreeForm.value)
+  }
+
+  ngAfterViewInit(): void {
+    console.log(this.pseudoRef)
+    console.log(this.firstNameRef)
   }
 
   get currentStepValid() {
@@ -129,8 +145,12 @@ export class RegisterComponent implements OnInit {
       this.progressValue++;
     }
 
-    // this.currentStepNb =
-    //   step === 'prev' ? this.currentStepNb - 1 : this.currentStepNb + 1;
+    if (this.currentStepNb === 0) {
+      this.pseudoRef.nativeElement.focus();
+    } else if (this.currentStepNb === 1) {
+      this.firstNameRef.nativeElement.focus();
+    }
+
   }
 
   get stepOne() {
@@ -141,6 +161,18 @@ export class RegisterComponent implements OnInit {
   }
   get stepThree() {
     return this.registerForm[2].controls;
+  }
+
+  reinitForm() {
+    if (this.currentStepNb === 0) {
+      this.stepOneForm.reset();
+    } else if (this.currentStepNb === 1) {
+      this.stepTwoForm.reset();
+    } else {
+      this.stepThreeForm.reset();
+      this.stepThree.birthDate.setValue(this.defaultBirthDate);
+      this.photo = null;
+    }
   }
 
   emailOnFocus() {
@@ -195,10 +227,6 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  resetPseudo() {
-    this.pseudoRef.nativeElement.value = '';
-  }
-
   openErrorModal() {
     this.modalRef = this.modalService.show(ErrorModalComponent, this.errorModalConfig);
   }
@@ -212,7 +240,7 @@ export class RegisterComponent implements OnInit {
     if (this.currentStepNb < 2) {
       this.goToStep('next')
     }
-
+    this.loading = true;
     // // TODO refacto
     this.member.pseudo = this.stepOneForm.value.pseudo.toLowerCase();
     this.member.password = this.stepOneForm.value.password;
@@ -232,17 +260,20 @@ export class RegisterComponent implements OnInit {
         this.registerStatus = res;
         if (this.registerStatus.pseudoUnavailable) {
           this.currentStepNb = 0;
-          // this.pseudoRef.nativeElement.focus();
+          this.loading = false;
+          this.pseudoRef.nativeElement.focus();
         } else {
           if (this.registerStatus.save) {
             this.openNotificationModal();
           } else {
+            this.loading = false;
             this.openErrorModal();
           }
         }
       },
       error => {
         console.error(error);
+        this.loading = false;
         this.registerStatus.save = false;
         this.openErrorModal();
       });

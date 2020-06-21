@@ -21,21 +21,35 @@
   </div>
 
   <!-- affichage des boutons en fonction de la relation avec le membre sélectionné -->
-  <button *ngIf="isConfirmed" type="button" class="btn btn-outline-primary d-block mx-auto my-2">Voir son profil (todo)
-  </button>
-  <button *ngIf="isConfirmed" type="button" class="btn btn-outline-primary d-block mx-auto my-2"
-    (click)="relationUpdate(status_terminated)">Supprimer
-  </button>
-  <div *ngIf="toValidate" class="mx-auto">
-    <button type="button" class="btn btn-outline-primary mx-2 my-2" (click)="relationUpdate(status_confirmed)">Accepter
-    </button>
-    <button type="button" class="btn btn-outline-primary mx-2 my-2" (click)="relationUpdate(status_rejected)">Refuser
-    </button>
+  <div *ngIf="isConfirmed" class="button-container row">
+    <div class="col-md my-3">
+      <button type="button" class="btn btn-outline-primary d-block mr-2 mt-3">Voir son profil (todo)
+      </button>
+      <button type="button" class="btn btn-primary d-block mt-3"
+        (click)="relationUpdate(status_terminated)">Supprimer
+      </button>
+    </div>
   </div>
-  <button *ngIf="toBefriend" type="button" class="btn btn-outline-primary d-block mx-auto my-2"
-    (click)="relationRequest()">Ajouter en ami
-  </button>
-  <button type="button" class="btn btn-outline-primary d-block mx-auto my-2">Voir ses amis (todo)
-  </button>
+
+  <div *ngIf="toValidate" class="button-container row">
+    <div class="col-md my-3">
+      <button type="button" class="btn btn-primary d-block mr-2 mt-3"
+        (click)="relationUpdate(status_confirmed)">Accepter
+      </button>
+      <button type="button" class="btn btn-primary d-block mt-3"
+        (click)="relationUpdate(status_rejected)">Refuser
+      </button>
+    </div>
   </div>
-  <div class="modal-footer"></div>
+  <div *ngIf="toBefriend" class="button-container row">
+    <div class="col-md my-3">
+      <button type="button" class="btn btn-primary d-block mr-2 mt-3"
+        (click)="relationRequest()">Ajouter en ami
+      </button>
+      <button type="button" class="btn btn-outline-primary d-block mt-3">Voir ses amis (todo)
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer"></div>

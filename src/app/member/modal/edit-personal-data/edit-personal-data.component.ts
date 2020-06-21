@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
@@ -9,6 +9,8 @@ import { ErrorModalComponent } from '@app/shared/modal/error-modal/error-modal.c
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FORMAT_RULES, TOOL_TIPS } from '@app/shared/constant/profile-form';
 import { MemberDataService } from '@app/data/service/member-data.service';
+import { UtilService } from '@app/shared/service/util.service';
+import { EDIT_PROFILE } from '@app/shared/constant/notification-modal';
 
 interface IPersonalData {
   id: string,
@@ -38,11 +40,12 @@ export class EditPersonalDataComponent implements OnInit {
     ignoreBackdropClick: true,
     class: 'modal-dialog-centered',
     initialState: {
-      bgColor: '#a5d152',
-      title: 'A y est, demande prise en compte!',
-      text: 'Vos données personnelles sont mises à jour.'
+      color: EDIT_PROFILE.color,
+      title: EDIT_PROFILE.title,
+      text: EDIT_PROFILE.personal_data_text
     }
   };
+
   public errorModalConfig = {
     animated: true,
     ignoreBackdropClick: true,
@@ -53,8 +56,15 @@ export class EditPersonalDataComponent implements OnInit {
   public personalDataForm = [];
   public currentStepNb = 0;
   public progressValue = 0;
+  public loading = false;
   public stepOneForm: FormGroup;
   public stepTwoForm: FormGroup;
+  public titleCaseFirstName: string;
+  public titleCaseLastName: string;
+  public shortBirthDate: string;
+  public defaultBirthDate: string;
+  public minBirthDate: string;
+  public maxBirthDate: string;
 
   public submitted = false;
   public updateStatus = true;
@@ -69,9 +79,6 @@ export class EditPersonalDataComponent implements OnInit {
   public acceptFileExtensions = FORMAT_RULES.fileExtensions.join(',');
   public invalidFileMessage: string;
 
-  public maxBirthDate = '2002-12-31';
-  public birthDateValue = '1979-01-01';
-
   public emailBlurred: boolean;
 
   public nameTooltip = TOOL_TIPS.name;
@@ -83,36 +90,54 @@ export class EditPersonalDataComponent implements OnInit {
     private modalService: BsModalService,
     private fb: FormBuilder,
     private memberDataService: MemberDataService,
-    public authenticationService: AuthenticationService
+    public authenticationService: AuthenticationService,
+    private utilService: UtilService
   ) { }
 
   ngOnInit(): void {
     registerLocaleData(localeFr, 'fr');
+    this.minBirthDate = this.utilService.subtractYears(new Date(), 100);
+    this.maxBirthDate = this.utilService.subtractYears(new Date(), 1);
+    this.defaultBirthDate = this.utilService.subtractYears(new Date(), 35);
+    this.shortBirthDate = this.updateMember.birthDate.toString().substring(0,10)
 
+    this.titleCaseFirstName = this.utilService.toTitleCase(this.updateMember.firstName);
+    this.titleCaseLastName = this.utilService.toTitleCase(this.updateMember.lastName);
     // formGroup de l'étape 1 du formulaire
     this.stepOneForm = this.fb.group({
-      firstName: ['', [Validators.required, Validators.pattern(FORMAT_RULES.namePattern), Validators.maxLength(FORMAT_RULES.nameMax)]],
-      lastName: ['', [Validators.required, Validators.pattern(FORMAT_RULES.namePattern), Validators.maxLength(FORMAT_RULES.nameMax)]],
-      email: ['', [Validators.required, Validators.pattern(FORMAT_RULES.emailPattern), Validators.maxLength(FORMAT_RULES.emailMax)]],
+      firstName: [
+        this.titleCaseFirstName,
+        [Validators.required,
+        Validators.pattern(FORMAT_RULES.namePattern),
+        Validators.maxLength(FORMAT_RULES.nameMax)]
+      ],
+      lastName: [
+        this.titleCaseLastName,
+        [Validators.required,
+        Validators.pattern(FORMAT_RULES.namePattern),
+        Validators.maxLength(FORMAT_RULES.nameMax)]
+      ],
+      email: [
+        this.updateMember.email,
+        [Validators.required,
+        Validators.pattern(FORMAT_RULES.emailPattern),
+        Validators.maxLength(FORMAT_RULES.emailMax)]
+      ],
     });
     this.personalDataForm.push(this.stepOneForm);
 
     // formGroup de l'étape 2 du formulaire
     this.stepTwoForm = this.fb.group({
-      sex: [''],
-      birthDate: [new Date('1980-01-01')],
-      presentation: ['', Validators.maxLength(140)],
+      sex: [this.updateMember.sex],
+      birthDate: [this.shortBirthDate],
+      presentation: [
+        this.updateMember.presentation,
+        Validators.maxLength(140)
+      ],
       file: [null]
     });
     this.personalDataForm.push(this.stepTwoForm);
-    this.stepOne.firstName.setValue(this.updateMember.firstName);
-    this.stepOne.lastName.setValue(this.updateMember.lastName);
-    this.stepOne.email.setValue(this.updateMember.email);
-    this.stepTwo.sex.setValue(this.updateMember.sex);
-    this.stepTwo.birthDate.setValue(this.updateMember.birthDate);
-    this.stepTwo.presentation.setValue(this.updateMember.presentation);
   }
-
 
   get currentStepValid() {
     return this.personalDataForm[this.currentStepNb].status === "VALID" ? true : false;
@@ -135,18 +160,27 @@ export class EditPersonalDataComponent implements OnInit {
     return this.personalDataForm[1].controls;
   }
 
-  reinitForm(index) {
-    console.log('>initForm')
-    if (index === 0) {
+  reinitForm() {
+    if (this.currentStepNb === 0) {
       this.stepOneForm.reset();
-      this.stepOne.firstName.setValue(this.updateMember.firstName);
-      this.stepOne.laststName.setValue(this.updateMember.lastName);
+      this.stepOne.firstName.setValue(this.titleCaseFirstName);
+      this.stepOne.lastName.setValue(this.titleCaseLastName);
       this.stepOne.email.setValue(this.updateMember.email);
     } else {
       this.stepTwoForm.reset();
       this.stepTwo.sex.setValue(this.updateMember.sex);
-      this.stepTwo.birthDate.setValue(this.updateMember.birthDate);
+      this.stepTwo.birthDate.setValue(this.shortBirthDate);
       this.stepTwo.presentation.setValue(this.updateMember.presentation);
+      this.photo = null;
+    }
+
+  }
+
+  get noModification() {
+    if (this.stepOneForm.dirty || this.stepTwoForm.dirty || this.photo) {
+      return false;
+    } else {
+      return true;
     }
   }
 
@@ -209,34 +243,49 @@ export class EditPersonalDataComponent implements OnInit {
       const lastName = this.stepOneForm.value.lastName.toLowerCase();
       const email = this.stepOneForm.value.email.toLowerCase();
       const sex = this.stepTwoForm.value.sex;
+      const date = this.stepTwoForm.value.birthDate;
       const presentation = this.stepTwoForm.value.presentation;
+      console.log('compare date', date)
       if (this.updateMember.firstName !== firstName) {
         personalData.firstName = firstName;
+        this.updateMember.firstName = firstName;
       }
       if (this.updateMember.lastName !== lastName) {
         personalData.lastName = lastName;
+        this.updateMember.lastName = lastName;
       }
       if (this.updateMember.email !== email) {
         personalData.email = email;
+        this.updateMember.email = email;
       }
       if (this.updateMember.sex !== sex) {
         personalData.sex = sex;
+        this.updateMember.sex = sex;
+      }
+
+      if (this.updateMember.birthDate.toString().substring(0, 10) !== date.substring(0, 10)) {
+        personalData.birthDate = date
+        this.updateMember.birthDate = date;
       }
       if (this.updateMember.presentation !== presentation) {
         personalData.presentation = presentation;
+        this.updateMember.presentation = presentation;
       }
-      // TODO date
       if (this.photo) {
         this.photo.content = this.stepTwoForm.value.file;
         personalData.photo = this.photo;
       }
-
       resolve(personalData);
     })
   }
 
   onSubmit() {
     this.submitted = true;
+
+    if (this.noModification) {
+      return;
+    }
+    this.loading = true;
     if (this.currentStepNb < 1) {
       this.goToStep('next')
     }
@@ -246,26 +295,29 @@ export class EditPersonalDataComponent implements OnInit {
       .then(updateData => {
         this.memberDataService.update(updateData).subscribe(
           res => {
-            this.updateStatus = res;
-            console.log('update status', this.updateStatus);
-
+            this.updateStatus = res.save;
+            console.log('update status', JSON.stringify(this.updateStatus));
             if (this.updateStatus) {
+              this.updateMember.photoUrl = res.photoUrl;
               this.updateCurrentMember();
               this.openNotificationModal();
             } else {
+              this.loading = false;
               this.openErrorModal();
             }
           },
           error => {
+            this.loading = false;
             console.error(error);
             this.updateStatus = false;
             this.openErrorModal();
           });
       });
-    }
+  }
 
-    //mise à jour des données du membre stocké en localStorage
+  //mise à jour des données du membre stocké en localStorage
   updateCurrentMember() {
+
     this.authenticationService.setUserProfile(this.updateMember);
   }
 

@@ -1,5 +1,5 @@
 .container-fluid {
-  background: url('../../../assets/img/error.jpg') no-repeat center center;
+  background: url('../../../assets/img/bg-home.jpg') center center;
   background-size: cover;
-  height: calc(100vh - 6vh);
+  height: 100%;
 }

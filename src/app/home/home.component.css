@@ -4,6 +4,10 @@
   height: 100%;
 }
 
+.intro {
+  font-size: 1.2rem;
+}
+
 .btn-primary {
   border: 1px solid #ae3006 !important;
   background-color: #ae3006 !important;

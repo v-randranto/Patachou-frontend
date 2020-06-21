@@ -1,11 +1,6 @@
-.message {
+.post {
   background: url('../../../assets/img/bg-profile.jpg') center center;
   background-size: cover;
   background-color: #ffe4c4;
   height: 100%;
 }
-.text-white {
-  color: ivory !important;
-}
-
-

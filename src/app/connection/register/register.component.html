@@ -1,39 +1,50 @@
 <div class="register">
 
   <div class="col-md-8 col-lg-7 mx-auto">
-    <h3 class="text-dark text-center pt-5 pb-3 ">Je m'inscris...{{currentStepNb+1}}/3</h3>
+    <h3 class="text-dark text-center pt-5 pb-3 ">Je m'inscris...</h3>
+
     <div class="row mx-4 mb-5">
-        <progressbar [value]="progressValue" type="success" [animate]="true" max="3"></progressbar>
+      <progressbar [value]="progressValue" type="success" [animate]="true" max="3"></progressbar>
     </div>
 
-    <form *ngIf="currentStepNb === 0" [formGroup]="stepOneForm">
+    <form [className]="currentStepNb === 0 ? 'd-block' : 'd-none'" [formGroup]="stepOneForm">
       <div class="form-row mt-3">
+
         <div class="form-group col mx-4">
           <input #pseudo type="text" formControlName="pseudo" class="form-control d-inline" placeholder="* Pseudonyme"
             autofocus maxlength=20 (keydown)="checkPseudoInput($event)" data-toggle="tooltip" [title]="pseudoTooltip" />
-          <div class="alert alert-danger my-1 p-1" *ngIf="(stepOne.pseudo.touched || stepOne.pseudo.dirty) && stepOne.pseudo.invalid">
-            <div  *ngIf="stepOne.pseudo.errors.required">Saisissez votre pseudo.</div>
+
+          <div class="alert alert-danger my-1 p-1"
+            *ngIf="(stepOne.pseudo.touched || stepOne.pseudo.dirty) && stepOne.pseudo.invalid">
+            <div *ngIf="stepOne.pseudo.errors.required">Saisissez votre pseudo.</div>
             <div *ngIf="stepOne.pseudo.errors.pattern">Format incorrect ou caractère non permis.</div>
             <div *ngIf="stepOne.pseudo.errors.maxlength">Le pseudonyme ne peut dépasser 20 caractères.</div>
           </div>
-          <div class="alert alert-danger my-1 p-1" *ngIf="registerStatus.pseudoUnavailable">Le pseudonyme est déjà utilisé.
+
+          <div class="alert alert-danger my-1 p-1" *ngIf="registerStatus.pseudoUnavailable">Le pseudonyme est déjà
+            utilisé.
           </div>
         </div>
       </div>
+
       <div class="form-row mt-3">
         <div class="form-group col mx-4">
-          <input type="password" formControlName="password" class="form-control required" placeholder="* Mot de passe"
+          <input type="password" formControlName="password" class="form-control" placeholder="* Mot de passe"
             maxlength=30 />
-          <div *ngIf="(stepOne.password.touched || stepOne.password.dirty) && stepOne.password.invalid" class="alert alert-danger my-1 p-1">
+
+          <div *ngIf="(stepOne.password.touched || stepOne.password.dirty) && stepOne.password.invalid"
+            class="alert alert-danger my-1 p-1">
             <div *ngIf="stepOne.password.errors.required">Saisissez un mot de passe.</div>
             <div *ngIf="stepOne.password.errors.strength">Le mot de passe n'est pas assez balèze.</div>
           </div>
         </div>
       </div>
+
       <div class="form-row mt-3">
         <div class="form-group col mx-4">
-          <input type="password" formControlName="confirmPassword" class="form-control required"
+          <input type="password" formControlName="confirmPassword" class="form-control"
             placeholder="* Confirmation du mot de passe" maxlength=30 />
+
           <div
             *ngIf="(stepOne.confirmPassword.touched || stepOne.confirmPassword.dirty) && stepOne.confirmPassword.invalid"
             class="alert alert-danger my-1 p-1">
@@ -44,36 +55,42 @@
       </div>
     </form>
 
-    <form *ngIf="currentStepNb === 1" [formGroup]="stepTwoForm">
+    <form #step1="ngForm" [className]="currentStepNb === 1 ? 'd-block' : 'd-none'" [formGroup]="stepTwoForm">
       <div class="form-row mt-3">
+
         <div class="form-group col mx-4">
-          <input type="text" formControlName="firstName" class="form-control required" placeholder="* Prénom"
-            maxlength=30 autofocus (keydown)="checkNameInput($event)" data-toggle="tooltip" [title]="nameTooltip" />
+          <input #firstName type="text" formControlName="firstName" class="form-control" placeholder="* Prénom"
+            maxlength=30 (keydown)="checkNameInput($event)" data-toggle="tooltip" [title]="nameTooltip" />
+
           <div *ngIf="(stepTwo.firstName.touched || stepTwo.firstName.dirty) && stepTwo.firstName.invalid"
-          class="alert alert-danger my-1 p-1">
+            class="alert alert-danger my-1 p-1">
             <div *ngIf="stepTwo.firstName.errors.required">Saisissez votre prénom.</div>
             <div *ngIf="stepTwo.firstName.errors.pattern">Le format n'est pas correct.</div>
             <div *ngIf="stepTwo.firstName.errors.maxlength">Le prénom ne peut dépasser 30 caractères.</div>
           </div>
         </div>
       </div>
+
       <div class="form-row mt-3">
         <div class="form-group col mx-4">
           <input type="text" formControlName="lastName" class="form-control" placeholder="* Nom" maxlength=30
             (keydown)="checkNameInput($event)" data-toggle="tooltip" [title]="nameTooltip" />
+
           <div *ngIf="(stepTwo.lastName.touched || stepTwo.lastName.dirty) && stepTwo.lastName.invalid"
-          class="alert alert-danger my-1 p-1">
+            class="alert alert-danger my-1 p-1">
             <div *ngIf="stepTwo.lastName.errors.required">Saisissez votre nom.</div>
             <div *ngIf="stepTwo.lastName.errors.pattern">Le format n'est pas correct.</div>
             <div *ngIf="stepTwo.lastName.errors.maxlength">Le nom ne peut dépasser 30 caractères.</div>
           </div>
         </div>
       </div>
+
       <div class="form-row mt-3">
         <div class="form-group col mx-4">
-          <input type="text" formControlName="email" class="form-control required" placeholder="* mon.adresse@email.com"
+          <input type="text" formControlName="email" class="form-control" placeholder="* mon.adresse@email.com"
             maxlength=50 (blur)="emailOnBlur()" (focus)="emailOnFocus()" />
           <small id="emailHelp" class="form-text text-color">Nous ne partagerons pas votre email.</small>
+
           <div *ngIf="emailBlurred && stepTwo.email.invalid" class="alert alert-danger my-1 p-1">
             <div *ngIf="stepTwo.email.errors.required">Saisissez votre email.</div>
             <div *ngIf="stepTwo.email.errors.pattern">Le format n'est pas correct.</div>
@@ -83,30 +100,33 @@
       </div>
     </form>
 
-    <form *ngIf="currentStepNb === 2" [formGroup]="stepThreeForm">
+    <form [className]="currentStepNb === 2 ? 'd-block' : 'd-none'" [formGroup]="stepThreeForm">
       <div class="form-row align-items-center mt-3">
         <div class="form-group col mx-4">
+
           <div class="form-check d-inline mr-4 align-self-center">
-            <input class="form-check-input" type="radio" name="sex" id="female" value="female" formControlName="sex"
-              checked>
+            <input class="form-check-input" type="radio" name="sex" id="female" value="female" formControlName="sex">
             <fa-icon class="align-self-center" [icon]="['fas','venus']"></fa-icon>
           </div>
+
           <div class="form-check d-inline  mr-4">
             <input class="form-check-input" type="radio" name="sex" id="male" value="male" formControlName="sex">
             <fa-icon class="align-self-center" [icon]="['fas','mars']"></fa-icon>
           </div>
+
           <div class="form-check d-inline ">
             <input class="form-check-input" type="radio" name="sex" id="other" value="other" formControlName="sex">
             <fa-icon class="align-self-center" [icon]="['fas','venus-mars']"></fa-icon>
           </div>
         </div>
       </div>
+
       <div class="form-row mt-3">
         <div class="form-group col mx-4">
           <div class="row ">
             <fa-icon class="col-1 ml-1 align-self-center" [icon]="['fas','birthday-cake']"></fa-icon>
-            <input type="date" formControlName="birthDate" class="form-control col-6 col-xl-7 ml-3" min="1920-01-01"
-              [max]="maxBirthDate" />
+            <input type="date" formControlName="birthDate" class="form-control col-6 col-xl-7 ml-3" [min]="minBirthDate"
+              max="2002/01/01" />
           </div>
         </div>
       </div>
@@ -116,37 +136,63 @@
           <textarea formControlName="presentation" class="form-control"
             placeholder="Quelques mots pour vous présenter touïtement (140 caractères)" rows="3" cols="50"
             maxlength="140">
-      </textarea>
+          </textarea>
+
           <div
-            *ngIf="(stepThree.presentation.touched || stepThree.presentation.dirty) && stepThree.presentation.invalid" class="alert alert-danger my-1 p-1">
+            *ngIf="(stepThree.presentation.touched || stepThree.presentation.dirty) && stepThree.presentation.invalid"
+            class="alert alert-danger my-1 p-1">
             <div *ngIf="stepThree.presentation?.errors.maxLength">Oups, c'est trop long!</div>
           </div>
         </div>
       </div>
+
       <div class="form-row col mx-4">
         <div class="form-group ml-1">
           <fa-icon [icon]="['fas','upload']"></fa-icon>
           <label class="d-inline label-file ml-2">Photo ou avatar
-            <input type="file" class="d-none" (change)="onFileSelect($event.target.files)"
+            <input #inputFile type="file" class="d-none" (change)="onFileSelect($event.target.files)"
               [accept]="acceptFileExtensions">
           </label>
-          <span class="text-white" *ngIf="photo; else noPix"> : {{photo.name}}</span>
+
+          <span class="text-dark" *ngIf="photo; else noPix"> : {{photo.name}}</span>
           <ng-template #noPix>
             <span class="text-dark">: Aucun fichier</span>
           </ng-template>
+          
           <div *ngIf="fileStatus['invalid']" class="alert alert-danger my-1 p-1"> {{invalidFileMessage}}
           </div>
         </div>
       </div>
     </form>
 
-    <div class="row mx-4">
-      <button class="btn btn-info my-3" [disabled]="!currentStepNb" (click)="goToStep('prev')">
-        Précédent</button>
-      <button *ngIf="currentStepNb === 2 && currentStepValid" class="btn btn-primary my-3 ml-auto" (click)="onSubmit()">
-        J'envoie la sauce caramel</button>
-      <button *ngIf="currentStepNb !== 2" class="btn btn-info my-3 ml-auto" [disabled]="!currentStepValid"
-        (click)="goToStep('next')">Suivant</button>
+    <div *ngIf="!loading">
+      <div class="row mx-4 mt-3 justify-content-between ">
+
+        <button class="gotostep" [disabled]="!currentStepNb" (click)="goToStep('prev')">
+          <fa-icon [icon]="['fas','caret-square-left']"></fa-icon>
+        </button>
+
+        <button *ngIf="currentStepNb === 2 && currentStepValid" class="btn btn-primary" (click)="onSubmit()">
+          Enregistrer</button>
+
+        <button type="button" class="btn btn-info" (click)="reinitForm()">Réinitialiser
+        </button>
+
+        <button *ngIf="currentStepNb !== 2" class="gotostep" [disabled]="!currentStepValid" (click)="goToStep('next')">
+          <fa-icon [icon]="['fas','caret-square-right']"></fa-icon>
+        </button>
+      </div>
+
+      <div class="row mx-4 mt-4 justify-content-center">
+        <div class="text-center ">
+          <button class="btn btn-secondary" [routerLink]="'/connection/login'">En fait, j'ai déjà un compte</button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="loading" class="d-flex justify-content-center">
+      <div class="spinner-border" role="status">
+      </div>
     </div>
   </div>
 </div>

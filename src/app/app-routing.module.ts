@@ -11,8 +11,9 @@ import { ProfileComponent } from './member/profile/profile.component';
 import { ErrorComponent } from './layout/error/error.component';
 import { NetworkComponent } from './member/network/network.component';
 import { NetworkResolver } from './member/network/network.resolver';
-import { MessageComponent } from './member/message/message.component';
 import { RegisterComponent } from './connection/register/register.component';
+import { PostComponent } from './member/post/post.component';
+import { DiscussionComponent } from './member/discussion/discussion.component';
 
 const routes: Routes = [
 
@@ -41,7 +42,8 @@ const routes: Routes = [
         component: NetworkComponent,
         resolve: { network: NetworkResolver }
       },
-      { path: 'message', component: MessageComponent },
+      { path: 'post', component: PostComponent },
+      { path: 'discussion', component: DiscussionComponent },
     ]
   },
   { path: '**', component: NotFoundComponent }

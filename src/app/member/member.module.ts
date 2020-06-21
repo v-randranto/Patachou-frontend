@@ -8,9 +8,11 @@ import { ProfileComponent } from '@app/member/profile/profile.component';
 import { NetworkComponent } from './network/network.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { SharedModule } from '@app/shared/shared.module';
-import { MessageComponent } from './message/message.component';
 import { EditCredentialsComponent } from './modal/edit-credentials/edit-credentials.component';
 import { EditPersonalDataComponent } from './modal/edit-personal-data/edit-personal-data.component';
+import { ChatComponent } from './modal/chat/chat.component';
+import { DiscussionComponent } from './discussion/discussion.component';
+import { PostComponent } from './post/post.component';
 
 const routes: Routes = [];
 
@@ -18,9 +20,11 @@ const routes: Routes = [];
   declarations: [
     ProfileComponent,
     NetworkComponent,
-    MessageComponent,
     EditCredentialsComponent,
     EditPersonalDataComponent,
+    ChatComponent,
+    DiscussionComponent,
+    PostComponent,
   ],
   imports: [
     CommonModule,

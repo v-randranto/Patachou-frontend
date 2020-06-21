@@ -8,6 +8,7 @@ import { ErrorModalComponent } from '../error-modal/error-modal.component';
 import { NotificationModalComponent } from '../notification-modal/notification-modal.component';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
+import { NETWORK_REQUEST } from '@app/shared/constant/notification-modal';
 
 @Component({
   selector: 'app-member-preview-modal',
@@ -69,8 +70,6 @@ export class MemberPreviewModalComponent implements OnInit {
 
   ngOnInit(): void {
     registerLocaleData(localeFr, 'fr');
-    this.relations = this.authenticationService.userRelationships;
-    console.log('onInit', this.relations)
     this.currentMember = this.authenticationService.userProfile;
     console.log('currentMember', this.currentMember)
     if (this.selectedRelation) {
@@ -111,22 +110,23 @@ export class MemberPreviewModalComponent implements OnInit {
     this.nestedModalRef = this.modalService.show(ErrorModalComponent, this.errorModalConfig);
   }
 
-  valueInitialState(dataStatus) {
+  valueInitialState(dataStatus: string) {
     let text: string;
+    const pseudo = this.toTitleCase(this.selectedMember.pseudo)
     switch (dataStatus) {
       case this.status_confirmed:
-        text = `Vous êtes pote avec ${this.toTitleCase(this.selectedMember.pseudo)}.`;
+        text = `${NETWORK_REQUEST.confirm_text} ${pseudo}.`;
         break;
       case this.status_rejected:
-        text = `La demande de ${this.toTitleCase(this.selectedMember.pseudo)} est rejetée.`;
+        text = `${NETWORK_REQUEST.reject_text} ${pseudo}.`;
         break;
       case this.status_terminated:
-        text = `Vous n'êtes plus pote avec ${this.toTitleCase(this.selectedMember.pseudo)}.`;
+        text = `${NETWORK_REQUEST.unfriend_text} ${pseudo}.`;
         break;
     }
     const initialState = {
-      bgColor: '#a5d152',
-      title: 'A y est, demande prise en compte!',
+      color: NETWORK_REQUEST.color,
+      title: NETWORK_REQUEST.title,
       text: text
     }
     this.notificationModalConfig.initialState = initialState;;
@@ -152,15 +152,22 @@ export class MemberPreviewModalComponent implements OnInit {
       subscribe(res => {
         this.requestStatus = res;
         if (!this.requestStatus.save || this.requestStatus.alreadyRelated) {
+
           this.openErrorModal();
         } else {
+          this.relationDataService.getAll({ id: this.selectedMember._id })
+        .subscribe(relations => {
+          console.log('res relations', relations)
+          this.authenticationService.setUserRelationships(relations);
+        });
           const initialState = {
-            bgColor: '#a5d152',
-            title: 'A y est, demande prise en compte!',
-            text: `${this.toTitleCase(this.selectedMember.pseudo)} est notifié.e de votre demande.`
+            color: NETWORK_REQUEST.color,
+            title: NETWORK_REQUEST.title,
+            text: `${this.toTitleCase(this.selectedMember.pseudo)} ${NETWORK_REQUEST.request_text}.`
           }
           this.notificationModalConfig.initialState = initialState;
           this.openNotificationModal();
+
         }
       }, error => {
         this.requestStatus.save = false;
@@ -179,7 +186,11 @@ export class MemberPreviewModalComponent implements OnInit {
     this.relationDataService.update(data).
       subscribe(res => {
         console.log('updatedRelation from server', res)
-        // this.updateRelations(res);
+        this.relationDataService.getAll({ id: this.selectedMember._id })
+        .subscribe(relations => {
+          console.log('res relations', relations)
+          this.authenticationService.setUserRelationships(relations);
+        });
         this.valueInitialState(data.status);
         this.openNotificationModal();
 

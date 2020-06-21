@@ -1,3 +1,39 @@
 .modal-body, .modal-header, .modal-footer{
   background-color: ivory;
 }
+
+.form-control {
+  border: none;
+  border-bottom: 1px solid #ced4da;
+  background-color: ivory !important;
+  border-radius: 0;
+}
+textarea.form-control {
+  border: 1px solid #ced4da;
+  background-color: ivory !important;
+}
+
+button.gotostep {
+  border: none;
+  background-color: ivory;
+}
+
+button.gotostep fa-icon {
+  color: darkslategray;
+}
+
+button.gotostep:disabled {
+  background-color: ivory;
+}
+
+button.gotostep:disabled fa-icon {
+  color: #cecece;
+}
+
+fa-icon {
+  font-size: 1.4rem;
+  color: darkslategray;
+}
+
+
+

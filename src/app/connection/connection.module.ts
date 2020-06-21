@@ -9,6 +9,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { SharedModule } from '@app/shared/shared.module';
 import { RegisterComponent } from './register/register.component';
 import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 const routes: Routes = [];
 
@@ -23,6 +24,7 @@ const routes: Routes = [];
     ReactiveFormsModule,
     FontAwesomeModule,
     ProgressbarModule.forRoot(),
+    BsDatepickerModule.forRoot(),
     [RouterModule.forChild(routes)],
     SharedModule
   ],

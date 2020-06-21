@@ -13,23 +13,26 @@
   background-color: ivory;
 }
 
-.nav-tabs .nav-link {
-  background-color: #0d1323;
-  border: 1px solid #0d1323;
-  color: #fff;
-  font-size: 12px;
-}
 
+/* styling not working */
+/* a.nav-link {
+  color: white !important;
+}
+a.nav-link.active {
+  background-color: gray !important;
+  color: black !important;
+} */
+
+
+/* styling not working */
 .nav-tabs .nav-link:hover {
-  background-color: gray;
+  border: 1px solid ivory !important;
 }
 
 .nav-tabs .nav-link.active {
-  background-color: #038F43 !important;
-  color: #fff !important;
-  font-size: 12px;
+  background-color: ivory !important;
 }
 
-.nav-tabs .nav-link.active:hover {
-  background-color: gray;
+.nav-tabs .nav-item .nav-link {
+  color: ivory !important;
 }

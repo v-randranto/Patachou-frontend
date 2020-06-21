@@ -1,3 +1,5 @@
+import { UtilService } from './../../../shared/service/util.service';
+
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Member } from '@app/data/model/member';
@@ -6,6 +8,7 @@ import { NotificationModalComponent } from '@app/shared/modal/notification-modal
 import { ErrorModalComponent } from '@app/shared/modal/error-modal/error-modal.component';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FORMAT_RULES, TOOL_TIPS } from '@app/shared/constant/profile-form';
+import { EDIT_PROFILE } from '@app/shared/constant/notification-modal';
 import { MemberDataService } from '@app/data/service/member-data.service';
 import { MustMatch, PasswordStrength } from '@app/connection/custom-validator/custom-validator.validator';
 
@@ -33,9 +36,9 @@ export class EditCredentialsComponent implements OnInit {
     ignoreBackdropClick: true,
     class: 'modal-dialog-centered',
     initialState: {
-      bgColor: '#a5d152',
-      title: 'A y est, demande prise en compte!',
-      text: 'Vos identifiants sont mis à jour.'
+      color: EDIT_PROFILE.color,
+      title: EDIT_PROFILE.title,
+      text: EDIT_PROFILE.credentials_text
     }
   };
   public errorModalConfig = {
@@ -46,6 +49,7 @@ export class EditCredentialsComponent implements OnInit {
 
   public credentialsForm: FormGroup;
   public submitted = false;
+  public noModification = false;
   public updateStatus = {
     pseudoUnavailable: false,
     save: true
@@ -59,7 +63,8 @@ export class EditCredentialsComponent implements OnInit {
     private modalService: BsModalService,
     private fb: FormBuilder,
     private memberDataService: MemberDataService,
-    public authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private utilService: UtilService
   ) { }
 
   ngOnInit(): void {
@@ -76,7 +81,7 @@ export class EditCredentialsComponent implements OnInit {
         ]
       },
     );
-    this.formControls.pseudo.setValue(this.updateMember.pseudo);
+    this.formControls.pseudo.setValue(this.utilService.toTitleCase(this.updateMember.pseudo));
     console.log(this.credentialsForm)
 
   }
@@ -103,7 +108,10 @@ export class EditCredentialsComponent implements OnInit {
   reinitForm() {
     console.log('>initForm')
     this.credentialsForm.reset();
-    this.formControls.pseudo.setValue(this.updateMember.pseudo);
+    this.submitted = false;
+    this.noModification = false;
+    this.updateStatus.save = true;
+    this.formControls.pseudo.setValue(this.utilService.toTitleCase(this.updateMember.pseudo));
   }
 
   setCredentialsData() {
@@ -127,35 +135,39 @@ export class EditCredentialsComponent implements OnInit {
   onSubmit() {
     console.log('>onSubmit')
     this.submitted = true;
+    if (this.credentialsForm.pristine){
+      this.noModification = true;
+      return;
+    }
     // // TODO refacto
     console.log('>update form', this.credentialsForm.value)
 
     this.setCredentialsData()
-    .then(updateData => {
-      console.log('update data', updateData)
-      this.memberDataService.update(updateData).subscribe(
-        res => {
-          this.updateStatus = res;
-          console.log('update status', this.updateStatus);
-          if (this.updateStatus.pseudoUnavailable) {
-          } else {
-            if (this.updateStatus.save) {
-              if (this.credentialsForm.value.pseudo) {
-                this.updateCurrentMember();
-              }
-              this.openNotificationModal();
+      .then(updateData => {
+        console.log('update data', updateData)
+        this.memberDataService.update(updateData).subscribe(
+          res => {
+            this.updateStatus = res;
+            console.log('update status', this.updateStatus);
+            if (this.updateStatus.pseudoUnavailable) {
             } else {
-              this.openErrorModal();
+              if (this.updateStatus.save) {
+                if (this.credentialsForm.value.pseudo) {
+                  this.updateCurrentMember();
+                }
+                this.openNotificationModal();
+              } else {
+                this.openErrorModal();
+              }
             }
-          }
-        },
-        error => {
-          console.error(error);
-          this.updateStatus.save = false;
-          this.openErrorModal();
-        });
+          },
+          error => {
+            console.error(error);
+            this.updateStatus.save = false;
+            this.openErrorModal();
+          });
 
-    })
+      })
   }
 
   closeModal() {

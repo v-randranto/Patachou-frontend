@@ -5,7 +5,7 @@
       <div class="form-row my-3">
         <div class="form-group col mx-4">
           <input type="text" formControlName="pseudo" class="form-control d-inline" placeholder="* Pseudonyme"
-            maxlength=30 />
+            maxlength=30 autofocus/>
           <div *ngIf="(formControls.pseudo.touched || formControls.pseudo.dirty) && formControls.pseudo.invalid">
             <div class="alert alert-danger my-1 p-1" *ngIf="formControls.pseudo.errors.required">Saisissez votre pseudo.
             </div>
@@ -25,28 +25,30 @@
 
         </div>
       </div>
+      <div *ngIf="!loading">
+        <div class="text-center col mt-3">
+          <button class="btn btn-primary" type="submit" [disabled]="loginForm.invalid">Je me connecte</button>
 
-      <div class="text-center col mt-3">
-        <button class="btn btn-primary" type="submit" [disabled]="loginForm.invalid">Et j'envoie la sauce
-          caramel!</button>
-        <div *ngIf="badCredentials">
-          <div class="alert alert-danger mt-1 p-1">Oups, le pseudo ou le mot passe n'est pas correct.</div>
+          <div *ngIf="badCredentials">
+            <div class="alert alert-danger mt-1 p-1">Oups, le pseudo ou le mot passe n'est pas correct.</div>
+          </div>
+          <div *ngIf="technicalFailure">
+            <div class="alert alert-danger mt-1 p-1">Oups, il y a une saucisse dans la pâte à choux. Veuillez réessayer
+              plus tard.</div>
+          </div>
         </div>
-        <div *ngIf="technicalFailure">
-          <div class="alert alert-danger mt-1 p-1">Oups, il y a une saucisse dans la pâte à choux. Veuillez réessayer
-            plus tard.</div>
+
+        <div class="text-center col mt-3">
+          <button class="btn btn-secondary" [routerLink]="'/connection/register'">Ah mais je n'ai pas de
+            compte!</button>
         </div>
       </div>
 
-      <!-- <button [disabled]="loading" class="btn btn-primary">
-      <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-      Login
-  </button> -->
-
-      <div class="text-center col mt-3">
-        <button class="btn btn-warning" [routerLink]="'/connection/register'">Ah mais je n'ai pas de
-          compte!</button>
+      <div *ngIf="loading" class="d-flex justify-content-center">
+        <div class="spinner-border" role="status">
+        </div>
       </div>
+
     </form>
 
     <ng-template #error>

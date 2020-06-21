@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { Router } from '@angular/router';
+import { ERROR_NOTIFICATION } from '@app/shared/constant/notification-modal';
 
 @Component({
   selector: 'app-error-modal',
@@ -8,8 +9,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./error-modal.component.css']
 })
 export class ErrorModalComponent {
-  public title = `Oups, il y a une saucisse dans la pâte!`;
-  public text = `Nous sommes désolés, un incident est intervenu. Merci de réessayer plus tard.`;
+  public title = ERROR_NOTIFICATION.title;
+  public text = ERROR_NOTIFICATION.text;
   public redirection: string;
 
   constructor(

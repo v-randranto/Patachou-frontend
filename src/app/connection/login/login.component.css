@@ -4,21 +4,11 @@
   height: 100%;
 }
 
-.btn-primary {
-  border: 1px solid #ae3006 !important;
-  background-color: #ae3006 !important;
-}
-
-.btn-warning {
-  border: 1px solid #ffd700 !important;
-  background-color: #ffd700 !important;
-}
-
-
-.bg-danger {
-  background-color: #cb7364 !important;
-}
-
 input {
   background-color: #f7f5ec;
 }
+
+button .btn {
+  outline: 0;
+}
+
