@@ -9,8 +9,18 @@ import { ErrorModalComponent } from '@app/shared/modal/error-modal/error-modal.c
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FORMAT_RULES, TOOL_TIPS } from '@app/shared/constant/profile-form';
 import { MemberDataService } from '@app/data/service/member-data.service';
-import { Router } from '@angular/router';
-import { MustMatch, PasswordStrength } from '@app/connection/custom-validator/custom-validator.validator';
+
+interface IPersonalData {
+  id: string,
+  firstName?: string,
+  lastName?: string,
+  email?: string;
+  sex?: string;
+  birthDate?: Date,
+  presentation?: string,
+  photo?: Photo,
+  modificationAuthor: string
+}
 
 @Component({
   selector: 'app-edit-personal-data',
@@ -20,7 +30,7 @@ import { MustMatch, PasswordStrength } from '@app/connection/custom-validator/cu
 export class EditPersonalDataComponent implements OnInit {
   //données passées par le composant Profil
   public title: string;
-  public currentMember: Member;
+  public updateMember: Member;
 
   public nestedModalRef: BsModalRef;
   public notificationModalConfig = {
@@ -30,7 +40,7 @@ export class EditPersonalDataComponent implements OnInit {
     initialState: {
       bgColor: '#a5d152',
       title: 'A y est, demande prise en compte!',
-      text: 'Vos données personnelles sont mise à jour.'
+      text: 'Vos données personnelles sont mises à jour.'
     }
   };
   public errorModalConfig = {
@@ -40,19 +50,14 @@ export class EditPersonalDataComponent implements OnInit {
   };
 
   public member: Member;
-  public registerForm = [];
+  public personalDataForm = [];
   public currentStepNb = 0;
   public progressValue = 0;
   public stepOneForm: FormGroup;
   public stepTwoForm: FormGroup;
-  public stepThreeForm: FormGroup;
+
   public submitted = false;
-  public pseudoUnavailable = false;
-  public registerStatus = {
-    pseudoUnavailable: false,
-    save: true,
-    email: true
-  }
+  public updateStatus = true;
 
   public photo: Photo;
   public registerData = new RegisterData();
@@ -78,58 +83,42 @@ export class EditPersonalDataComponent implements OnInit {
     private modalService: BsModalService,
     private fb: FormBuilder,
     private memberDataService: MemberDataService,
-    private router: Router,
     public authenticationService: AuthenticationService
   ) { }
 
   ngOnInit(): void {
     registerLocaleData(localeFr, 'fr');
-     // formGroup de l'étape 1 du formulaire
-     this.stepOneForm = this.fb.group({
-      pseudo: ['', [Validators.required, Validators.pattern(FORMAT_RULES.pseudoPattern), Validators.maxLength(FORMAT_RULES.pseudoMax)]],
-      password: ['', [Validators.required, Validators.maxLength(FORMAT_RULES.passwordMax)]],
-      confirmPassword: ['', Validators.required]
-    },
-      {
-        validator: [
-          MustMatch("password", "confirmPassword"),
-          PasswordStrength("password")
-        ]
-      },
-    );
-    this.registerForm.push(this.stepOneForm);
 
-    // formGroup de l'étape 2 du formulaire
-    this.stepTwoForm = this.fb.group({
+    // formGroup de l'étape 1 du formulaire
+    this.stepOneForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.pattern(FORMAT_RULES.namePattern), Validators.maxLength(FORMAT_RULES.nameMax)]],
       lastName: ['', [Validators.required, Validators.pattern(FORMAT_RULES.namePattern), Validators.maxLength(FORMAT_RULES.nameMax)]],
       email: ['', [Validators.required, Validators.pattern(FORMAT_RULES.emailPattern), Validators.maxLength(FORMAT_RULES.emailMax)]],
     });
-    this.registerForm.push(this.stepTwoForm);
+    this.personalDataForm.push(this.stepOneForm);
 
-    // formGroup de l'étape 3 du formulaire
-    this.stepThreeForm = this.fb.group({
+    // formGroup de l'étape 2 du formulaire
+    this.stepTwoForm = this.fb.group({
       sex: [''],
       birthDate: [new Date('1980-01-01')],
       presentation: ['', Validators.maxLength(140)],
       file: [null]
     });
-    this.registerForm.push(this.stepThreeForm);
-
-    this.stepThree.birthDate.setValue('1980-01-01');
-    console.log("step1Form", this.stepOneForm.status)
-    console.log("step2Form", this.stepTwoForm.status)
-    console.log("step3Form", this.stepThreeForm.status)
+    this.personalDataForm.push(this.stepTwoForm);
+    this.stepOne.firstName.setValue(this.updateMember.firstName);
+    this.stepOne.lastName.setValue(this.updateMember.lastName);
+    this.stepOne.email.setValue(this.updateMember.email);
+    this.stepTwo.sex.setValue(this.updateMember.sex);
+    this.stepTwo.birthDate.setValue(this.updateMember.birthDate);
+    this.stepTwo.presentation.setValue(this.updateMember.presentation);
   }
 
 
   get currentStepValid() {
-    return this.registerForm[this.currentStepNb].status === "VALID" ? true : false;
+    return this.personalDataForm[this.currentStepNb].status === "VALID" ? true : false;
   }
 
   goToStep(step: string): void {
-    console.log('>goToStep step', this.currentStepNb)
-    console.log('form status', this.registerForm[this.currentStepNb].status)
     if (step === 'prev') {
       this.currentStepNb = this.currentStepNb - 1;
       this.progressValue--;
@@ -137,19 +126,28 @@ export class EditPersonalDataComponent implements OnInit {
       this.currentStepNb = this.currentStepNb + 1;
       this.progressValue++;
     }
-
-    // this.currentStepNb =
-    //   step === 'prev' ? this.currentStepNb - 1 : this.currentStepNb + 1;
   }
 
   get stepOne() {
-    return this.registerForm[0].controls;
+    return this.personalDataForm[0].controls;
   }
   get stepTwo() {
-    return this.registerForm[1].controls;
+    return this.personalDataForm[1].controls;
   }
-  get stepThree() {
-    return this.registerForm[2].controls;
+
+  reinitForm(index) {
+    console.log('>initForm')
+    if (index === 0) {
+      this.stepOneForm.reset();
+      this.stepOne.firstName.setValue(this.updateMember.firstName);
+      this.stepOne.laststName.setValue(this.updateMember.lastName);
+      this.stepOne.email.setValue(this.updateMember.email);
+    } else {
+      this.stepTwoForm.reset();
+      this.stepTwo.sex.setValue(this.updateMember.sex);
+      this.stepTwo.birthDate.setValue(this.updateMember.birthDate);
+      this.stepTwo.presentation.setValue(this.updateMember.presentation);
+    }
   }
 
   emailOnFocus() {
@@ -180,7 +178,7 @@ export class EditPersonalDataComponent implements OnInit {
       const file = files[0];
       reader.readAsDataURL(file);
       reader.onload = () => {
-        this.stepThreeForm.patchValue({
+        this.stepTwoForm.patchValue({
           file: reader.result
         });
       };
@@ -188,66 +186,87 @@ export class EditPersonalDataComponent implements OnInit {
     }
   }
 
-  // Les 2 fonctions ci-dessous bloquent la saisie de caractères interdits (inopérant sur mobile)
-  checkPseudoInput(e) {
-    // if (this.registerStatus.pseudoUnavailable) {
-    //   this.registerStatus.pseudoUnavailable = false;
-    // }
-    if (FORMAT_RULES.pseudoAllowedChars.test(e.key) === false) {
-      e.preventDefault();
-    }
-  }
-
+  //bloque la saisie de caractères interdits (inopérant sur mobile)
   checkNameInput(e) {
     if (FORMAT_RULES.nameAllowedChars.test(e.key) === false) {
       e.preventDefault();
     }
   }
 
+  compareFields(updateMemberField, formField) {
+    if (updateMemberField !== formField) {
+      this.updateMember[updateMemberField] = formField
+    }
+  }
+
+  setPersonalData() {
+    return new Promise((resolve, reject) => {
+      const personalData: IPersonalData = {
+        id: this.updateMember._id,
+        modificationAuthor: this.updateMember._id
+      }
+      const firstName = this.stepOneForm.value.firstName.toLowerCase();
+      const lastName = this.stepOneForm.value.lastName.toLowerCase();
+      const email = this.stepOneForm.value.email.toLowerCase();
+      const sex = this.stepTwoForm.value.sex;
+      const presentation = this.stepTwoForm.value.presentation;
+      if (this.updateMember.firstName !== firstName) {
+        personalData.firstName = firstName;
+      }
+      if (this.updateMember.lastName !== lastName) {
+        personalData.lastName = lastName;
+      }
+      if (this.updateMember.email !== email) {
+        personalData.email = email;
+      }
+      if (this.updateMember.sex !== sex) {
+        personalData.sex = sex;
+      }
+      if (this.updateMember.presentation !== presentation) {
+        personalData.presentation = presentation;
+      }
+      // TODO date
+      if (this.photo) {
+        this.photo.content = this.stepTwoForm.value.file;
+        personalData.photo = this.photo;
+      }
+
+      resolve(personalData);
+    })
+  }
 
   onSubmit() {
     this.submitted = true;
-    if (this.currentStepNb < 2) {
+    if (this.currentStepNb < 1) {
       this.goToStep('next')
     }
 
     // // TODO refacto
-    this.member.pseudo = this.stepOneForm.value.pseudo.toLowerCase();
-    this.member.password = this.stepOneForm.value.password;
-    this.member.firstName = this.stepTwoForm.value.firstName.toLowerCase();
-    this.member.lastName = this.stepTwoForm.value.lastName.toLowerCase();
-    this.member.email = this.stepTwoForm.value.email.toLowerCase();
-    this.member.sex = this.stepThreeForm.value.sex;
-    this.member.birthDate = this.stepThreeForm.value.birthDate;
-    this.member.presentation = this.stepThreeForm.value.presentation || 'Pas de présentation';
-    this.registerData.member = this.member;
-    if (this.photo) {
-      this.photo.content = this.stepThreeForm.value.file;
-      this.registerData.photo = this.photo;
-    }
-    console.log('member', this.registerData.member);
-    this.memberDataService.register(this.registerData).subscribe(
-      res => {
-        console.log('res', res)
-        this.registerStatus = res;
-        console.log('register status', this.registerStatus);
-        if (this.registerStatus.pseudoUnavailable) {
-          this.currentStepNb = 0;
-          // this.pseudoRef.nativeElement.focus();
-        } else {
-          if (this.registerStatus.save) {
-            this.openNotificationModal();
-          } else {
-            // TODO refacto
+    this.setPersonalData()
+      .then(updateData => {
+        this.memberDataService.update(updateData).subscribe(
+          res => {
+            this.updateStatus = res;
+            console.log('update status', this.updateStatus);
+
+            if (this.updateStatus) {
+              this.updateCurrentMember();
+              this.openNotificationModal();
+            } else {
+              this.openErrorModal();
+            }
+          },
+          error => {
+            console.error(error);
+            this.updateStatus = false;
             this.openErrorModal();
-          }
-        }
-      },
-      error => {
-        console.error(error);
-        this.registerStatus.save = false;
-        this.openErrorModal();
+          });
       });
+    }
+
+    //mise à jour des données du membre stocké en localStorage
+  updateCurrentMember() {
+    this.authenticationService.setUserProfile(this.updateMember);
   }
 
   closeModal() {
@@ -257,27 +276,6 @@ export class EditPersonalDataComponent implements OnInit {
   openErrorModal() {
     this.closeModal();
     this.nestedModalRef = this.modalService.show(ErrorModalComponent, this.errorModalConfig);
-  }
-
-  valueInitialState(dataStatus) {
-    let text: string;
-    switch (dataStatus) {
-      // case this.status_confirmed:
-      //   text = `Vous êtes pote avec ${this.toTitleCase(this.selectedMember.pseudo)}.`;
-      //   break;
-      // case this.status_rejected:
-      //   text = `La demande de ${this.toTitleCase(this.selectedMember.pseudo)} est rejetée.`;
-      //   break;
-      // case this.status_terminated:
-      //   text = `Vous n'êtes plus pote avec ${this.toTitleCase(this.selectedMember.pseudo)}.`;
-      //   break;
-    }
-    const initialState = {
-      bgColor: '#a5d152',
-      title: 'A y est, demande prise en compte!',
-      text: text
-    }
-    this.notificationModalConfig.initialState = initialState;;
   }
 
   openNotificationModal() {

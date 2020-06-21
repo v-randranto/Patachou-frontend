@@ -7,7 +7,6 @@ import { ErrorModalComponent } from '@app/shared/modal/error-modal/error-modal.c
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FORMAT_RULES, TOOL_TIPS } from '@app/shared/constant/profile-form';
 import { MemberDataService } from '@app/data/service/member-data.service';
-import { Router } from '@angular/router';
 import { MustMatch, PasswordStrength } from '@app/connection/custom-validator/custom-validator.validator';
 
 interface ICredentialsData {
