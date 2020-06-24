@@ -71,7 +71,6 @@ export class MemberPreviewModalComponent implements OnInit {
   ngOnInit(): void {
     registerLocaleData(localeFr, 'fr');
     this.currentMember = this.authenticationService.userProfile;
-    console.log('currentMember', this.currentMember)
     if (this.selectedRelation) {
       switch (this.relationType) {
         case this.relation_confirmed:
@@ -157,7 +156,6 @@ export class MemberPreviewModalComponent implements OnInit {
         } else {
           this.relationDataService.getAll({ id: this.selectedMember._id })
         .subscribe(relations => {
-          console.log('res relations', relations)
           this.authenticationService.setUserRelationships(relations);
         });
           const initialState = {
@@ -177,7 +175,6 @@ export class MemberPreviewModalComponent implements OnInit {
 
   // traiter la màj de la relation suite à confirmation, rejet ou suppression
   relationUpdate(status: string) {
-    console.log('> relationUpdate', status)
     const data = {
       id: this.selectedRelation._id,
       status: status,
@@ -185,10 +182,8 @@ export class MemberPreviewModalComponent implements OnInit {
     }
     this.relationDataService.update(data).
       subscribe(res => {
-        console.log('updatedRelation from server', res)
         this.relationDataService.getAll({ id: this.selectedMember._id })
         .subscribe(relations => {
-          console.log('res relations', relations)
           this.authenticationService.setUserRelationships(relations);
         });
         this.valueInitialState(data.status);

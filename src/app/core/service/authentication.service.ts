@@ -32,7 +32,6 @@ export class AuthenticationService {
 
     return this.memberDataService.login(loginData)
       .pipe(map(data => {
-        console.log('>login memberDataService.subcribe member', data);
         const user = {
           member: data.member,
           token: data.token
@@ -77,7 +76,6 @@ export class AuthenticationService {
   }
 
   setUserProfile(member: Member) {
-    console.log('>set userProfile', member)
     localStorage.setItem('user_data', JSON.stringify(member));
   }
 

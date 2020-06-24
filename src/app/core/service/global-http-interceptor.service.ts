@@ -31,13 +31,11 @@ export class GlobalHttpInterceptorService implements HttpInterceptor {
         console.error('intercept http error', err.error);
         if (this.authenticationService.isLoggedIn) {
           if (err.status === 401) {
-            console.log('à déconnecter')
             this.authenticationService.logout();
             location.reload(true);
           }
         }
         if (err.error.loginStatus ) {
-          console.log(err.error.loginStatus);
           return throwError(err.error.loginStatus)
         }
         const error = err.error.message || err.statusText;

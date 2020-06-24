@@ -49,6 +49,7 @@ export class EditCredentialsComponent implements OnInit {
 
   public credentialsForm: FormGroup;
   public submitted = false;
+  public loading = false;
   public noModification = false;
   public updateStatus = {
     pseudoUnavailable: false,
@@ -68,7 +69,6 @@ export class EditCredentialsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log('updateMember', this.updateMember)
     this.credentialsForm = this.fb.group({
       pseudo: ['', [Validators.required, Validators.pattern(FORMAT_RULES.pseudoPattern), Validators.maxLength(FORMAT_RULES.pseudoMax)]],
       password: ['', [Validators.maxLength(FORMAT_RULES.passwordMax)]],
@@ -81,10 +81,9 @@ export class EditCredentialsComponent implements OnInit {
         ]
       },
     );
-    this.formControls.pseudo.setValue(this.utilService.toTitleCase(this.updateMember.pseudo));
-    console.log(this.credentialsForm)
-
+    this.formControls.pseudo.setValue(this.utilService.toTitleCase(this.updateMember.pseudo))
   }
+
   get formControls() {
     return this.credentialsForm.controls;
   }
@@ -106,7 +105,6 @@ export class EditCredentialsComponent implements OnInit {
   }
 
   reinitForm() {
-    console.log('>initForm')
     this.credentialsForm.reset();
     this.submitted = false;
     this.noModification = false;
@@ -133,23 +131,21 @@ export class EditCredentialsComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log('>onSubmit')
     this.submitted = true;
     if (this.credentialsForm.pristine){
       this.noModification = true;
       return;
     }
-    // // TODO refacto
-    console.log('>update form', this.credentialsForm.value)
+
+    this.loading = true;
 
     this.setCredentialsData()
       .then(updateData => {
-        console.log('update data', updateData)
         this.memberDataService.update(updateData).subscribe(
           res => {
             this.updateStatus = res;
-            console.log('update status', this.updateStatus);
             if (this.updateStatus.pseudoUnavailable) {
+              this.loading = false;
             } else {
               if (this.updateStatus.save) {
                 if (this.credentialsForm.value.pseudo) {
@@ -157,12 +153,14 @@ export class EditCredentialsComponent implements OnInit {
                 }
                 this.openNotificationModal();
               } else {
+                this.loading = false;
                 this.openErrorModal();
               }
             }
           },
           error => {
             console.error(error);
+            this.loading = false;
             this.updateStatus.save = false;
             this.openErrorModal();
           });
@@ -176,7 +174,6 @@ export class EditCredentialsComponent implements OnInit {
 
   //mise à jour des données du membre stocké en localStorage
   updateCurrentMember() {
-    console.log('>updateCurrentMember')
     this.authenticationService.setUserProfile(this.updateMember);
   }
 

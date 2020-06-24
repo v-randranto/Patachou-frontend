@@ -24,7 +24,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // récup données du membre s'il est connecté
     if (this.authenticationService.isLoggedIn) {
-      console.log('> onInit membre connecté');
         this.currentMember = this.authenticationService.userProfile;
     }
     // requêtes socket.io pour récupérer nombre de membres connectés
@@ -47,7 +46,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   get isLoggedIn() {
     if (this.authenticationService.isLoggedIn) {
-      // console.log('> onInit user profile', this.authenticationService.userProfile);
       this.currentMember = this.authenticationService.userProfile;
       return this.authenticationService.isLoggedIn;
     }

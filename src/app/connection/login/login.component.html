@@ -26,21 +26,26 @@
         </div>
       </div>
       <div *ngIf="!loading">
-        <div class="text-center col mt-3">
-          <button class="btn btn-primary" type="submit" [disabled]="loginForm.invalid">Je me connecte</button>
+        <div class="text-center col mt-3 ">
+          <button class="btn btn-primary col col-md-6" type="submit" [disabled]="loginForm.invalid">J'envoie</button>
 
           <div *ngIf="badCredentials">
             <div class="alert alert-danger mt-1 p-1">Oups, le pseudo ou le mot passe n'est pas correct.</div>
           </div>
           <div *ngIf="technicalFailure">
-            <div class="alert alert-danger mt-1 p-1">Oups, il y a une saucisse dans la pâte à choux. Veuillez réessayer
-              plus tard.</div>
+            <div class="alert alert-danger mt-1 p-1">Oups, il y a une saucisse dans la pâte à choux. Veuillez réessayer plus tard.</div>
+          </div>
+          <div *ngIf="passwordExpired">
+            <div class="alert alert-danger mt-1 p-1">Oups, votre mot de passe provisoire a expiré. Refaites une demande pour mot de passe perdu</div>
           </div>
         </div>
 
-        <div class="text-center col mt-3">
-          <button class="btn btn-secondary" [routerLink]="'/connection/register'">Ah mais je n'ai pas de
-            compte!</button>
+        <div class="text-center col mt-4">
+          <button class="btn btn-secondary col col-md-6" [routerLink]="'/connection/register'">Je n'ai pas de compte</button>
+        </div>
+
+        <div class="text-center col mt-4">
+          <button class="btn btn-info col col-md-6" [routerLink]="'/connection/password'">J'ai perdu mon mot de passe</button>
         </div>
       </div>
 

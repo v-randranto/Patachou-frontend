@@ -11,6 +11,12 @@ const REGISTER_PROFILE = {
   text: 'Un email vous a été envoyé pour confirmer votre inscription. Si vous ne le recevez pas, vérifiez votre adresse dans le profil de votre compte.'
 };
 
+const LOST_PASSWORD = {
+  color: '#28a745',
+  title: 'A y est, demande traitée!',
+  text: 'Un mot de passe provisoire vous a été envoyé par email. Pensez à le modifier après connexion.'
+};
+
 const NETWORK_REQUEST = {
   color: '#28a745',
   title: 'A y est, demande traitée!',
@@ -25,4 +31,4 @@ const ERROR_NOTIFICATION = {
   text: 'Nous sommes désolées, un incident est intervenu. Merci de réessayer plus tard.'
 };
 
-export { EDIT_PROFILE, REGISTER_PROFILE , ERROR_NOTIFICATION, NETWORK_REQUEST}
+export { EDIT_PROFILE, REGISTER_PROFILE , ERROR_NOTIFICATION, NETWORK_REQUEST, LOST_PASSWORD}

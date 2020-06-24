@@ -122,21 +122,26 @@
     <div *ngIf="noModification && submitted" class="alert alert-info my-1 p-1">Aucune modification.</div>
   </div>
 
-  <div *ngIf="!loading" class="row mx-4 my-2 justify-content-between">
+  <div *ngIf="!loading" class="row mx-4 mt-4 justify-content-between">
 
     <button class="gotostep" [disabled]="!currentStepNb" (click)="goToStep('prev')">
       <fa-icon [icon]="['fas','caret-left']"></fa-icon>
     </button>
 
-    <button *ngIf="currentStepNb === 1 && currentStepValid" class="btn btn-primary" (click)="onSubmit()">
-      Enregistrer
+    <button *ngIf="currentStepNb === 1 && currentStepValid" class="btn btn-primary col-8" (click)="onSubmit()">
+      J'envoie
     </button>
 
-    <button type="button" class="btn btn-outline-info" (click)="reinitForm()">Réinitialiser
+    <button *ngIf="!(currentStepNb === 1 && currentStepValid)" type="button" class="btn btn-outline-info col-8" (click)="reinitForm()">Je réinitialise
     </button>
 
-    <button *ngIf="currentStepNb !== 1" class="gotostep" [disabled]="!currentStepValid" (click)="goToStep('next')">
+    <button class="gotostep" [disabled]="!currentStepValid || currentStepNb === 1" (click)="goToStep('next')">
       <fa-icon [icon]="['fas','caret-right']"></fa-icon>
+    </button>
+  </div>
+
+  <div *ngIf="currentStepNb === 1 && currentStepValid" class="row mx-4 mt-4 justify-content-center">
+    <button type="button" class="btn btn-outline-info text-center col-8" (click)="reinitForm()">Je réinitialise
     </button>
   </div>
 

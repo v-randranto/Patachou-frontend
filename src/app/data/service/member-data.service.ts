@@ -5,40 +5,39 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Member } from '../model/member';
 
+const url_connection = 'api/connection',
+  url_member = 'api/member';
+
 @Injectable({
   providedIn: 'root'
 })
+
 export class MemberDataService {
 
   constructor(private http: HttpClient) { }
 
   public login(user: any): Observable<any> {
-    const url = '/api/connection/login';
-    return this.http.post<any>(url, user);
-  }
-  public getMember(idObj: any): Observable<Member> {
-    const url = '/api/member/get';
-    return this.http.post<Member>(url, idObj);
-  }
-
-  public searchMembers(data: any): Observable<Member[]> {
-    const url = '/api/member/search';
-    return this.http.post<Member[]>(url, data);
-  }
-
-  public checkPseudo(pseudoObj: any): Observable<boolean> {
-    const url = '/api/connection/pseudo';
-    return this.http.post<boolean>(url, pseudoObj)
+    return this.http.post<any>(url_connection + '/login', user);
   }
 
   public register(data: RegisterData): Observable<any> {
-    const url = '/api/connection/register';
-    return this.http.post<any>(url, data)
+    return this.http.post<any>(url_connection + '/register', data)
+  }
+
+  public lostPassword(data: any): Observable<any> {
+    return this.http.post<any>(url_connection + '/password', data)
+  }
+
+  public getMember(idObj: any): Observable<Member> {
+    return this.http.post<Member>(url_member + '/pseudo', idObj);
+  }
+
+  public searchMembers(data: any): Observable<Member[]> {
+    return this.http.post<Member[]>(url_member + '/search', data);
   }
 
   public update(data: any): Observable<any> {
-    const url = '/api/member/update';
-    return this.http.post<any>(url, data)
+    return this.http.post<any>(url_member + '/update', data)
   }
 
 }

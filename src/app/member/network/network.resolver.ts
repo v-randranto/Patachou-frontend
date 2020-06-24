@@ -12,7 +12,6 @@ export class NetworkResolver implements Resolve<any> {
     ) { }
 
   resolve(): Observable<any> {
-    console.log(">networkResolver")
     const id = this.authenticationService.userId;
     return this.relationDataService.getAll({ id });
   }

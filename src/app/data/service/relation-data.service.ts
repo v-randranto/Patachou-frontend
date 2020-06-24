@@ -14,19 +14,15 @@ export class RelationDataService {
   constructor(private http: HttpClient) { }
 
   public add(data: RelationForm): Observable<any> {
-    const url = url_api + '/add';
-    return this.http.post<any>(url, data)
+    return this.http.post<any>(url_api + '/add', data)
   }
 
   public getAll(idObj: any): Observable<Relationship[]> {
-    console.log(">relationData.getAll()")
-    const url = url_api + '/getAll';
-    return this.http.post<Relationship[]>(url, idObj)
+    return this.http.post<Relationship[]>(url_api + '/getAll', idObj)
   }
 
   public update(data: any): Observable<any> {
-    const url = url_api + '/update';
-    return this.http.post<any>(url, data)
+    return this.http.post<any>(url_api + '/update', data)
   }
 
 }

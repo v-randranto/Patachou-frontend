@@ -184,6 +184,7 @@ export class EditPersonalDataComponent implements OnInit {
     }
   }
 
+  // ces fonctions bloquent les messages d'erreur pendant la saisie de l'email
   emailOnFocus() {
     this.emailBlurred = false;
   }
@@ -245,7 +246,6 @@ export class EditPersonalDataComponent implements OnInit {
       const sex = this.stepTwoForm.value.sex;
       const date = this.stepTwoForm.value.birthDate;
       const presentation = this.stepTwoForm.value.presentation;
-      console.log('compare date', date)
       if (this.updateMember.firstName !== firstName) {
         personalData.firstName = firstName;
         this.updateMember.firstName = firstName;
@@ -296,7 +296,6 @@ export class EditPersonalDataComponent implements OnInit {
         this.memberDataService.update(updateData).subscribe(
           res => {
             this.updateStatus = res.save;
-            console.log('update status', JSON.stringify(this.updateStatus));
             if (this.updateStatus) {
               this.updateMember.photoUrl = res.photoUrl;
               this.updateCurrentMember();

@@ -1,5 +1,6 @@
 <div class="profile">
   <div class="card" class="mx-auto pt-4 col-md-8 col-lg-6">
+
     <h5 class="card-title text-center text-white">{{ member.pseudo | customTitleCase }}</h5>
     <div class="mx-auto text-white" style="width: 3rem;">
       <img class="card-img-top rounded" [src]="member.photoUrl" alt="photo membre">
@@ -7,10 +8,12 @@
     <div class="text-center">
       <small class="text-white">Membre depuis le {{member.creationDate | date:'mediumDate':'':'fr'}}</small>
     </div>
+
     <div class="card-body">
       <p *ngIf="member.presentation" class="card-text">{{member.presentation}}</p>
 
       <ul class="list-group list-group-flush">
+
         <li class="list-group-item p-1">
           <span *ngIf="member.sex" class="d-inline mr-2" [ngSwitch]="member.sex">
             <fa-icon *ngSwitchCase="'female'" [icon]="['fas','venus']"></fa-icon>
@@ -21,12 +24,14 @@
             {{ member.firstName | customTitleCase }} {{ member.lastName | customTitleCase }}
           </span>
         </li>
+
         <li *ngIf="member.birthDate" class="list-group-item p-1">
           <span class="d-inline mr-2">
             <fa-icon [icon]="['fas','birthday-cake']"></fa-icon>
           </span>
           <span class="d-inline">{{member.birthDate | date:'mediumDate':'':'fr'}}</span>
         </li>
+
         <li class="list-group-item p-1">
           <span class="d-inline">
             <fa-icon [icon]="['fas','at']"></fa-icon>
@@ -34,21 +39,20 @@
           <span class="d-inline pl-2">{{member.email}}</span>
         </li>
       </ul>
-      <div class="button-container row">
-        <div class="col-md my-3">
-        <button class="btn btn-outline-primary d-inline-block mr-4 mt-3" (click)="update(updCredentials)">
+
+      <div class="row mx-4">
+        <button class="btn btn-outline-primary col mt-4" (click)="update(updCredentials)">
           <fa-icon class='action mr-2' [icon]="['fas','edit']"></fa-icon>
           <span>Identifiants</span>
         </button>
-        <button class="btn btn-outline-primary d-inline-block mt-3" (click)="update(updPersonalData)">
+      </div>
+
+      <div class="row mx-4">
+        <button class="btn btn-outline-primary col mt-4" (click)="update(updPersonalData)">
           <fa-icon class='action mr-2' [icon]="['fas','edit']"></fa-icon>
           <span>Données personnelles</span>
         </button>
-
-      </div>
-
       </div>
     </div>
-
   </div>
 </div>

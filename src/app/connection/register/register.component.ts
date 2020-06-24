@@ -2,7 +2,7 @@ import { UtilService } from '@app/shared/service/util.service';
 import { FORMAT_RULES, TOOL_TIPS } from '@shared/constant/profile-form';
 import { ErrorModalComponent } from '@shared/modal/error-modal/error-modal.component';
 import { NotificationModalComponent } from '@shared/modal/notification-modal/notification-modal.component';
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MustMatch, PasswordStrength } from '@app/connection/custom-validator/custom-validator.validator';
 import { MemberDataService } from '@app/data/service/member-data.service';
@@ -18,7 +18,7 @@ import { REGISTER_PROFILE } from '@app/shared/constant/notification-modal';
   styleUrls: ['./register.component.css']
 
 })
-export class RegisterComponent implements OnInit, AfterViewInit {
+export class RegisterComponent implements OnInit {
   @ViewChild('pseudo') pseudoRef: ElementRef;
   @ViewChild('firstName') firstNameRef: ElementRef;
   public modalRef: BsModalRef;
@@ -124,12 +124,6 @@ export class RegisterComponent implements OnInit, AfterViewInit {
       file: [null]
     });
     this.registerForm.push(this.stepThreeForm);
-    console.log(this.stepThreeForm.value)
-  }
-
-  ngAfterViewInit(): void {
-    console.log(this.pseudoRef)
-    console.log(this.firstNameRef)
   }
 
   get currentStepValid() {
@@ -175,6 +169,7 @@ export class RegisterComponent implements OnInit, AfterViewInit {
     }
   }
 
+  // ces fonctions bloquent les messages d'erreur de saisie jusqu'à la fin de la saisie de l'email
   emailOnFocus() {
     this.emailBlurred = false;
   }

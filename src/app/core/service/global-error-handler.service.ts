@@ -10,9 +10,6 @@ export class GlobalErrorHandlerService implements ErrorHandler {
 
   handleError(error) {
     let router = this.injector.get(Router);
-    console.log('URL: ' + router.url);
-    console.error(error);
-
     router.navigate(['/error']);
  }
 }

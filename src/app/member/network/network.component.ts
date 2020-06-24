@@ -63,7 +63,6 @@ export class NetworkComponent implements OnInit {
         this.relations = this.authenticationService.userRelationships;
       } else {
         this.activatedRoute.data.subscribe((data: { network: Relationship[] }) => {
-          console.log(data.network);
           if (data?.network) {
             this.relations = data.network;
             this.authenticationService.setUserRelationships(this.relations);
@@ -104,7 +103,6 @@ export class NetworkComponent implements OnInit {
   }
   // sélection d'une relation
   selectRelation(relation: Relationship, relationType: string) {
-    console.log('selectedRelation', relation);
     this.modalConfig.initialState.selectedRelation = relation;
     this.modalConfig.initialState.relationType = relationType;
     if (this.isRequester(relation)) {
@@ -118,7 +116,6 @@ export class NetworkComponent implements OnInit {
 
   // sélection d'un membre issu de la recherche
   selectMember(member: Member) {
-    console.log('selectedMember', member);
     this.modalConfig.initialState.selectedRelation = null;
     this.modalConfig.initialState.selectedMember = member;
     this.modalConfig.initialState.relationType = this.relation_to_befriend;

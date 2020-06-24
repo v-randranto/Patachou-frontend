@@ -11,13 +11,11 @@ export class SocketIoService {
 
   // donner ordre au serveur de compter le membre parmi les connectés
   connectMember(member) {
-    console.log('>connectMember => emit', member)
     this.socket.emit('connectMember', member);
   }
 
   // donner ordre au serveur de déconnecter le membre
   disconnectMember() {
-    console.log('>disconnectMember => emit')
     this.socket.emit('disconnectMember');
   }
 
@@ -25,7 +23,6 @@ export class SocketIoService {
   getConnectionsNb() {
 
     return Observable.create((observer) => {
-      console.log('>getConnectionsNb')
       this.socket.on('connectedMembers', (connectionsNb) => {
         observer.next(connectionsNb);
       });
@@ -34,10 +31,8 @@ export class SocketIoService {
 
   disconnected() {
     return Observable.create((observer) => {
-      console.log(this.socket.ioSocket)
       this.socket.on('disconnect', (reason) => {
         console.log('member disconected');
-        observer.next(reason);
         this.socket.ioSocket.connect();
       });
     });

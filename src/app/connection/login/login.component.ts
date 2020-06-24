@@ -80,12 +80,17 @@ export class LoginComponent implements OnInit {
           this.router.navigate([this.returnUrl]);
         },
         error => {
-          if (error.notFound || error.authKO) {
-            this.badCredentials = true;
+          if (error.error) {
+            this.technicalFailure = true;
+          } else {
+            if (error.notFound || error.authKO) {
+              this.badCredentials = true;
+            }
+            if (error.pwdExpired) {
+              this.passwordExpired = true;
+            }
           }
-          if (error.exp) {
-            this.passwordExpired = true;
-          }
+
           this.loading = false;
         });
   }
