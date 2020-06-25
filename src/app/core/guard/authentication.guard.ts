@@ -17,6 +17,7 @@ export class AuthenticationGuard implements CanActivate {
       color: '#17a2b8',
       title: 'Session expirée!',
       text: `Veuillez vous connecter à nouveau.`,
+      logout: true,
       redirection: `/connection/login`
     }
   };
@@ -34,10 +35,11 @@ export class AuthenticationGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     if (!this.authenticationService.isLoggedIn) {
       this.openNotificationModal();
-      this.router.navigate(['login']);
+    } else {
+      if (this.authenticationService.tokenExpDate < Date.now()) {
+        this.openNotificationModal();
+      }
     }
     return true;
   }
-
-
 }

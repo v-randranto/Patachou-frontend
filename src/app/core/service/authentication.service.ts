@@ -29,15 +29,16 @@ export class AuthenticationService {
   }
 
   login(loginData: LoginData) {
-
     return this.memberDataService.login(loginData)
       .pipe(map(data => {
         const user = {
           member: data.member,
-          token: data.token
+          token: data.token,
+          tokenExpDate: Date.now() + data.expiresIn - (60 * 1000)
         }
         this.socketService.connectMember({ id: JSON.stringify(data.member._id), pseudo: data.member.pseudo });
         localStorage.setItem('user_data', JSON.stringify(user));
+        console.log('date expiration ', new Date(user.tokenExpDate))
         return user;
       }));
   }
@@ -51,6 +52,11 @@ export class AuthenticationService {
   get token() {
     const userData = JSON.parse(localStorage.getItem('user_data'));
     return userData.token;
+  }
+
+  get tokenExpDate() {
+    const userData = JSON.parse(localStorage.getItem('user_data'));
+    return userData.tokenExpDate;
   }
 
   get userId() {
