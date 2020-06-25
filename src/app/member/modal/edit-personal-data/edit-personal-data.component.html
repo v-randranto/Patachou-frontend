@@ -12,7 +12,7 @@
 
       <div class="form-group col mx-4">
         <input type="text" formControlName="firstName" class="form-control" placeholder="* Prénom" maxlength=30
-          autofocus (keydown)="checkNameInput($event)" data-toggle="tooltip" [title]="nameTooltip" />
+          autofocus (keydown)="checkNameInput($event)"/>
 
         <div *ngIf="(stepOne.firstName.touched || stepOne.firstName.dirty) && stepOne.firstName.invalid"
           class="alert alert-danger my-1 p-1">
@@ -25,8 +25,7 @@
 
     <div class="form-row mt-1">
       <div class="form-group col mx-4">
-        <input type="text" formControlName="lastName" class="form-control" placeholder="* Nom" maxlength=30
-          (keydown)="checkNameInput($event)" data-toggle="tooltip" [title]="nameTooltip" />
+        <input type="text" formControlName="lastName" class="form-control" placeholder="* Nom" maxlength=30 (keydown)="checkNameInput($event)"/>
 
         <div *ngIf="(stepOne.lastName.touched || stepOne.lastName.dirty) && stepOne.lastName.invalid"
           class="alert alert-danger my-1 p-1">
@@ -103,7 +102,7 @@
         <fa-icon [icon]="['fas','upload']"></fa-icon>
 
         <label class="d-inline label-file ml-2">Photo ou avatar
-          <input #inputFile type="file" class="d-none" (change)="onFileSelect($event.target.files)"
+          <input #inputFile type="file" class="d-none" (change)="onFileSelect($event.target.files)" [tooltip]="uploadTooltip"
             [accept]="acceptFileExtensions">
         </label>
 

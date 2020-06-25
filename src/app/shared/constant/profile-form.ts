@@ -7,7 +7,7 @@ const NAME_ALLOWED_CHAR = /[a-zàáâäãåąčćęèéêëėįìíîïłńòó�
 const NAME_PATTERN_BASE = `a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð`;
 const NAME_PATTERN = `^[${NAME_PATTERN_BASE}]+(([' -][${NAME_PATTERN_BASE}])?[${NAME_PATTERN_BASE}]*)*$`;
 const PSEUDO_PATTERN = `^[${NAME_PATTERN_BASE}0-9]+(([' -][${NAME_PATTERN_BASE}0-9])?[${NAME_PATTERN_BASE}0-9]*)*$`;
-const EMAIL_PATTERN = `^([a-zA-Z0-9.]+)@([a-zA-Z0-9-.]+).([a-zA-Z]{2,5})$`;
+const EMAIL_PATTERN = `^([a-z0-9.]+)@([a-z0-9-.]+).([a-z]{2,5})$`;
 
 
 const FORMAT_RULES = {
@@ -26,9 +26,9 @@ const FORMAT_RULES = {
 }
 
 const TOOL_TIPS = {
-  pseudo: 'format alphanumérique avec apostrophe, tiret et espace permis',
-  name: 'format alphabétique avec apostrophe, tiret et espace permis',
-  password: 'Saisir 8 caractères minimum avec 3 des caractéristiques suivantes: 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial'
+  pseudo: 'chiffre autorisé',
+  password: 'Saisir 8 caractères minimum avec 3 des caractéristiques suivantes: 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial',
+  upload: 'Fichier de taiile 500ko maximum.'
 }
 
 export { FORMAT_RULES, TOOL_TIPS }

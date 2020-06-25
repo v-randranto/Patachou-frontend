@@ -36,7 +36,7 @@ export class AuthenticationService {
           token: data.token,
           tokenExpDate: Date.now() + data.expiresIn - (60 * 1000)
         }
-        this.socketService.connectMember({ id: JSON.stringify(data.member._id), pseudo: data.member.pseudo });
+        this.socketService.addMember(data.member);
         localStorage.setItem('user_data', JSON.stringify(user));
         console.log('date expiration ', new Date(user.tokenExpDate))
         return user;
@@ -45,7 +45,7 @@ export class AuthenticationService {
 
   logout() {
     localStorage.clear();
-    this.socketService.disconnectMember();
+    this.socketService.subtractMember();
     this.router.navigate(['home']);
   }
 
@@ -69,16 +69,8 @@ export class AuthenticationService {
     return userData.member;
   }
 
-  get userRelationships() {
-    return JSON.parse(localStorage.getItem('user_relations'));
-  }
-
   get isLoggedIn(): boolean {
     return (localStorage.getItem('user_data')) ? true : false;
-  }
-
-  setUserRelationships(relations: Relationship[]) {
-    localStorage.setItem('user_relations', JSON.stringify(relations));
   }
 
   setUserProfile(member: Member) {

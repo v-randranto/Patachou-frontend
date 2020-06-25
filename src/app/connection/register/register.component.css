@@ -57,3 +57,14 @@ button.gotostep fa-icon {
   color: darkslategray;
 }
 
+
+:host >>> .tooltip-inner {
+  background-color: white;
+  color: black;
+  border: 1px solid white;
+  text-align: left;
+}
+:host >>> .tooltip.top .tooltip-arrow:before,
+:host >>> .tooltip.top .tooltip-arrow {
+  border-top-color: white;
+}

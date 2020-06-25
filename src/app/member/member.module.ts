@@ -7,6 +7,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { ProfileComponent } from '@app/member/profile/profile.component';
 import { NetworkComponent } from './network/network.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { SharedModule } from '@app/shared/shared.module';
 import { EditCredentialsComponent } from './modal/edit-credentials/edit-credentials.component';
 import { EditPersonalDataComponent } from './modal/edit-personal-data/edit-personal-data.component';
@@ -30,6 +31,7 @@ const routes: Routes = [];
     CommonModule,
     FontAwesomeModule,
     TabsModule.forRoot(),
+    TooltipModule.forRoot(),
     [RouterModule.forChild(routes)],
     SharedModule
   ],
@@ -37,4 +39,5 @@ const routes: Routes = [];
     NetworkResolver
   ]
 })
+
 export class MemberModule { }

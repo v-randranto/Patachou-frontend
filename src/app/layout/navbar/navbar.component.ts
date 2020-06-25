@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthenticationService } from '@app/core/service/authentication.service';
 import { SocketIoService } from '@app/core/service/socket-io.service';
 import { Member } from '@app/data/model/member';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -10,8 +11,9 @@ import { Member } from '@app/data/model/member';
 export class NavbarComponent implements OnInit, OnDestroy {
 
   // nombre de membres connectés
-  public connectedNb;
+  public loggedInNb;
   public currentMember = new Member();
+  public socketSubscription : Subscription;
 
   // menu
   public isMenuCollapsed = true;
@@ -27,21 +29,16 @@ export class NavbarComponent implements OnInit, OnDestroy {
         this.currentMember = this.authenticationService.userProfile;
     }
     // requêtes socket.io pour récupérer nombre de membres connectés
-    this.socketService
-      .getConnectionsNb()
+    this.socketSubscription = this.socketService
+      .getLoggedInNb()
       .subscribe((res) => {
-        this.connectedNb = res;
+        this.loggedInNb = res;
       });
 
-    this.socketService
-      .disconnected()
-      .subscribe((res) => {
-        this.connectedNb++;
-      });
   }
 
   ngOnDestroy(): void {
-    this.socketService.getConnectionsNb().unsuscribe();
+    this.socketSubscription.unsubscribe();
   }
 
   get isLoggedIn() {

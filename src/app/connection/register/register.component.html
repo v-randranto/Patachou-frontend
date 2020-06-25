@@ -12,7 +12,7 @@
 
         <div class="form-group col mx-4">
           <input #pseudo type="text" formControlName="pseudo" class="form-control d-inline" placeholder="* Pseudonyme"
-            autofocus maxlength=20 (keydown)="checkPseudoInput($event)" data-toggle="tooltip" [title]="pseudoTooltip" />
+            autofocus maxlength=20 (keydown)="checkPseudoInput($event)" [tooltip]="pseudoTooltip" />
 
           <div class="alert alert-danger my-1 p-1"
             *ngIf="(stepOne.pseudo.touched || stepOne.pseudo.dirty) && stepOne.pseudo.invalid">
@@ -29,8 +29,7 @@
 
       <div class="form-row mt-3">
         <div class="form-group col mx-4">
-          <input type="password" formControlName="password" class="form-control" placeholder="* Mot de passe"
-            maxlength=30 />
+          <input type="password" formControlName="password" class="form-control" placeholder="* Mot de passe" maxlength=30 [tooltip]="passwordTooltip"/>
 
           <div *ngIf="(stepOne.password.touched || stepOne.password.dirty) && stepOne.password.invalid"
             class="alert alert-danger my-1 p-1">
@@ -38,6 +37,13 @@
             <div *ngIf="stepOne.password.errors.strength">Le mot de passe n'est pas assez balèze.</div>
           </div>
         </div>
+        <ng-template #passwordTooltip>
+          <span>Au moins 8 caractères et 3 des caractéristiques suivantes:</span>
+          <li>une mininuscule</li>
+          <li>une majuscule</li>
+          <li>un chiffre</li>
+          <li>un caractère spécial: !@#$%&*_+-=?</li>
+        </ng-template>
       </div>
 
       <div class="form-row mt-3">
@@ -52,6 +58,7 @@
             <div *ngIf="stepOne.confirmPassword.errors.mustMatch">Ce mot de passe est différent.</div>
           </div>
         </div>
+
       </div>
     </form>
 
@@ -60,7 +67,7 @@
 
         <div class="form-group col mx-4">
           <input #firstName type="text" formControlName="firstName" class="form-control" placeholder="* Prénom"
-            maxlength=30 (keydown)="checkNameInput($event)" data-toggle="tooltip" [title]="nameTooltip" />
+            maxlength=30 (keydown)="checkNameInput($event)"/>
 
           <div *ngIf="(stepTwo.firstName.touched || stepTwo.firstName.dirty) && stepTwo.firstName.invalid"
             class="alert alert-danger my-1 p-1">
@@ -74,7 +81,7 @@
       <div class="form-row mt-3">
         <div class="form-group col mx-4">
           <input type="text" formControlName="lastName" class="form-control" placeholder="* Nom" maxlength=30
-            (keydown)="checkNameInput($event)" data-toggle="tooltip" [title]="nameTooltip" />
+            (keydown)="checkNameInput($event)"/>
 
           <div *ngIf="(stepTwo.lastName.touched || stepTwo.lastName.dirty) && stepTwo.lastName.invalid"
             class="alert alert-danger my-1 p-1">
@@ -150,7 +157,7 @@
         <div class="form-group ml-1">
           <fa-icon [icon]="['fas','upload']"></fa-icon>
           <label class="d-inline label-file ml-2">Photo ou avatar
-            <input #inputFile type="file" class="d-none" (change)="onFileSelect($event.target.files)"
+            <input #inputFile type="file" class="d-none" (change)="onFileSelect($event.target.files)" [tooltip]="uploadToolTip"
               [accept]="acceptFileExtensions">
           </label>
 

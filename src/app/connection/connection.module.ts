@@ -10,6 +10,7 @@ import { SharedModule } from '@app/shared/shared.module';
 import { RegisterComponent } from './register/register.component';
 import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 const routes: Routes = [];
 
@@ -25,6 +26,7 @@ const routes: Routes = [];
     FontAwesomeModule,
     ProgressbarModule.forRoot(),
     BsDatepickerModule.forRoot(),
+    TooltipModule.forRoot(),
     [RouterModule.forChild(routes)],
     SharedModule
   ],

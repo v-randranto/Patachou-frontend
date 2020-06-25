@@ -4,9 +4,10 @@ import { AuthenticationService } from '@app/core/service/authentication.service'
 import { ActivatedRoute, Router } from '@angular/router';
 import { Member } from '@app/data/model/member';
 import { MemberPreviewModalComponent } from '@shared/modal/member-preview-modal/member-preview-modal.component';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { SearchService } from '@app/core/service/search.service';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { SocketIoService } from '@app/core/service/socket-io.service';
 
 const CONFIRMED_STATUS = 'CONFIRMED',
   PENDING_STATUS = 'PENDING';
@@ -17,8 +18,9 @@ const CONFIRMED_STATUS = 'CONFIRMED',
   styleUrls: ['./network.component.css']
 })
 export class NetworkComponent implements OnInit {
-  public previewMember: Member;
+
   public currentMember: Member;
+  public previewMember: Member; //membre ou relation sélectionné pour affcihage dans une modale
   public relations: Relationship[] = [];
   public confirmedRelations: Relationship[] = [];
   public relationsInWaiting: Relationship[] = [];
@@ -48,33 +50,31 @@ export class NetworkComponent implements OnInit {
   public searchTerm$ = new Subject<string>();
   public searchTerm = '';
 
+  public socketSubscription: Subscription;
+
   constructor(
     private authenticationService: AuthenticationService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private searchService: SearchService,
-    private modalService: BsModalService
+    private modalService: BsModalService,
+    private socketService: SocketIoService
   ) { }
 
   ngOnInit(): void {
     if (this.authenticationService.isLoggedIn) {
         this.currentMember = this.authenticationService.userProfile;
-      if (this.authenticationService.userRelationships) {
-        this.relations = this.authenticationService.userRelationships;
-      } else {
-        this.activatedRoute.data.subscribe((data: { network: Relationship[] }) => {
+          this.activatedRoute.data.subscribe((data: { network: Relationship[] }) => {
           if (data?.network) {
             this.relations = data.network;
-            this.authenticationService.setUserRelationships(this.relations);
           }
         });
-      }
       this.initRelationsTypes();
     } else {
       this.router.navigate(['home']);
     };
 
-    // service de recherche de membres
+    // abonnement au service de recherche de membres
     this.searchService.search(this.searchTerm$)
       .subscribe(results => {
         this.members = results;
@@ -82,8 +82,30 @@ export class NetworkComponent implements OnInit {
           this.showResults = true;
         }
       });
+
+    // requêtes socket.io pour récupérer la mise à jour d'une relation
+    this.socketSubscription = this.socketService.relationUpdate()
+    .subscribe(update => {
+      console.log('new update', update)
+      const index = this.relations.findIndex(relation =>
+        JSON.stringify(relation._id) === JSON.stringify(update._id))
+        if (index === -1) {
+          console.log('index non trouvé')
+          throw Error ('index non trouvé')
+        } else {
+          console.log('index trouvé')
+          console.log('relations à mettre à jour', this.relations[index])
+          this.relations[index] = update;
+          this.initRelationsTypes();
+        }
+    });
   }
 
+  ngOnDestroy(): void {
+    this.socketSubscription.unsubscribe();
+  }
+
+  // répartition des relations dans différents tableaux selon leur statut : amis confirmés, à valider ou en attente
   initRelationsTypes() {
     this.confirmedRelations = this.relations.filter(relation => relation.status == CONFIRMED_STATUS);
     this.relationsInWaiting = this.relations.filter(relation =>
@@ -97,11 +119,13 @@ export class NetworkComponent implements OnInit {
     this.showResults = false;
   }
 
-  // check si le membre courant est à l'origine (requester) de la relation
+  // déterminer si le membre courant est à l'origine (requester) de la relation
+  // cela permet de distinguer les relations à valider de celles en attente
   isRequester(relation: Relationship) {
     return relation.requester._id == this.currentMember._id
   }
-  // sélection d'une relation
+
+  // sélection d'une relation et affichage des données de l'ami dans une modale
   selectRelation(relation: Relationship, relationType: string) {
     this.modalConfig.initialState.selectedRelation = relation;
     this.modalConfig.initialState.relationType = relationType;
@@ -113,8 +137,7 @@ export class NetworkComponent implements OnInit {
     this.openModal();
   }
 
-
-  // sélection d'un membre issu de la recherche
+  // sélection d'un membre issu de la recherche et affichage de ses données dans une modale
   selectMember(member: Member) {
     this.modalConfig.initialState.selectedRelation = null;
     this.modalConfig.initialState.selectedMember = member;
@@ -122,8 +145,6 @@ export class NetworkComponent implements OnInit {
     this.openModal();
   }
 
-
-  // affichage du membre sélectionné
   openModal() {
     this.modalRef = this.modalService.show(MemberPreviewModalComponent, this.modalConfig);
   }

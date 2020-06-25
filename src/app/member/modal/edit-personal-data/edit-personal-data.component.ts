@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
@@ -59,6 +59,7 @@ export class EditPersonalDataComponent implements OnInit {
   public loading = false;
   public stepOneForm: FormGroup;
   public stepTwoForm: FormGroup;
+  public uploadTooltip = TOOL_TIPS.upload;
   public titleCaseFirstName: string;
   public titleCaseLastName: string;
   public shortBirthDate: string;
@@ -80,10 +81,6 @@ export class EditPersonalDataComponent implements OnInit {
   public invalidFileMessage: string;
 
   public emailBlurred: boolean;
-
-  public nameTooltip = TOOL_TIPS.name;
-  public passwordTooltip = TOOL_TIPS.password;
-  public pseudoTooltip = TOOL_TIPS.pseudo;
 
   constructor(
     public modalRef: BsModalRef,

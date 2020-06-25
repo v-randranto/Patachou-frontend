@@ -27,7 +27,7 @@ export function MustMatch(controlName: string, matchingControlName: string) {
  *
  * @param controlName
  * La fonction contrôle la robustesse du mot de passe
- * il doit comporter un minimum de caractères cf. const minLength
+ * il doit comporter un minimum de 8 caractères
  * et au moins 3 des caractéristiques suivantes :
  * - une minuscule
  * - une majuscule
@@ -47,12 +47,12 @@ export function PasswordStrength(controlName: string) {
       return;
     }
 
-    const minLength = 4;
-    const minPassedTests = 4;
-    const upperCaseCharacters = /[A-Z]+/g;
-    const lowerCaseCharacters = /[a-z]+/g;
-    const numberCharacters = /[0-9]+/g;
-    const specialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+    const minLength = 8,
+      minPassedTests = 4,
+      upperCaseCharacters = /[A-Z]+/g,
+      lowerCaseCharacters = /[a-z]+/g,
+      numberCharacters = /[0-9]+/g,
+      specialCharacters = /[!@#$%&*_+-=?]+/;
     let passedTests = 0;
     let result = {
       passedTests: 0,

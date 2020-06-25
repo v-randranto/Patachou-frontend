@@ -11,8 +11,7 @@ import { AuthenticationService } from './authentication.service';
 export class GlobalHttpInterceptorService implements HttpInterceptor {
 
   constructor(
-    private authenticationService: AuthenticationService,
-    private router: Router
+    private authenticationService: AuthenticationService
   ) { }
 
 

@@ -71,9 +71,8 @@ export class RegisterComponent implements OnInit {
   public maxBirthDate: string;
   public defaultBirthDate: string;
   public emailBlurred: boolean;
-  public nameTooltip = TOOL_TIPS.name;
-  public passwordTooltip = TOOL_TIPS.password;
   public pseudoTooltip = TOOL_TIPS.pseudo;
+  public uploadToolTip = TOOL_TIPS.upload;
 
   constructor(
     private fb: FormBuilder,
@@ -267,7 +266,6 @@ export class RegisterComponent implements OnInit {
         }
       },
       error => {
-        console.error(error);
         this.loading = false;
         this.registerStatus.save = false;
         this.openErrorModal();

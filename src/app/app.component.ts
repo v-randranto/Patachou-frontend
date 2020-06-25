@@ -1,4 +1,4 @@
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { SocketIoService } from '@app/core/service/socket-io.service';
 import { AuthenticationService } from '@core/service/authentication.service';
 import { Component, OnInit } from '@angular/core';
@@ -20,8 +20,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     if (this.authenticationService.isLoggedIn) {
       const member = this.authenticationService.userProfile;
-      this.socketService.connectMember({ id: member.id, pseudo: member.pseudo });
-      this.router.navigate(['member/profile']);
+      this.socketService.addMember(member);
     }
   }
 }

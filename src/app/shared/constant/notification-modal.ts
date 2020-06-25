@@ -28,7 +28,7 @@ const NETWORK_REQUEST = {
 
 const ERROR_NOTIFICATION = {
   title: 'Oups, une saucisse dans la pâte',
-  text: 'Nous sommes désolées, un incident est intervenu. Merci de réessayer plus tard.'
+  text: 'Nous sommes désolés, un incident est intervenu. Merci de réessayer plus tard.'
 };
 
 export { EDIT_PROFILE, REGISTER_PROFILE , ERROR_NOTIFICATION, NETWORK_REQUEST, LOST_PASSWORD}
