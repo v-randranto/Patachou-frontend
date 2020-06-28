@@ -16,32 +16,38 @@
 
 <div class="network">
   <div class="col-md-8 mx-auto pt-2">
-    <h5 class="text-white">Mon réseau d'amis <small>(Design todo)</small></h5>
+    <h5 class="text-white">Mon réseau d'amis <small></small></h5>
     <tabset [justified]="true">
 
       <!--======================================================================================================
              les amis confirmés
       ==========================================================================================================-->
       <tab heading="Amis">
-        <div class="list-group mt-3" *ngIf="confirmedRelations?.length; else noFriends">
-          <button *ngFor="let relation of confirmedRelations" class="list-group-item list-group-item-action"
+        <ul class="list-group mt-3" *ngIf="confirmedRelations?.length; else noFriends">
+          <li *ngFor="let relation of confirmedRelations" class="list-group-item list-group-item-action align-items-center"
             (click)="selectRelation(relation, relation_confirmed)">
             <div *ngIf="isRequester(relation); else isReceiver">
+
               <img class="rounded img-fluid" [src]="relation.receiver.photoUrl" width="12%" height="auto" alt="avatar">
-              {{ relation.receiver.pseudo | customTitleCase }}, {{ relation.receiver.firstName | customTitleCase }}
-              {{ relation.receiver.lastName | customTitleCase }}
+              <div class="d-inline-block mx-2 loginStatus" [ngStyle]="{'background-color': relation.receiver.isLoggedIn ? 'green' : 'red' }" ></div>
+              <div class="d-inline-block ml-2">
+                {{ relation.receiver.pseudo | customTitleCase }}, {{ relation.receiver.firstName | customTitleCase }}
+                {{ relation.receiver.lastName | customTitleCase }} <br>
+                Pote depuis le {{ relation.modificationDate | date:'mediumDate':'':'fr' }}
+              </div>
             </div>
 
             <ng-template #isReceiver>
-              <div>
-                <img class="rounded img-fluid" [src]="relation.requester.photoUrl" width="12%" height="auto"
-                  alt="avatar">
+              <img class="rounded img-fluid" [src]="relation.requester.photoUrl" width="12%" height="auto" alt="avatar">
+              <div class="d-inline-block mx-2 loginStatus" [ngStyle]="{'background-color': relation.requester.isLoggedIn ? 'green' : 'red' }" ></div>
+              <div class="d-inline-block ml-2">
                 {{ relation.requester.pseudo | customTitleCase }}, {{ relation.requester.firstName | customTitleCase }}
-                {{ relation.requester.lastName | customTitleCase }}
+                {{ relation.requester.lastName | customTitleCase }} <br>
+                Pote depuis le {{ relation.modificationDate | date:'mediumDate':'':'fr' }}
               </div>
             </ng-template>
-          </button>
-        </div>
+          </li>
+        </ul>
 
         <ng-template #noFriends>
           <div class="list-group mt-3">
@@ -59,20 +65,25 @@
       ==========================================================================================================-->
 
       <tab heading="Validation">
-        <div class="list-group mt-3" *ngIf="relationsToValidate?.length; else noValidations">
-          <button *ngFor="let relation of relationsToValidate" class="list-group-item list-group-item-action"
+        <ul class="list-group mt-3" *ngIf="relationsToValidate?.length; else noValidations">
+          <li *ngFor="let relation of relationsToValidate" class="list-group-item list-group-item-action  align-items-center"
             (click)="selectRelation(relation, relation_to_validate)">
+
             <img class="rounded img-fluid" [src]="relation.requester.photoUrl" width="12%" height="auto" alt="avatar">
-            {{ relation.requester.pseudo | customTitleCase }}, {{ relation.requester.firstName | customTitleCase }}
-            {{ relation.requester.lastName | customTitleCase }}
-          </button>
-        </div>
+            <div class="d-inline-block mx-2 loginStatus" [ngStyle]="{'background-color': relation.receiver.isLoggedIn ? 'green' : 'red' }" ></div>
+            <div class="d-inline-block ml-2">
+              {{ relation.requester.pseudo | customTitleCase }}, {{ relation.requester.firstName | customTitleCase }}
+              {{ relation.requester.lastName | customTitleCase }} <br>
+              Demande reçue le {{ relation.creationDate | date:'mediumDate':'':'fr' }}
+            </div>
+          </li>
+        </ul>
+
         <ng-template #noValidations>
           <div class="list-group mt-3">
             <div class="list-group-item">
               <span> Je n'ai pas de demandes à valider.</span>
-              <img class="img-fluid ml-1" src="../../../assets/img/bored.gif" width="100" height="auto"
-                alt="bored cat">
+              <img class="img-fluid ml-1" src="../../../assets/img/bored.gif" width="100" height="auto" alt="bored cat">
             </div>
           </div>
         </ng-template>
@@ -83,14 +94,20 @@
       ==========================================================================================================-->
 
       <tab heading="Attente">
-        <div class="list-group mt-3" *ngIf="relationsInWaiting?.length; else noneInWaiting">
-          <button *ngFor="let relation of relationsInWaiting" class="list-group-item list-group-item-action"
+        <ul class="list-group mt-3" *ngIf="relationsInWaiting?.length; else noneInWaiting">
+          <li *ngFor="let relation of relationsInWaiting" class="list-group-item list-group-item-action  align-items-center"
             (click)="selectRelation(relation, relation_in_waiting)">
+
             <img class="rounded img-fluid" [src]="relation.receiver.photoUrl" width="12%" height="auto" alt="avatar">
-            {{ relation.receiver.pseudo | customTitleCase }}, {{ relation.receiver.firstName | customTitleCase }}
-            {{ relation.receiver.lastName | customTitleCase }}
-          </button>
-        </div>
+            <div class="d-inline-block mx-2 loginStatus" [ngStyle]="{'background-color': relation.receiver.isLoggedIn ? 'green' : 'red' }" ></div>
+            <div class="d-inline-block ml-2">
+              {{ relation.receiver.pseudo | customTitleCase }}, {{ relation.receiver.firstName | customTitleCase }}
+              {{ relation.receiver.lastName | customTitleCase }}<br>
+              Demande envoyée le {{ relation.creationDate | date:'mediumDate':'':'fr' }}
+            </div>
+          </li>
+        </ul>
+
         <ng-template #noneInWaiting>
           <div class="list-group mt-3">
             <div class="list-group-item">
@@ -111,22 +128,23 @@
         <!-- formulaire de recherche -->
         <form class="form-inline my-2 mt-3 ">
           <input #searchTerm class="form-control w-100" type="search" placeholder="Recherche par pseudo, prénom ou nom"
-            (keyup)="searchTerm$.next($event.target.value)">
+            autofocus (keyup)="searchTerm$.next($event.target.value)">
         </form>
 
         <!-- résultats de la recherche -->
         <div *ngIf="members; else noResults">
-          <div class="list-group overflow-auto my-lg-0">
-            <button class="list-group-item py-1 px-2 mt-2 text-left">
+          <ul class="list-group overflow-auto my-lg-0">
+            <li class="list-group-item py-1 px-2 mt-2 text-left">
               Résultats pour "{{searchTerm.value}}"
-            </button>
-            <button *ngFor="let member of members" class="list-group-item list-group-item-action"
+            </li>
+            <li *ngFor="let member of members" class="list-group-item list-group-item-action"
               (click)="selectMember(member)">
               <img class="rounded img-fluid" [src]="member.photoUrl" width="12%" height="auto" alt="avatar">
+              <div class="d-inline-block mx-2 loginStatus" [ngStyle]="{'background-color': member.isLoggedIn ? 'green' : 'red'}"></div>
               {{ member.pseudo | customTitleCase }}, {{ member.firstName | customTitleCase }}
-              {{ member.lastName | customTitleCase }}
-            </button>
-          </div>
+              {{ member.lastName | customTitleCase }}<br>
+          </li>
+          </ul>
         </div>
         <ng-template #noResults>
           <div class="list-group mt-3">

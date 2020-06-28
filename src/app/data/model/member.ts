@@ -11,6 +11,7 @@ export class Member {
   public presentation: string;
   public photoUrl: string;
   public creationDate: Date;
+  public isLoggedIn: boolean;
 }
 
 export class Photo {

@@ -38,7 +38,6 @@ export class AuthenticationService {
         }
         this.socketService.addMember(data.member);
         localStorage.setItem('user_data', JSON.stringify(user));
-        console.log('date expiration ', new Date(user.tokenExpDate))
         return user;
       }));
   }

@@ -1,13 +1,56 @@
-<div class="container-fluid pt-3">
-  <div class="card col-lg-6 mx-auto pt-3">
-    <img src="../../assets/img/bg-contact.jpg" class="card-img-top" alt="...">
-    <div class="card-body">
-      <h5 class="card-title">Contactez-nous!</h5>
-      <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio iusto, excepturi debitis
-        ut
-        numquam, repellendus nam voluptatibus ex delectus possimus veritatis quo sed porro, quas laborum et libero est
-        quae!</p>
-      <button class="btn btn-outline-secondary"><a class="text-dark" href="mailto:patachou.becsucre@gmail.com">Pour nous écrire</a></button>
+<div class="contact">
+  <div class="col-md-8 col-lg-6 mx-auto">
+
+    <h3 class="text-center text-color py-5">Je laisse un 'ti mot...</h3>
+
+      <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+        <div class="form-group col">
+          <input type="text" formControlName="name" class="form-control" placeholder="* Nom" maxlength=30 autocomplete="off"/>
+
+          <div *ngIf="(formControls.name.touched || formControls.name.dirty) && formControls.name.invalid" class="alert alert-danger my-1 p-1">
+            <div *ngIf="formControls.name.errors.required">Saisissez votre nom.</div>
+            <div *ngIf="formControls.name.errors.pattern">Le format n'est pas correct.</div>
+            <div *ngIf="formControls.name.errors.maxlength">Le nom ne peut dépasser 30 caractères.</div>
+          </div>
+        </div>
+        <div class="form-group col">
+          <input type="text" formControlName="email" class="form-control required" placeholder="* mon.adresse@email.com" autocomplete="off"
+            maxlength=50  (blur)="emailOnBlur()" (focus)="emailOnFocus()" />
+          <small id="emailHelp" class="form-text text-color">Nous ne partagerons pas votre email.</small>
+
+          <div *ngIf="emailBlurred && formControls.email.invalid" class="alert alert-danger my-1 p-1">
+            <div *ngIf="formControls.email.errors.required">Saisissez votre email.</div>
+            <div *ngIf="formControls.email.errors.pattern">Le format n'est pas correct.</div>
+            <div *ngIf="formControls.email.errors.maxlength">L'email est trop long!</div>
+          </div>
+        </div>
+        <div class="form-row my-3">
+          <div class="form-group col mx-4">
+            <textarea formControlName="message" class="form-control"
+            placeholder="Votre message... (250 caractères)" rows="5" cols="50"
+            maxlength="250">
+          </textarea>
+          </div>
+          <div
+            *ngIf="(formControls.message.touched || formControls.message.dirty) && formControls.message.invalid"
+            class="alert alert-danger my-1 p-1">
+            <div *ngIf="formControls.message?.errors.maxLength">Oups, c'est trop long!</div>
+          </div>
+        </div>
+        <div *ngIf="!loading">
+          <div class="text-center col mt-3 ">
+            <button class="btn btn-primary col col-md-6" type="submit" [disabled]="contactForm.invalid">J'envoie</button>
+
+
+          </div>
+        </div>
+
+        <div *ngIf="loading" class="d-flex justify-content-center">
+          <div class="spinner-border" role="status">
+          </div>
+        </div>
+
+      </form>
     </div>
   </div>
-</div>
+

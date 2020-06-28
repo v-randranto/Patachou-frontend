@@ -36,3 +36,10 @@ a.nav-link.active {
 .nav-tabs .nav-item .nav-link {
   color: ivory !important;
 }
+
+.loginStatus {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+}

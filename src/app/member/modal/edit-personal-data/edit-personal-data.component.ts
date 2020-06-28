@@ -95,7 +95,7 @@ export class EditPersonalDataComponent implements OnInit {
     registerLocaleData(localeFr, 'fr');
     this.minBirthDate = this.utilService.subtractYears(new Date(), 100);
     this.maxBirthDate = this.utilService.subtractYears(new Date(), 1);
-    this.defaultBirthDate = this.utilService.subtractYears(new Date(), 35);
+    // this.defaultBirthDate = this.utilService.subtractYears(new Date(), 35);
     this.shortBirthDate = this.updateMember.birthDate.toString().substring(0,10)
 
     this.titleCaseFirstName = this.utilService.toTitleCase(this.updateMember.firstName);
@@ -181,7 +181,7 @@ export class EditPersonalDataComponent implements OnInit {
     }
   }
 
-  // ces fonctions bloquent les messages d'erreur pendant la saisie de l'email
+
   emailOnFocus() {
     this.emailBlurred = false;
   }

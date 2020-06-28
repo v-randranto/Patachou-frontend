@@ -118,7 +118,7 @@ export class RegisterComponent implements OnInit {
     // formGroup de l'étape 3 du formulaire
     this.stepThreeForm = this.fb.group({
       sex: [''],
-      birthDate: [this.defaultBirthDate],
+      birthDate: [''],
       presentation: ['', Validators.maxLength(140)],
       file: [null]
     });
@@ -163,7 +163,7 @@ export class RegisterComponent implements OnInit {
       this.stepTwoForm.reset();
     } else {
       this.stepThreeForm.reset();
-      this.stepThree.birthDate.setValue(this.defaultBirthDate);
+      // this.stepThree.birthDate.setValue(this.defaultBirthDate);
       this.photo = null;
     }
   }

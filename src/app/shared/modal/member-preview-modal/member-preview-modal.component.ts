@@ -121,7 +121,6 @@ export class MemberPreviewModalComponent implements OnInit {
 
 // configuration de la modale de confirmation de la mise à jour de la relation
   valueInitialState(dataStatus: string) {
-    console.log('> valueInitialState');
     let text: string;
     const pseudo = this.utilService.toTitleCase(this.selectedMember.pseudo)
     // alimentation du texte à afficher en fonction du statut finale de la relation
@@ -137,8 +136,6 @@ export class MemberPreviewModalComponent implements OnInit {
         break;
     }
     this.notificationModalConfig.initialState.text = text;
-
-    console.log('valueInitialState >');
   }
 
   openNotificationModal() {

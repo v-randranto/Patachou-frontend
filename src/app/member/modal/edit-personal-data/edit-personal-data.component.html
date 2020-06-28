@@ -11,11 +11,10 @@
     <div class="form-row mt-3">
 
       <div class="form-group col mx-4">
-        <input type="text" formControlName="firstName" class="form-control" placeholder="* Prénom" maxlength=30
+        <input type="text" formControlName="firstName" class="form-control" placeholder="* Prénom" maxlength=30 autocomplete="off"
           autofocus (keydown)="checkNameInput($event)"/>
 
-        <div *ngIf="(stepOne.firstName.touched || stepOne.firstName.dirty) && stepOne.firstName.invalid"
-          class="alert alert-danger my-1 p-1">
+        <div *ngIf="(stepOne.firstName.touched || stepOne.firstName.dirty) && stepOne.firstName.invalid" class="alert alert-danger my-1 p-1">
           <div *ngIf="stepOne.firstName.errors.required">Saisissez votre prénom.</div>
           <div *ngIf="stepOne.firstName.errors.pattern">Le format n'est pas correct.</div>
           <div *ngIf="stepOne.firstName.errors.maxlength">Le prénom ne peut dépasser 30 caractères.</div>
@@ -25,10 +24,9 @@
 
     <div class="form-row mt-1">
       <div class="form-group col mx-4">
-        <input type="text" formControlName="lastName" class="form-control" placeholder="* Nom" maxlength=30 (keydown)="checkNameInput($event)"/>
+        <input type="text" formControlName="lastName" class="form-control" placeholder="* Nom" maxlength=30 (keydown)="checkNameInput($event)" autocomplete="off"/>
 
-        <div *ngIf="(stepOne.lastName.touched || stepOne.lastName.dirty) && stepOne.lastName.invalid"
-          class="alert alert-danger my-1 p-1">
+        <div *ngIf="(stepOne.lastName.touched || stepOne.lastName.dirty) && stepOne.lastName.invalid" class="alert alert-danger my-1 p-1">
           <div *ngIf="stepOne.lastName.errors.required">Saisissez votre nom.</div>
           <div *ngIf="stepOne.lastName.errors.pattern">Le format n'est pas correct.</div>
           <div *ngIf="stepOne.lastName.errors.maxlength">Le nom ne peut dépasser 30 caractères.</div>
@@ -38,7 +36,7 @@
 
     <div class="form-row mt-1">
       <div class="form-group col mx-4">
-        <input type="text" formControlName="email" class="form-control required" placeholder="* mon.adresse@email.com"
+        <input type="text" formControlName="email" class="form-control required" placeholder="* mon.adresse@email.com" autocomplete="off"
           maxlength=50 (blur)="emailOnBlur()" (focus)="emailOnFocus()" />
         <small id="emailHelp" class="form-text text-color">Nous ne partagerons pas votre email.</small>
 

@@ -17,6 +17,12 @@ const LOST_PASSWORD = {
   text: 'Un mot de passe provisoire vous a été envoyé par email. Pensez à le modifier après connexion.'
 };
 
+const CONTACT_EMAIL = {
+  color: '#28a745',
+  title: `A y est, c'est dans la boîte!`,
+  text: 'Merci pour votre message, nous y répondrons dans les plus brefs délais.'
+};
+
 const NETWORK_REQUEST = {
   color: '#28a745',
   title: 'A y est, demande traitée!',
@@ -31,4 +37,4 @@ const ERROR_NOTIFICATION = {
   text: 'Nous sommes désolés, un incident est intervenu. Merci de réessayer plus tard.'
 };
 
-export { EDIT_PROFILE, REGISTER_PROFILE , ERROR_NOTIFICATION, NETWORK_REQUEST, LOST_PASSWORD}
+export { EDIT_PROFILE, REGISTER_PROFILE , ERROR_NOTIFICATION, NETWORK_REQUEST, LOST_PASSWORD, CONTACT_EMAIL}

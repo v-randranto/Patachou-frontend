@@ -32,7 +32,6 @@ export class SocketIoService {
   disconnected() {
     return Observable.create((observer) => {
       this.socket.on('disconnected', (reason) => {
-        console.log('member disconnected reason', reason);
         this.socket.ioSocket.connect();
       });
     });
@@ -40,7 +39,6 @@ export class SocketIoService {
 
   // mise à jour d'une relation en base
   updateRelation(data) {
-    console.log('>updateRelation', data);
     this.socket.emit('updateRelation', data);
   }
 
@@ -48,7 +46,6 @@ export class SocketIoService {
   relationUpdate(){
     return Observable.create((observer) => {
       this.socket.on('relationUpdate', (relation) => {
-        console.log('>relationUpdate', relation);
         observer.next(relation);
       });
     });

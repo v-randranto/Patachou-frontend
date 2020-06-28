@@ -86,15 +86,11 @@ export class NetworkComponent implements OnInit {
     // requêtes socket.io pour récupérer la mise à jour d'une relation
     this.socketSubscription = this.socketService.relationUpdate()
     .subscribe(update => {
-      console.log('new update', update)
       const index = this.relations.findIndex(relation =>
         JSON.stringify(relation._id) === JSON.stringify(update._id))
         if (index === -1) {
-          console.log('index non trouvé')
           throw Error ('index non trouvé')
         } else {
-          console.log('index trouvé')
-          console.log('relations à mettre à jour', this.relations[index])
           this.relations[index] = update;
           this.initRelationsTypes();
         }
@@ -110,7 +106,8 @@ export class NetworkComponent implements OnInit {
     this.confirmedRelations = this.relations.filter(relation => relation.status == CONFIRMED_STATUS);
     this.relationsInWaiting = this.relations.filter(relation =>
       (relation.status == PENDING_STATUS) && this.isRequester(relation));
-    this.relationsToValidate = this.relations.filter(relation =>
+
+      this.relationsToValidate = this.relations.filter(relation =>
       (relation.status == PENDING_STATUS) && !this.isRequester(relation));
   }
 

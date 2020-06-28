@@ -15,14 +15,12 @@ export class UtilService {
   }
 
   subtractYears(date: Date, nb: number): string {
-    console.log(`date jour ${date}`)
     let day = date.getDate();
     let month = date.getMonth() + 1;
     let  year = date.getFullYear() - nb;
     const dd = (day < 10 ? "0" : "") + day;
     const mm = (month < 10 ? "0" : "") + month;
     const yyyy = year;
-    console.log(`calcul date : ${yyyy}-${mm}-${dd}`);
     return `${yyyy}-${mm}-${dd}`;
   }
 

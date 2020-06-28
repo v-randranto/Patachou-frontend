@@ -11,7 +11,7 @@
       <div class="form-row mt-3">
 
         <div class="form-group col mx-4">
-          <input #pseudo type="text" formControlName="pseudo" class="form-control d-inline" placeholder="* Pseudonyme"
+          <input #pseudo type="text" formControlName="pseudo" class="form-control d-inline" placeholder="* Pseudonyme" autocomplete="off"
             autofocus maxlength=20 (keydown)="checkPseudoInput($event)" [tooltip]="pseudoTooltip" />
 
           <div class="alert alert-danger my-1 p-1"
@@ -29,7 +29,7 @@
 
       <div class="form-row mt-3">
         <div class="form-group col mx-4">
-          <input type="password" formControlName="password" class="form-control" placeholder="* Mot de passe" maxlength=30 [tooltip]="passwordTooltip"/>
+          <input type="password" formControlName="password" class="form-control" placeholder="* Mot de passe" maxlength=30 [tooltip]="passwordTooltip" autocomplete="off"/>
 
           <div *ngIf="(stepOne.password.touched || stepOne.password.dirty) && stepOne.password.invalid"
             class="alert alert-danger my-1 p-1">
@@ -49,7 +49,7 @@
       <div class="form-row mt-3">
         <div class="form-group col mx-4">
           <input type="password" formControlName="confirmPassword" class="form-control"
-            placeholder="* Confirmation du mot de passe" maxlength=30 />
+            placeholder="* Confirmation du mot de passe" maxlength=30 autocomplete="off"/>
 
           <div
             *ngIf="(stepOne.confirmPassword.touched || stepOne.confirmPassword.dirty) && stepOne.confirmPassword.invalid"
@@ -67,7 +67,7 @@
 
         <div class="form-group col mx-4">
           <input #firstName type="text" formControlName="firstName" class="form-control" placeholder="* Prénom"
-            maxlength=30 (keydown)="checkNameInput($event)"/>
+            maxlength=30 (keydown)="checkNameInput($event)" autocomplete="off"/>
 
           <div *ngIf="(stepTwo.firstName.touched || stepTwo.firstName.dirty) && stepTwo.firstName.invalid"
             class="alert alert-danger my-1 p-1">
@@ -81,7 +81,7 @@
       <div class="form-row mt-3">
         <div class="form-group col mx-4">
           <input type="text" formControlName="lastName" class="form-control" placeholder="* Nom" maxlength=30
-            (keydown)="checkNameInput($event)"/>
+            (keydown)="checkNameInput($event)" autocomplete="off"/>
 
           <div *ngIf="(stepTwo.lastName.touched || stepTwo.lastName.dirty) && stepTwo.lastName.invalid"
             class="alert alert-danger my-1 p-1">
@@ -95,7 +95,7 @@
       <div class="form-row mt-3">
         <div class="form-group col mx-4">
           <input type="text" formControlName="email" class="form-control" placeholder="* mon.adresse@email.com"
-            maxlength=50 (blur)="emailOnBlur()" (focus)="emailOnFocus()" />
+            maxlength=50 (blur)="emailOnBlur()" (focus)="emailOnFocus()" autocomplete="off"/>
           <small class="form-text text-color">Nous ne partagerons pas votre email.</small>
 
           <div *ngIf="emailBlurred && stepTwo.email.invalid" class="alert alert-danger my-1 p-1">
