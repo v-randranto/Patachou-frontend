@@ -3,12 +3,18 @@
   <div class="col-md-8 col-lg-7 mx-auto">
     <h3 class="text-dark text-center pt-5 pb-3 ">Je m'inscris...</h3>
 
-    <div class="row mx-4 mb-5">
-      <progressbar [value]="progressValue" type="success" [animate]="true" max="3"></progressbar>
+    <div class="row mx-1 align-items-center">
+      <button class="gotostep mr-auto" [disabled]="!currentStepNb" (click)="goToStep('prev')">
+        <fa-icon [icon]="['fas','caret-square-left']"></fa-icon>
+      </button>
+      <progressbar class="d-inline mx-2" [value]="progressValue" type="success" [animate]="true" max="3"></progressbar>
+      <button class="gotostep ml-auto" [disabled]="!currentStepValid || currentStepNb == 2" (click)="goToStep('next')">
+        <fa-icon [icon]="['fas','caret-square-right']"></fa-icon>
+      </button>
     </div>
 
     <form [className]="currentStepNb === 0 ? 'd-block' : 'd-none'" [formGroup]="stepOneForm">
-      <div class="form-row mt-3">
+      <div class="form-row mt-2">
 
         <div class="form-group col mx-4">
           <input #pseudo type="text" formControlName="pseudo" class="form-control d-inline" placeholder="* Pseudonyme" autocomplete="off"
@@ -27,7 +33,7 @@
         </div>
       </div>
 
-      <div class="form-row mt-3">
+      <div class="form-row mt-2">
         <div class="form-group col mx-4">
           <input type="password" formControlName="password" class="form-control" placeholder="* Mot de passe" maxlength=30 [tooltip]="passwordTooltip" autocomplete="off"/>
 
@@ -46,7 +52,7 @@
         </ng-template>
       </div>
 
-      <div class="form-row mt-3">
+      <div class="form-row mt-2">
         <div class="form-group col mx-4">
           <input type="password" formControlName="confirmPassword" class="form-control"
             placeholder="* Confirmation du mot de passe" maxlength=30 autocomplete="off"/>
@@ -63,7 +69,7 @@
     </form>
 
     <form #step1="ngForm" [className]="currentStepNb === 1 ? 'd-block' : 'd-none'" [formGroup]="stepTwoForm">
-      <div class="form-row mt-3">
+      <div class="form-row mt-2">
 
         <div class="form-group col mx-4">
           <input #firstName type="text" formControlName="firstName" class="form-control" placeholder="* Prénom"
@@ -78,7 +84,7 @@
         </div>
       </div>
 
-      <div class="form-row mt-3">
+      <div class="form-row mt-2">
         <div class="form-group col mx-4">
           <input type="text" formControlName="lastName" class="form-control" placeholder="* Nom" maxlength=30
             (keydown)="checkNameInput($event)" autocomplete="off"/>
@@ -92,7 +98,7 @@
         </div>
       </div>
 
-      <div class="form-row mt-3">
+      <div class="form-row mt-2">
         <div class="form-group col mx-4">
           <input type="text" formControlName="email" class="form-control" placeholder="* mon.adresse@email.com"
             maxlength=50 (blur)="emailOnBlur()" (focus)="emailOnFocus()" autocomplete="off"/>
@@ -128,7 +134,7 @@
         </div>
       </div>
 
-      <div class="form-row mt-3">
+      <div class="form-row mt-2">
         <div class="form-group col mx-4">
           <div class="row ">
             <fa-icon class="col-1 ml-1 align-self-center" [icon]="['fas','birthday-cake']"></fa-icon>
@@ -138,7 +144,7 @@
         </div>
       </div>
 
-      <div class="form-row mt-3">
+      <div class="form-row mt-2">
         <div class="form-group col mx-4">
           <textarea formControlName="presentation" class="form-control"
             placeholder="Quelques mots pour vous présenter touïtement (140 caractères)" rows="3" cols="50"
@@ -173,29 +179,17 @@
     </form>
 
     <div *ngIf="!loading">
-      <div class="row mx-1 mt-3 justify-content-between ">
-
-        <button class="gotostep" [disabled]="!currentStepNb" (click)="goToStep('prev')">
-          <fa-icon [icon]="['fas','caret-square-left']"></fa-icon>
-        </button>
-
+      <div class="row mx-4 mt-3 justify-content-center">
         <button *ngIf="currentStepNb === 2 && currentStepValid" class="btn btn-primary col-8 col-md-6" (click)="onSubmit()">
           J'envoie</button>
-
-        <button *ngIf="!(currentStepNb === 2 && currentStepValid)" type="button" class="btn btn-info col-8 col-md-6" (click)="reinitForm()">Je réinitialise
-        </button>
-
-        <button class="gotostep" [disabled]="!currentStepValid || currentStepNb == 2" (click)="goToStep('next')">
-          <fa-icon [icon]="['fas','caret-square-right']"></fa-icon>
-        </button>
       </div>
 
-      <div *ngIf="currentStepNb === 2 && currentStepValid" class="row mx-2 mt-4 justify-content-center">
+      <div class="row mx-4 mt-3 justify-content-center">
         <button type="button" class="btn btn-info text-center col-8 col-md-6" (click)="reinitForm()">Je réinitialise
         </button>
       </div>
 
-      <div class="row mx-1 mt-4 justify-content-center">
+      <div class="row mx-4 mt-3 justify-content-center">
           <button class="btn btn-secondary text-center col-8 col-md-6" [routerLink]="'/connection/login'">J'ai déjà un compte</button>
         </div>
     </div>

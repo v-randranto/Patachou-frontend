@@ -19,14 +19,7 @@ export class AuthenticationService {
     private memberDataService: MemberDataService,
     private router: Router,
     private socketService: SocketIoService
-  ) {
-    this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('user_data')));
-    this.currentUser = this.currentUserSubject.asObservable();
-  }
-
-  public get currentUserValue(): User {
-    return this.currentUserSubject.value;
-  }
+  ) { }
 
   login(loginData: LoginData) {
     return this.memberDataService.login(loginData)

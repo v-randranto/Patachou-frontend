@@ -2,7 +2,7 @@
   <div class="col-md-8 col-lg-6 mx-auto">
     <h3 class="text-center text-color py-5">Je me connecte...</h3>
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <div class="form-row my-3">
+      <div class="form-row my-2">
         <div class="form-group col mx-4">
           <input type="text" formControlName="pseudo" class="form-control d-inline" placeholder="* Pseudonyme"
             maxlength=30 autofocus/>
@@ -13,7 +13,7 @@
         </div>
       </div>
 
-      <div class="form-row my-3">
+      <div class="form-row my-2">
         <div class="form-group col mx-4">
           <input type="password" formControlName="password" class="form-control" placeholder="* Password"
             maxlength=30 />
@@ -40,11 +40,11 @@
           </div>
         </div>
 
-        <div class="text-center col mt-4">
+        <div class="text-center col mt-3">
           <button class="btn btn-secondary col col-md-6" [routerLink]="'/connection/register'">Je n'ai pas de compte</button>
         </div>
 
-        <div class="text-center col mt-4">
+        <div class="text-center col mt-3">
           <button class="btn btn-info col col-md-6" [routerLink]="'/connection/password'">J'ai perdu mon mot de passe</button>
         </div>
       </div>
