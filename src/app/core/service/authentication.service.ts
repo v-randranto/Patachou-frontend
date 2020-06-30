@@ -1,13 +1,11 @@
-import { LoginData } from './../../data/model/user';
+import { User, LoginData } from '@data/model/user';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Member } from '@app/data/model/member';
-import { MemberDataService } from '@app/data/service/member-data.service';
+import { Member } from '@data/model/member';
+import { MemberDataService } from '@data/service/member-data.service';
 import { SocketIoService } from './socket-io.service';
 import { BehaviorSubject, Observable} from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Relationship } from '@app/data/model/relationship';
-import { User } from '@app/data/model/user';
 
 @Injectable({
   providedIn: 'root'
