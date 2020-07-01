@@ -72,6 +72,7 @@ export class ContactComponent implements OnInit {
   emailOnFocus() {
     this.emailBlurred = false;
   }
+  
   emailOnBlur() {
     this.emailBlurred = true;
   }
